@@ -22,6 +22,6 @@ describe("buildPalette", () => {
   it("every accent clears 4.5:1 on the dark bg", () => {
     const p = buildPalette(dusk);
     for (const k of Object.keys(p.accents))
-      expect(contrastRatio((p.accents as any)[k], p.bg0)).toBeGreaterThanOrEqual(4.0);
+      expect(contrastRatio((p.accents as any)[k], p.bg0)).toBeGreaterThanOrEqual(4.5);
   });
 });

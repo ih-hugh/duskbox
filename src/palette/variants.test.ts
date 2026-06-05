@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { VARIANTS, VARIANT_NAMES } from "./variants";
-import { buildPalette } from "./types";
+import { buildPalette, BASE_HUES } from "./types";
 import { contrastRatio } from "../oklch";
 
 describe("variants", () => {
@@ -20,5 +20,13 @@ describe("variants", () => {
   it("cyber uses the portfolio near-black background", () => {
     const cyber = VARIANTS.find((v) => v.name === "cyber")!;
     expect(buildPalette(cyber).bg0).toBe("#0a0a0f");
+  });
+  it("every accent clears >= 4.0:1 on its own background (all variants)", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      for (const name of Object.keys(BASE_HUES) as (keyof typeof BASE_HUES)[]) {
+        expect(contrastRatio(p.accents[name], p.bg0), `${v.name}/${name}`).toBeGreaterThanOrEqual(4.0);
+      }
+    }
   });
 });

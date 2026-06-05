@@ -32,7 +32,7 @@ export function oklchToHex(L: number, C: number, H: number): string {
 }
 
 export function relLuminance(hex: string): number {
-  const [r, g, b] = hexToRgb(hex) as [number, number, number];
+  const [r, g, b] = hexToRgb(hex);
   return 0.2126 * srgbToLin(r) + 0.7152 * srgbToLin(g) + 0.0722 * srgbToLin(b);
 }
 export function contrastRatio(a: string, b: string): number {

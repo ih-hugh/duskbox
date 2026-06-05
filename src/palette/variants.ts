@@ -6,7 +6,7 @@ import type { VariantConfig } from "./types";
 export const VARIANTS: VariantConfig[] = [
   // --- light ---
   { name: "dawn", kind: "light", uiContrast: "normal",
-    bg: [0.965, 0.008, 85], fg: [0.34, 0.02, 265], accentL: 0.55, accentC: 0.13 },
+    bg: [0.965, 0.008, 85], fg: [0.34, 0.02, 265], accentL: 0.52, accentC: 0.13 },
   { name: "day", kind: "light", uiContrast: "normal",
     bg: [0.985, 0.003, 250], fg: [0.30, 0.02, 265], accentL: 0.52, accentC: 0.14 },
   { name: "day-hc", kind: "light", uiContrast: "high",
@@ -23,7 +23,7 @@ export const VARIANTS: VariantConfig[] = [
     bg: [0.12, 0.01, 275], fg: [0.97, 0.01, 265], accentL: 0.80, accentC: 0.16 },
   // --- signature neon (portfolio) ---
   { name: "cyber", kind: "dark", uiContrast: "high",
-    bg: [0.115, 0.018, 285], bgHex: "#0a0a0f", fg: [0.96, 0.005, 250], accentL: 0.80, accentC: 0.20,
+    bg: [0.147, 0.011, 285], bgHex: "#0a0a0f", fg: [0.96, 0.005, 250], accentL: 0.80, accentC: 0.20,
     accentLC: {
       red: [0.66, 0.23], orange: [0.78, 0.18], yellow: [0.86, 0.16], green: [0.80, 0.20],
       teal: [0.82, 0.15], cyan: [0.86, 0.18], blue: [0.74, 0.20], purple: [0.70, 0.20], magenta: [0.74, 0.24],

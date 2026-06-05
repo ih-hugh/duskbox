@@ -34,20 +34,21 @@ export function buildPalette(v: VariantConfig): Palette {
   const dir = v.kind === "dark" ? 1 : -1; // dark: surfaces step lighter; light: step darker
   const [bgL, bgC, bgH] = v.bg;
   const [fgL, fgC, fgH] = v.fg;
-  const bg0 = v.bgHex ?? oklchToHex(bgL, bgC, bgH);
-  const bg1 = oklchToHex(bgL - dir * 0.025, bgC, bgH); // darker panel/sidebar (dark) / lighter (light)
-  const bg2 = oklchToHex(bgL + dir * 0.04, bgC, bgH);  // cursorline
-  const bg3 = oklchToHex(bgL + dir * 0.08, bgC * 1.5, 255); // selection (cool tint)
-  const fg0 = oklchToHex(fgL, fgC, fgH);
-  const fg1 = oklchToHex(fgL - dir * 0.12, fgC, fgH);  // dim
-  const fg2 = oklchToHex(fgL - dir * 0.24, fgC, fgH);  // muted/comment
+  const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
+  const bg0 = v.bgHex ?? oklchToHex(clamp01(bgL), bgC, bgH);
+  const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
+  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
+  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, 255); // selection (cool tint)
+  const fg0 = oklchToHex(clamp01(fgL), fgC, fgH);
+  const fg1 = oklchToHex(clamp01(fgL - dir * 0.12), fgC, fgH);   // dim
+  const fg2 = oklchToHex(clamp01(fgL - dir * 0.24), fgC, fgH);   // muted/comment
 
   const accents = {} as Record<AccentName, string>;
-  (Object.keys(BASE_HUES) as AccentName[]).forEach((name) => {
+  for (const name of Object.keys(BASE_HUES) as AccentName[]) {
     const hue = v.hues?.[name] ?? BASE_HUES[name];
     const [L, C] = v.accentLC?.[name] ?? [v.accentL, v.accentC];
     accents[name] = oklchToHex(L, C, hue);
-  });
+  }
 
   return { name: v.name, kind: v.kind, uiContrast: v.uiContrast, bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents };
 }
