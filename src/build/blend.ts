@@ -8,4 +8,4 @@ export function blend(a: string, b: string, t: number): string {
   return `#${m(r1, r2)}${m(g1, g2)}${m(b1, b2)}`;
 }
 /** Desaturate an accent toward the neutral foreground ("sand"/soft). */
-export const muteHex = (hex: string, fg0: string): string => blend(hex, fg0, 0.45);
+export const muteHex = (hex: string, fg0: string): string => blend(hex, fg0, 0.30);

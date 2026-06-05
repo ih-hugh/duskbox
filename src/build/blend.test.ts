@@ -12,4 +12,7 @@ describe("blend", () => {
     expect(m).toMatch(/^#[0-9a-f]{6}$/);
     expect(m).not.toBe("#7dcfff");
   });
+  it("muteHex is a 0.30 blend toward fg0", () => {
+    expect(muteHex("#000000", "#ffffff")).toBe(blend("#000000", "#ffffff", 0.30));
+  });
 });

@@ -12,7 +12,6 @@ function slot(p: Palette, c: ColorSlot): string {
   return p.accents[c as AccentName];
 }
 
-
 export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, Attrs> {
   const p = buildPalette(v);
   const hl: Record<string, Attrs> = {};
@@ -66,8 +65,8 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl.SpellCap = { undercurl: true, sp: slot(p, TOKENS.warning.color) };
 
   const gAdd = slot(p, TOKENS.gitAdd.color), gChg = slot(p, TOKENS.gitChange.color), gDel = slot(p, TOKENS.gitDelete.color);
-  hl.DiffAdd = { bg: blend(gAdd, p.bg0, 0.18) }; hl.DiffChange = { bg: blend(gChg, p.bg0, 0.18) };
-  hl.DiffDelete = { bg: blend(gDel, p.bg0, 0.18) }; hl.DiffText = { bg: blend(gChg, p.bg2, 0.18) };
+  hl.DiffAdd = { bg: blend(p.bg0, gAdd, 0.18) }; hl.DiffChange = { bg: blend(p.bg0, gChg, 0.18) };
+  hl.DiffDelete = { bg: blend(p.bg0, gDel, 0.18) }; hl.DiffText = { bg: blend(p.bg2, gChg, 0.18) };
   hl.GitSignsAdd = { fg: gAdd }; hl.GitSignsChange = { fg: gChg }; hl.GitSignsDelete = { fg: gDel };
   hl.Added = { fg: gAdd }; hl.Changed = { fg: gChg }; hl.Removed = { fg: gDel };
 

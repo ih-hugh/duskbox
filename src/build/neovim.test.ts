@@ -3,6 +3,7 @@ import { buildNeovim, toLua } from "./neovim";
 import { VARIANTS } from "../palette/variants";
 import { muteHex } from "./blend";
 import { buildPalette } from "../palette/types";
+import { contrastRatio } from "../oklch";
 
 const dusk = VARIANTS.find((v) => v.name === "dusk")!;
 
@@ -31,5 +32,19 @@ describe("neovim emitter", () => {
     expect(lua).toContain("return {");
     expect(lua).toContain('["Normal"] = { fg = "#c0caf5", bg = "#232634" }');
     expect(lua).toContain("bold = true");
+  });
+  it("diff backgrounds are a subtle wash close to bg0", () => {
+    const hl = buildNeovim(dusk, { bold: true });
+    const p = buildPalette(dusk);
+    expect(contrastRatio(hl.DiffAdd!.bg as string, p.bg0)).toBeLessThan(1.5);
+  });
+  it("key syntax roles render to distinct colors on dusk; param != variable; escape != string", () => {
+    const hl = buildNeovim(dusk, { bold: true });
+    const p = buildPalette(dusk);
+    const vals = [hl.Keyword!.fg, hl.Function!.fg, hl.Type!.fg, hl["@variable.parameter"]!.fg,
+      hl.String!.fg, hl["@string.escape"]!.fg, hl.Number!.fg, hl.Constant!.fg, hl["@property"]!.fg];
+    expect(new Set(vals).size).toBe(vals.length);
+    expect(hl["@variable.parameter"]!.fg).not.toBe(p.fg0);
+    expect(hl["@string.escape"]!.fg).not.toBe(hl.String!.fg);
   });
 });
