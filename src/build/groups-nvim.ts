@@ -1,7 +1,7 @@
 import type { Role } from "../tokens";
 
 // Each syntax role -> the Neovim highlight groups it paints (base + treesitter captures).
-export const ROLE_GROUPS: Record<Role, string[]> = {
+export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   keyword: ["Keyword", "@keyword", "@keyword.function", "Statement"],
   conditional: ["Conditional", "@keyword.conditional"],
   repeat: ["Repeat", "@keyword.repeat"],
@@ -25,6 +25,4 @@ export const ROLE_GROUPS: Record<Role, string[]> = {
   preproc: ["PreProc", "Include", "Define", "Macro", "@keyword.import", "@keyword.directive"],
   comment: ["Comment", "@comment"],
   punctuation: ["Delimiter", "@punctuation.bracket", "@punctuation.delimiter"],
-  error: [], warning: [], info: [], hint: [], ok: [],
-  gitAdd: [], gitChange: [], gitDelete: [],
 };

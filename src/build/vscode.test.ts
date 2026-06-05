@@ -18,7 +18,11 @@ describe("vscode emitter", () => {
     expect(t.semanticTokenColors["keyword"]).toBeDefined();
   });
   it("maps uiTheme by variant kind/contrast", () => {
+    const dawn = VARIANTS.find((v) => v.name === "dawn")!;
+    const dayHc = VARIANTS.find((v) => v.name === "day-hc")!;
     expect(uiThemeFor(dusk)).toBe("vs-dark");
     expect(uiThemeFor(cyber)).toBe("hc-black");
+    expect(uiThemeFor(dawn)).toBe("vs");
+    expect(uiThemeFor(dayHc)).toBe("hc-light");
   });
 });

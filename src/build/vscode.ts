@@ -14,7 +14,7 @@ function slot(p: Palette, c: ColorSlot): string {
   return p.accents[c as AccentName];
 }
 function titleCase(name: string) {
-  return "Duskbox " + name.split("-").map((s) => s[0]!.toUpperCase() + s.slice(1)).join(" ").replace("Hc", "HC");
+  return "Duskbox " + name.split("-").map((s) => s[0]!.toUpperCase() + s.slice(1)).join(" ").replaceAll("Hc", "HC");
 }
 
 export function uiThemeFor(v: VariantConfig): "vs" | "vs-dark" | "hc-black" | "hc-light" {
@@ -40,7 +40,8 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "tab.activeBackground": p.bg0, "tab.inactiveBackground": p.bg1, "tab.activeForeground": p.fg0, "tab.inactiveForeground": p.fg2,
     "tab.activeBorderTop": a.blue, "editorGroupHeader.tabsBackground": p.bg1,
     "panel.background": p.bg1, "panel.border": p.bg3, "terminal.background": p.bg0, "terminal.foreground": p.fg0,
-    "list.activeSelectionBackground": p.bg2, "list.hoverBackground": p.bg2, "list.highlightForeground": a.orange,
+    "list.activeSelectionBackground": p.bg3, "list.activeSelectionForeground": p.fg0,
+    "list.inactiveSelectionBackground": p.bg2, "list.hoverBackground": p.bg2, "list.highlightForeground": a.orange,
     "input.background": p.bg1, "input.foreground": p.fg0, "input.border": p.bg3,
     "focusBorder": a.blue, "foreground": p.fg1, "widget.shadow": "#00000066",
     "button.background": a.blue, "button.foreground": p.bg0,

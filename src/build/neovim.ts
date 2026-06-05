@@ -59,19 +59,21 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
     for (const g of groups) hl[g] = { ...attrs };
   });
 
-  const diag: [string, AccentName][] = [["Error", "red"], ["Warn", "yellow"], ["Info", "blue"], ["Hint", "teal"], ["Ok", "green"]];
-  for (const [name, acc] of diag) {
-    hl[`Diagnostic${name}`] = { fg: p.accents[acc] };
-    hl[`DiagnosticVirtualText${name}`] = { fg: p.accents[acc], bg: p.bg1 };
-    hl[`DiagnosticUnderline${name}`] = { undercurl: true, sp: p.accents[acc] };
+  const diag: [string, Role][] = [["Error","error"],["Warn","warning"],["Info","info"],["Hint","hint"],["Ok","ok"]];
+  for (const [name, role] of diag) {
+    const fg = slot(p, TOKENS[role].color);
+    hl[`Diagnostic${name}`] = { fg };
+    hl[`DiagnosticVirtualText${name}`] = { fg, bg: p.bg1 };
+    hl[`DiagnosticUnderline${name}`] = { undercurl: true, sp: fg };
   }
-  hl.SpellBad = { undercurl: true, sp: p.accents.red };
-  hl.SpellCap = { undercurl: true, sp: p.accents.yellow };
+  hl.SpellBad = { undercurl: true, sp: slot(p, TOKENS.error.color) };
+  hl.SpellCap = { undercurl: true, sp: slot(p, TOKENS.warning.color) };
 
-  hl.DiffAdd = { bg: mix(p.accents.green, p.bg0) }; hl.DiffChange = { bg: mix(p.accents.blue, p.bg0) };
-  hl.DiffDelete = { bg: mix(p.accents.red, p.bg0) }; hl.DiffText = { bg: mix(p.accents.blue, p.bg2) };
-  hl.GitSignsAdd = { fg: p.accents.green }; hl.GitSignsChange = { fg: p.accents.blue }; hl.GitSignsDelete = { fg: p.accents.red };
-  hl.Added = { fg: p.accents.green }; hl.Changed = { fg: p.accents.blue }; hl.Removed = { fg: p.accents.red };
+  const gAdd = slot(p, TOKENS.gitAdd.color), gChg = slot(p, TOKENS.gitChange.color), gDel = slot(p, TOKENS.gitDelete.color);
+  hl.DiffAdd = { bg: mix(gAdd, p.bg0) }; hl.DiffChange = { bg: mix(gChg, p.bg0) };
+  hl.DiffDelete = { bg: mix(gDel, p.bg0) }; hl.DiffText = { bg: mix(gChg, p.bg2) };
+  hl.GitSignsAdd = { fg: gAdd }; hl.GitSignsChange = { fg: gChg }; hl.GitSignsDelete = { fg: gDel };
+  hl.Added = { fg: gAdd }; hl.Changed = { fg: gChg }; hl.Removed = { fg: gDel };
 
   hl.TelescopeBorder = { fg: p.bg3, bg: p.bg1 }; hl.TelescopeNormal = { fg: p.fg0, bg: p.bg1 };
   hl.TelescopeSelection = { bg: p.bg2, bold: true }; hl.TelescopeMatching = { fg: p.accents.orange, bold: true };
