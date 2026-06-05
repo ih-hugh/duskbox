@@ -18,15 +18,15 @@ export const VARIANTS: VariantConfig[] = [
     bg: [0.265, 0.018, 278], fg: [0.86, 0.035, 265], accentL: 0.78, accentC: 0.12 },
   { name: "midnight", kind: "dark", uiContrast: "normal",
     bg: [0.175, 0.02, 278], fg: [0.80, 0.03, 265], accentL: 0.76, accentC: 0.105 },
-  // --- high-contrast dark ---
+  // --- high-contrast dark (bg lifted off pure-black; bright text + accents floored >=7:1) ---
   { name: "night-hc", kind: "dark", uiContrast: "high",
-    bg: [0.12, 0.01, 275], fg: [0.97, 0.01, 265], accentL: 0.80, accentC: 0.16 },
-  // --- signature neon (portfolio) ---
+    bg: [0.22, 0.012, 275], fg: [0.99, 0.008, 265], accentL: 0.84, accentC: 0.15 },
+  // --- signature neon (portfolio), high-contrast ---
   { name: "cyber", kind: "dark", uiContrast: "high",
-    bg: [0.147, 0.011, 285], bgHex: "#0a0a0f", fg: [0.96, 0.005, 250], accentL: 0.80, accentC: 0.20,
+    bg: [0.185, 0.012, 285], bgHex: "#13131c", fg: [0.99, 0.004, 250], accentL: 0.84, accentC: 0.18,
     accentLC: {
-      red: [0.66, 0.23], orange: [0.78, 0.18], yellow: [0.86, 0.16], green: [0.80, 0.20],
-      teal: [0.82, 0.15], cyan: [0.86, 0.18], blue: [0.74, 0.20], purple: [0.70, 0.20], magenta: [0.74, 0.24],
+      red: [0.74, 0.20], orange: [0.82, 0.17], yellow: [0.88, 0.15], green: [0.84, 0.18],
+      teal: [0.85, 0.14], cyan: [0.88, 0.16], blue: [0.80, 0.17], purple: [0.80, 0.16], magenta: [0.80, 0.20],
     },
     hues: { red: 25, orange: 60, yellow: 95, green: 145, teal: 210, cyan: 195, blue: 245, purple: 280, magenta: 330 },
   },

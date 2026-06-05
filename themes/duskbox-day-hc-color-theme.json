@@ -5,7 +5,7 @@
   "colors": {
     "editor.background": "#ffffff",
     "editor.foreground": "#0b0d12",
-    "editorLineNumber.foreground": "#45484d",
+    "editorLineNumber.foreground": "#2e3036",
     "editorLineNumber.activeForeground": "#694e05",
     "editorCursor.foreground": "#0b0d12",
     "editor.selectionBackground": "#e4e4e4",
@@ -16,14 +16,14 @@
     "editor.findMatchBackground": "#e4e4e4",
     "editor.findMatchHighlightBackground": "#f2f2f2",
     "sideBar.background": "#f7f7f7",
-    "sideBar.foreground": "#26292e",
+    "sideBar.foreground": "#1b1d22",
     "sideBarTitle.foreground": "#0b0d12",
     "activityBar.background": "#f7f7f7",
     "activityBar.foreground": "#0b0d12",
     "activityBarBadge.background": "#01519f",
     "activityBarBadge.foreground": "#ffffff",
     "statusBar.background": "#f7f7f7",
-    "statusBar.foreground": "#26292e",
+    "statusBar.foreground": "#1b1d22",
     "statusBar.noFolderBackground": "#f7f7f7",
     "statusBar.debuggingBackground": "#813d02",
     "titleBar.activeBackground": "#f7f7f7",
@@ -31,7 +31,7 @@
     "tab.activeBackground": "#ffffff",
     "tab.inactiveBackground": "#f7f7f7",
     "tab.activeForeground": "#0b0d12",
-    "tab.inactiveForeground": "#45484d",
+    "tab.inactiveForeground": "#2e3036",
     "tab.activeBorderTop": "#01519f",
     "editorGroupHeader.tabsBackground": "#f7f7f7",
     "panel.background": "#f7f7f7",
@@ -47,7 +47,7 @@
     "input.foreground": "#0b0d12",
     "input.border": "#e4e4e4",
     "focusBorder": "#01519f",
-    "foreground": "#26292e",
+    "foreground": "#1b1d22",
     "widget.shadow": "#00000066",
     "button.background": "#01519f",
     "button.foreground": "#ffffff",
@@ -66,7 +66,7 @@
     "terminal.ansiBlue": "#01519f",
     "terminal.ansiMagenta": "#851980",
     "terminal.ansiCyan": "#005c71",
-    "terminal.ansiWhite": "#26292e",
+    "terminal.ansiWhite": "#1b1d22",
     "terminal.ansiBrightBlack": "#e4e4e4",
     "terminal.ansiBrightRed": "#9d0221",
     "terminal.ansiBrightGreen": "#056519",
@@ -224,7 +224,7 @@
         "punctuation.definition.comment"
       ],
       "settings": {
-        "foreground": "#45484d",
+        "foreground": "#2e3036",
         "fontStyle": "italic"
       }
     },
@@ -234,7 +234,7 @@
         "meta.brace"
       ],
       "settings": {
-        "foreground": "#26292e"
+        "foreground": "#1b1d22"
       }
     }
   ],
@@ -295,7 +295,7 @@
       "foreground": "#813d02"
     },
     "comment": {
-      "foreground": "#45484d",
+      "foreground": "#2e3036",
       "italic": true
     },
     "operator": {

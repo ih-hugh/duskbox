@@ -39,9 +39,13 @@ export function buildPalette(v: VariantConfig): Palette {
   const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
   const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
   const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, 255); // selection (cool tint)
+  // High-contrast variants keep secondary text much closer to the main fg so
+  // comments / dim text stay legible against the near-black (or near-white) bg.
+  const dimDrop = v.uiContrast === "high" ? 0.07 : 0.12;
+  const muteDrop = v.uiContrast === "high" ? 0.15 : 0.24;
   const fg0 = oklchToHex(clamp01(fgL), fgC, fgH);
-  const fg1 = oklchToHex(clamp01(fgL - dir * 0.12), fgC, fgH);   // dim
-  const fg2 = oklchToHex(clamp01(fgL - dir * 0.24), fgC, fgH);   // muted/comment
+  const fg1 = oklchToHex(clamp01(fgL - dir * dimDrop), fgC, fgH);  // dim
+  const fg2 = oklchToHex(clamp01(fgL - dir * muteDrop), fgC, fgH); // muted/comment
 
   const accents = {} as Record<AccentName, string>;
   for (const name of Object.keys(BASE_HUES) as AccentName[]) {

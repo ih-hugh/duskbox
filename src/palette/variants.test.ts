@@ -17,15 +17,26 @@ describe("variants", () => {
       expect(contrastRatio(p.fg0, p.bg0)).toBeGreaterThanOrEqual(min);
     }
   });
-  it("cyber uses the portfolio near-black background", () => {
+  it("cyber uses a lifted near-black background (off pure-black for HC depth)", () => {
     const cyber = VARIANTS.find((v) => v.name === "cyber")!;
-    expect(buildPalette(cyber).bg0).toBe("#0a0a0f");
+    expect(buildPalette(cyber).bg0).toBe("#13131c");
   });
   it("every accent clears >= 4.0:1 on its own background (all variants)", () => {
     for (const v of VARIANTS) {
       const p = buildPalette(v);
       for (const name of Object.keys(BASE_HUES) as (keyof typeof BASE_HUES)[]) {
         expect(contrastRatio(p.accents[name], p.bg0), `${v.name}/${name}`).toBeGreaterThanOrEqual(4.0);
+      }
+    }
+  });
+  it("high-contrast variants: fg ramp AND every accent clear >= 7:1 on bg", () => {
+    for (const v of VARIANTS.filter((x) => x.uiContrast === "high")) {
+      const p = buildPalette(v);
+      for (const [lbl, hex] of [["fg0", p.fg0], ["fg1", p.fg1], ["fg2", p.fg2]] as [string, string][]) {
+        expect(contrastRatio(hex, p.bg0), `${v.name}/${lbl}`).toBeGreaterThanOrEqual(7);
+      }
+      for (const name of Object.keys(BASE_HUES) as (keyof typeof BASE_HUES)[]) {
+        expect(contrastRatio(p.accents[name], p.bg0), `${v.name}/${name}`).toBeGreaterThanOrEqual(7);
       }
     }
   });
