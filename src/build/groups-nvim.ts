@@ -25,4 +25,8 @@ export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   preproc: ["PreProc", "Include", "Define", "Macro", "@keyword.import", "@keyword.directive"],
   comment: ["Comment", "@comment"],
   punctuation: ["Delimiter", "@punctuation.bracket", "@punctuation.delimiter"],
+  tagNative: ["@tag.builtin"],
+  tagComponent: ["@tag"],
+  tagAttr: ["@tag.attribute"],
+  tagDelim: ["@tag.delimiter"],
 };

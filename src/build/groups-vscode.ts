@@ -18,6 +18,10 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   preproc: ["meta.preprocessor", "keyword.control.import", "keyword.control.export"],
   comment: ["comment", "punctuation.definition.comment"],
   punctuation: ["punctuation", "meta.brace"],
+  tagNative: ["entity.name.tag"],
+  tagComponent: ["support.class.component", "entity.name.tag.namespace"],
+  tagAttr: ["entity.other.attribute-name"],
+  tagDelim: ["punctuation.definition.tag"],
 };
 
 // VS Code semantic token type -> role
