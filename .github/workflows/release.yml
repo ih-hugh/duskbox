@@ -3,6 +3,9 @@ on: { push: { tags: ["v*"] } }
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -14,9 +17,7 @@ jobs:
       - run: npx @vscode/vsce package --no-dependencies -o duskbox.vsix --readme-path README.marketplace.md
       - name: Publish to VS Marketplace
         if: ${{ env.VSCE_PAT != '' }}
-        env: { VSCE_PAT: ${{ secrets.VSCE_PAT }} }
-        run: npx @vscode/vsce publish --no-dependencies -p "$VSCE_PAT"
+        run: npx @vscode/vsce publish --no-dependencies -p "$VSCE_PAT" --readme-path README.marketplace.md
       - name: Publish to Open VSX
         if: ${{ env.OVSX_PAT != '' }}
-        env: { OVSX_PAT: ${{ secrets.OVSX_PAT }} }
         run: npx ovsx publish duskbox.vsix -p "$OVSX_PAT"
