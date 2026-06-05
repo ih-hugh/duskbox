@@ -9,3 +9,5 @@ vitest.config.*
 node_modules/**
 **/*.test.ts
 *.vsix
+README.md
+README.marketplace.md

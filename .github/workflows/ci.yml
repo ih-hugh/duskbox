@@ -1,0 +1,24 @@
+name: ci
+on: { push: {}, pull_request: {} }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+      - name: outputs are up to date
+        run: git diff --exit-code -- colors lua/duskbox/themes themes package.json
+      - run: node scripts/validate-vscode.mjs
+      - uses: rhysd/action-setup-vim@v1
+        with: { neovim: true, version: stable }
+      - name: neovim smoke (all variants)
+        run: |
+          for v in dawn day day-hc storm dusk midnight night-hc cyber; do
+            nvim -u NONE --headless -c "lua vim.g.duskbox_test_variant='$v'" -c "luafile scripts/nvim-smoke.lua" -c "qa!"
+          done

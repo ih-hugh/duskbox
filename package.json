@@ -71,7 +71,8 @@
     "build": "tsx src/build/index.ts",
     "test": "vitest run",
     "validate:vscode": "node scripts/validate-vscode.mjs",
-    "package": "vsce package --no-dependencies -o duskbox.vsix"
+    "package": "vsce package --no-dependencies -o duskbox.vsix --readme-path README.marketplace.md",
+    "gallery": "tsx scripts/gallery.ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
