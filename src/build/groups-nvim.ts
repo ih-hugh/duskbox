@@ -1,0 +1,30 @@
+import type { Role } from "../tokens";
+
+// Each syntax role -> the Neovim highlight groups it paints (base + treesitter captures).
+export const ROLE_GROUPS: Record<Role, string[]> = {
+  keyword: ["Keyword", "@keyword", "@keyword.function", "Statement"],
+  conditional: ["Conditional", "@keyword.conditional"],
+  repeat: ["Repeat", "@keyword.repeat"],
+  exception: ["Exception", "@keyword.exception"],
+  keywordReturn: ["@keyword.return"],
+  operator: ["Operator", "@operator", "@keyword.operator"],
+  function: ["Function", "@function", "@function.call", "@function.method"],
+  method: ["@function.method.call"],
+  ctor: ["@constructor"],
+  type: ["Type", "@type", "Structure"],
+  typeBuiltin: ["@type.builtin"],
+  builtin: ["@variable.builtin", "@module.builtin", "@constant.builtin", "Special"],
+  parameter: ["@variable.parameter"],
+  string: ["String", "@string", "Character", "@character", "@markup.raw"],
+  escape: ["@string.escape", "@string.special"],
+  number: ["Number", "Float", "@number", "@number.float"],
+  boolean: ["Boolean", "@boolean"],
+  constant: ["Constant", "@constant"],
+  property: ["@property", "@variable.member", "@field"],
+  variable: ["Identifier", "@variable"],
+  preproc: ["PreProc", "Include", "Define", "Macro", "@keyword.import", "@keyword.directive"],
+  comment: ["Comment", "@comment"],
+  punctuation: ["Delimiter", "@punctuation.bracket", "@punctuation.delimiter"],
+  error: [], warning: [], info: [], hint: [], ok: [],
+  gitAdd: [], gitChange: [], gitDelete: [],
+};
