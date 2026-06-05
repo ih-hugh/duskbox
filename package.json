@@ -1,0 +1,27 @@
+{
+  "name": "duskbox",
+  "displayName": "Duskbox",
+  "description": "A calm, equiluminant theme family (8 variants incl. high-contrast & neon) for Neovim and VS Code.",
+  "version": "0.1.0",
+  "publisher": "ih-hugh",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/ih-hugh/duskbox.git" },
+  "engines": { "vscode": "^1.70.0" },
+  "categories": ["Themes"],
+  "keywords": ["theme", "color-theme", "dark", "light", "high-contrast", "oklch"],
+  "contributes": { "themes": [] },
+  "scripts": {
+    "build": "tsx src/build/index.ts",
+    "test": "vitest run",
+    "validate:vscode": "node scripts/validate-vscode.mjs",
+    "package": "vsce package --no-dependencies -o duskbox.vsix"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vscode/vsce": "^3.2.0",
+    "ovsx": "^0.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

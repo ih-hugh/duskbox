@@ -1,0 +1,11 @@
+src/**
+lua/**
+colors/**
+scripts/**
+docs/**
+.github/**
+tsconfig.json
+vitest.config.*
+node_modules/**
+**/*.test.ts
+*.vsix
