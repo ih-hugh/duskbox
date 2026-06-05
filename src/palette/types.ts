@@ -1,0 +1,53 @@
+import { oklchToHex } from "../oklch";
+
+export type AccentName =
+  | "red" | "orange" | "yellow" | "green" | "teal" | "cyan" | "blue" | "purple" | "magenta";
+
+/** Shared hue wheel (degrees). Per-variant L/C come from VariantConfig; cyber overrides hues. */
+export const BASE_HUES: Record<AccentName, number> = {
+  red: 22, orange: 52, yellow: 85, green: 145, teal: 185, cyan: 220, blue: 255, purple: 290, magenta: 330,
+};
+
+export interface VariantConfig {
+  name: string;
+  kind: "dark" | "light";
+  uiContrast: "normal" | "high";
+  bg: [number, number, number]; // OKLCH of the editor background
+  fg: [number, number, number]; // OKLCH of the primary foreground
+  accentL: number;              // default accent lightness
+  accentC: number;              // default accent chroma
+  bgHex?: string;               // exact bg override (e.g. cyber's #0a0a0f)
+  hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
+  accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides
+}
+
+export interface Palette {
+  name: string;
+  kind: "dark" | "light";
+  uiContrast: "normal" | "high";
+  bg0: string; bg1: string; bg2: string; bg3: string; // editor, panel/darker, cursorline, selection
+  fg0: string; fg1: string; fg2: string;              // text, dim, muted/comment
+  accents: Record<AccentName, string>;
+}
+
+export function buildPalette(v: VariantConfig): Palette {
+  const dir = v.kind === "dark" ? 1 : -1; // dark: surfaces step lighter; light: step darker
+  const [bgL, bgC, bgH] = v.bg;
+  const [fgL, fgC, fgH] = v.fg;
+  const bg0 = v.bgHex ?? oklchToHex(bgL, bgC, bgH);
+  const bg1 = oklchToHex(bgL - dir * 0.025, bgC, bgH); // darker panel/sidebar (dark) / lighter (light)
+  const bg2 = oklchToHex(bgL + dir * 0.04, bgC, bgH);  // cursorline
+  const bg3 = oklchToHex(bgL + dir * 0.08, bgC * 1.5, 255); // selection (cool tint)
+  const fg0 = oklchToHex(fgL, fgC, fgH);
+  const fg1 = oklchToHex(fgL - dir * 0.12, fgC, fgH);  // dim
+  const fg2 = oklchToHex(fgL - dir * 0.24, fgC, fgH);  // muted/comment
+
+  const accents = {} as Record<AccentName, string>;
+  (Object.keys(BASE_HUES) as AccentName[]).forEach((name) => {
+    const hue = v.hues?.[name] ?? BASE_HUES[name];
+    const [L, C] = v.accentLC?.[name] ?? [v.accentL, v.accentC];
+    accents[name] = oklchToHex(L, C, hue);
+  });
+
+  return { name: v.name, kind: v.kind, uiContrast: v.uiContrast, bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents };
+}
