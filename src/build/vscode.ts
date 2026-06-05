@@ -2,6 +2,7 @@ import type { Palette, AccentName } from "../palette/types";
 import { buildPalette, type VariantConfig } from "../palette/types";
 import { TOKENS, type ColorSlot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_SCOPES, SEMANTIC_ROLE } from "./groups-vscode";
+import { muteHex } from "./blend";
 
 export interface VsTheme {
   name: string; type: "dark" | "light"; semanticHighlighting: true;
@@ -58,14 +59,18 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
   (Object.keys(ROLE_SCOPES) as Role[]).forEach((role) => {
     const scopes = ROLE_SCOPES[role]; if (!scopes) return;
     const st: TokenStyle = TOKENS[role];
+    const base = slot(p, st.color);
+    const foreground = st.mute ? muteHex(base, p.fg0) : base;
     const fontStyle = [st.italic ? "italic" : "", st.bold && opts.bold ? "bold" : ""].filter(Boolean).join(" ");
-    tokenColors.push({ scope: scopes, settings: { foreground: slot(p, st.color), ...(fontStyle ? { fontStyle } : {}) } });
+    tokenColors.push({ scope: scopes, settings: { foreground, ...(fontStyle ? { fontStyle } : {}) } });
   });
 
   const semanticTokenColors: VsTheme["semanticTokenColors"] = {};
   for (const [sem, role] of Object.entries(SEMANTIC_ROLE)) {
     const st: TokenStyle = TOKENS[role];
-    semanticTokenColors[sem] = { foreground: slot(p, st.color), ...(st.bold && opts.bold ? { bold: true } : {}), ...(st.italic ? { italic: true } : {}) };
+    const base = slot(p, st.color);
+    const foreground = st.mute ? muteHex(base, p.fg0) : base;
+    semanticTokenColors[sem] = { foreground, ...(st.bold && opts.bold ? { bold: true } : {}), ...(st.italic ? { italic: true } : {}) };
   }
 
   return { name: titleCase(v.name), type: v.kind, semanticHighlighting: true, colors, tokenColors, semanticTokenColors };

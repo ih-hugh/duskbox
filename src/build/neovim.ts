@@ -2,6 +2,7 @@ import type { Palette, AccentName } from "../palette/types";
 import { buildPalette, type VariantConfig } from "../palette/types";
 import { TOKENS, type ColorSlot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_GROUPS } from "./groups-nvim";
+import { blend, muteHex } from "./blend";
 
 export interface Attrs { fg?: string; bg?: string; sp?: string; bold?: boolean; italic?: boolean; underline?: boolean; undercurl?: boolean; }
 export interface NvimOpts { bold: boolean; transparent?: boolean; }
@@ -11,13 +12,6 @@ function slot(p: Palette, c: ColorSlot): string {
   return p.accents[c as AccentName];
 }
 
-// blend an accent fg ~18% into bg for subtle diff backgrounds
-function mix(fg: string, bg: string): string {
-  const h = (s: string) => [1, 3, 5].map((i) => parseInt(s.slice(i, i + 2), 16));
-  const [r1, g1, b1] = h(fg), [r2, g2, b2] = h(bg); const a = 0.18;
-  const c = (x: number, y: number) => Math.round(x * a + y * (1 - a)).toString(16).padStart(2, "0");
-  return `#${c(r1!, r2!)}${c(g1!, g2!)}${c(b1!, b2!)}`;
-}
 
 export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, Attrs> {
   const p = buildPalette(v);
@@ -53,7 +47,9 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   (Object.keys(ROLE_GROUPS) as Role[]).forEach((role) => {
     const style: TokenStyle = TOKENS[role]; const groups = ROLE_GROUPS[role];
     if (!groups || !groups.length) return;
-    const attrs: Attrs = { fg: slot(p, style.color) };
+    const base = slot(p, style.color);
+    const fg = style.mute ? muteHex(base, p.fg0) : base;
+    const attrs: Attrs = { fg };
     if (style.bold && opts.bold) attrs.bold = true;
     if (style.italic) attrs.italic = true;
     for (const g of groups) hl[g] = { ...attrs };
@@ -70,8 +66,8 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl.SpellCap = { undercurl: true, sp: slot(p, TOKENS.warning.color) };
 
   const gAdd = slot(p, TOKENS.gitAdd.color), gChg = slot(p, TOKENS.gitChange.color), gDel = slot(p, TOKENS.gitDelete.color);
-  hl.DiffAdd = { bg: mix(gAdd, p.bg0) }; hl.DiffChange = { bg: mix(gChg, p.bg0) };
-  hl.DiffDelete = { bg: mix(gDel, p.bg0) }; hl.DiffText = { bg: mix(gChg, p.bg2) };
+  hl.DiffAdd = { bg: blend(gAdd, p.bg0, 0.18) }; hl.DiffChange = { bg: blend(gChg, p.bg0, 0.18) };
+  hl.DiffDelete = { bg: blend(gDel, p.bg0, 0.18) }; hl.DiffText = { bg: blend(gChg, p.bg2, 0.18) };
   hl.GitSignsAdd = { fg: gAdd }; hl.GitSignsChange = { fg: gChg }; hl.GitSignsDelete = { fg: gDel };
   hl.Added = { fg: gAdd }; hl.Changed = { fg: gChg }; hl.Removed = { fg: gDel };
 
