@@ -20,10 +20,10 @@ export const VARIANTS: VariantConfig[] = [
     bg: [0.175, 0.02, 278], fg: [0.80, 0.03, 265], accentL: 0.76, accentC: 0.105 },
   // --- high-contrast dark (bg lifted off pure-black; bright text + accents floored >=7:1) ---
   { name: "night-hc", kind: "dark", uiContrast: "high",
-    bg: [0.22, 0.012, 275], fg: [0.99, 0.008, 265], accentL: 0.84, accentC: 0.15 },
+    bg: [0.22, 0.012, 275], fg: [0.93, 0.016, 262], accentL: 0.84, accentC: 0.15 },
   // --- signature neon (portfolio), high-contrast ---
   { name: "cyber", kind: "dark", uiContrast: "high",
-    bg: [0.185, 0.012, 285], bgHex: "#13131c", fg: [0.99, 0.004, 250], accentL: 0.84, accentC: 0.18,
+    bg: [0.185, 0.012, 285], bgHex: "#13131c", fg: [0.93, 0.014, 258], accentL: 0.84, accentC: 0.18,
     accentLC: {
       red: [0.74, 0.20], orange: [0.82, 0.17], yellow: [0.88, 0.15], green: [0.84, 0.18],
       teal: [0.85, 0.14], cyan: [0.88, 0.16], blue: [0.80, 0.17], purple: [0.80, 0.16], magenta: [0.80, 0.20],

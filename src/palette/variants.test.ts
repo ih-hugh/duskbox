@@ -40,4 +40,10 @@ describe("variants", () => {
       }
     }
   });
+  it("no variant uses a pure-white foreground", () => {
+    for (const v of VARIANTS) {
+      const fg = buildPalette(v).fg0.toLowerCase();
+      expect(["#ffffff", "#fefefe", "#fdfdfd"], v.name).not.toContain(fg);
+    }
+  });
 });
