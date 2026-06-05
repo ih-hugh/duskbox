@@ -5,11 +5,68 @@
   "version": "0.1.0",
   "publisher": "ih-hugh",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/ih-hugh/duskbox.git" },
-  "engines": { "vscode": "^1.70.0" },
-  "categories": ["Themes"],
-  "keywords": ["theme", "color-theme", "dark", "light", "high-contrast", "oklch"],
-  "contributes": { "themes": [] },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ih-hugh/duskbox.git"
+  },
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "color-theme",
+    "dark",
+    "light",
+    "high-contrast",
+    "oklch"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Duskbox Dawn",
+        "uiTheme": "vs",
+        "path": "./themes/duskbox-dawn-color-theme.json"
+      },
+      {
+        "label": "Duskbox Day",
+        "uiTheme": "vs",
+        "path": "./themes/duskbox-day-color-theme.json"
+      },
+      {
+        "label": "Duskbox Day HC",
+        "uiTheme": "hc-light",
+        "path": "./themes/duskbox-day-hc-color-theme.json"
+      },
+      {
+        "label": "Duskbox Storm",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-storm-color-theme.json"
+      },
+      {
+        "label": "Duskbox Dusk",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-dusk-color-theme.json"
+      },
+      {
+        "label": "Duskbox Midnight",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-midnight-color-theme.json"
+      },
+      {
+        "label": "Duskbox Night HC",
+        "uiTheme": "hc-black",
+        "path": "./themes/duskbox-night-hc-color-theme.json"
+      },
+      {
+        "label": "Duskbox Cyber",
+        "uiTheme": "hc-black",
+        "path": "./themes/duskbox-cyber-color-theme.json"
+      }
+    ]
+  },
   "scripts": {
     "build": "tsx src/build/index.ts",
     "test": "vitest run",
