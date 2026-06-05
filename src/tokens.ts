@@ -1,42 +1,47 @@
 import type { AccentName } from "./palette/types";
 
 export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2";
-export interface TokenStyle { color: ColorSlot; bold?: boolean; italic?: boolean; }
+export interface TokenStyle { color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean; }
 
-// The duskbox identity, shared by ALL variants. Warm declarations / cool literals.
-// Bold = keyword + type (user choice). References accent NAMES, not hex.
+// The duskbox identity (shared by all variants). Targeted de-collapse within an 8-hue budget;
+// green is reserved for diagnostics/git. `mute` desaturates the accent toward fg0 (sand/soft).
+// Color is spent on meaningful, less-frequent tokens; variables/operators/punctuation stay neutral.
 export const TOKENS = {
-  keyword:      { color: "red", bold: true },
-  conditional:  { color: "red", bold: true },
-  repeat:       { color: "red", bold: true },
-  exception:    { color: "red", bold: true },
-  keywordReturn:{ color: "red", bold: true },
-  operator:     { color: "blue" },
-  function:     { color: "yellow" },
-  method:       { color: "yellow" },
-  ctor:         { color: "orange" },
-  type:         { color: "orange", bold: true },
-  typeBuiltin:  { color: "orange", bold: true },
-  builtin:      { color: "orange" },
-  parameter:    { color: "yellow" },
-  string:       { color: "cyan" },
-  escape:       { color: "teal" },
-  number:       { color: "blue" },
-  boolean:      { color: "orange" },
-  constant:     { color: "blue" },
-  property:     { color: "blue" },
-  variable:     { color: "fg0" },
-  preproc:      { color: "orange" },
-  comment:      { color: "fg2", italic: true },
-  punctuation:  { color: "fg1" },
-  error:        { color: "red" },
-  warning:      { color: "yellow" },
-  info:         { color: "blue" },
-  hint:         { color: "teal" },
-  ok:           { color: "green" },
-  gitAdd:       { color: "green" },
-  gitChange:    { color: "blue" },
-  gitDelete:    { color: "red" },
+  keyword:      { color: "red" as ColorSlot, bold: true },
+  conditional:  { color: "red" as ColorSlot, bold: true },
+  repeat:       { color: "red" as ColorSlot, bold: true },
+  exception:    { color: "red" as ColorSlot, bold: true },
+  keywordReturn:{ color: "red" as ColorSlot, bold: true },
+  function:     { color: "yellow" as ColorSlot, bold: true },
+  method:       { color: "yellow" as ColorSlot, bold: true },
+  ctor:         { color: "orange" as ColorSlot, bold: true },
+  type:         { color: "orange" as ColorSlot, bold: true },
+  typeBuiltin:  { color: "orange" as ColorSlot, bold: true },
+  parameter:    { color: "yellow" as ColorSlot, mute: true },
+  builtin:      { color: "orange" as ColorSlot, mute: true },
+  preproc:      { color: "orange" as ColorSlot, mute: true },
+  string:       { color: "cyan" as ColorSlot },
+  escape:       { color: "cyan" as ColorSlot, mute: true },
+  number:       { color: "blue" as ColorSlot },
+  constant:     { color: "purple" as ColorSlot },
+  boolean:      { color: "purple" as ColorSlot },
+  property:     { color: "teal" as ColorSlot },
+  variable:     { color: "fg0" as ColorSlot },
+  operator:     { color: "fg1" as ColorSlot },
+  punctuation:  { color: "fg2" as ColorSlot },
+  comment:      { color: "fg2" as ColorSlot, italic: true },
+  tagNative:    { color: "red" as ColorSlot, bold: true },
+  tagComponent: { color: "orange" as ColorSlot, bold: true },
+  tagAttr:      { color: "teal" as ColorSlot, mute: true },
+  tagDelim:     { color: "fg2" as ColorSlot },
+  error:        { color: "red" as ColorSlot },
+  warning:      { color: "yellow" as ColorSlot },
+  info:         { color: "blue" as ColorSlot },
+  hint:         { color: "teal" as ColorSlot },
+  ok:           { color: "green" as ColorSlot },
+  gitAdd:       { color: "green" as ColorSlot },
+  gitChange:    { color: "blue" as ColorSlot },
+  gitDelete:    { color: "red" as ColorSlot },
 } satisfies Record<string, TokenStyle>;
 
 export type Role = keyof typeof TOKENS;
