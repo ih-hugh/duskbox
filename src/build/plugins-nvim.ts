@@ -60,5 +60,69 @@ export function buildPluginGroups(p: Palette, ui: string): Record<string, Attrs>
     SnacksInputBorder: { fg: ui }, SnacksInputTitle: { fg: ui, bold: true }, SnacksInputIcon: { fg: ui },
   });
 
+  // which-key
+  Object.assign(g, {
+    WhichKey: { fg: ui }, WhichKeyBorder: { fg: ui }, WhichKeyTitle: { fg: ui, bold: true },
+    WhichKeyGroup: { fg: a.teal }, WhichKeyDesc: { fg: p.fg0 }, WhichKeySeparator: { fg: p.fg2 }, WhichKeyValue: { fg: p.fg2 },
+    WhichKeyFloat: { bg: p.bg1 }, WhichKeyNormal: { bg: p.bg1 },
+  });
+  // flash
+  Object.assign(g, {
+    FlashLabel: { fg: p.bg0, bg: ui, bold: true }, FlashMatch: { fg: p.fg2, bg: p.bg2 }, FlashCurrent: { fg: p.bg0, bg: a.yellow },
+    FlashBackdrop: { fg: p.fg2 }, FlashPrompt: { fg: p.fg0, bg: p.bg1 }, FlashPromptIcon: { fg: ui },
+  });
+  // trouble
+  Object.assign(g, {
+    TroubleNormal: { bg: p.bg1 }, TroubleText: { fg: p.fg1 },
+    TroubleSource: { fg: p.fg2 }, TroublePos: { fg: p.fg2 }, TroubleIndent: { fg: p.bg3 },
+    TroubleCount: { fg: ui, bold: true }, TroubleFoldIcon: { fg: ui },
+  });
+  // render-markdown
+  const hbg = (acc: string) => blend(p.bg0, acc, 0.1);
+  Object.assign(g, {
+    RenderMarkdownH1: { fg: a.blue, bold: true }, RenderMarkdownH2: { fg: a.teal, bold: true }, RenderMarkdownH3: { fg: a.green, bold: true },
+    RenderMarkdownH4: { fg: a.yellow, bold: true }, RenderMarkdownH5: { fg: a.orange, bold: true }, RenderMarkdownH6: { fg: a.red, bold: true },
+    RenderMarkdownH1Bg: { bg: hbg(a.blue) }, RenderMarkdownH2Bg: { bg: hbg(a.teal) }, RenderMarkdownH3Bg: { bg: hbg(a.green) },
+    RenderMarkdownH4Bg: { bg: hbg(a.yellow) }, RenderMarkdownH5Bg: { bg: hbg(a.orange) }, RenderMarkdownH6Bg: { bg: hbg(a.red) },
+    RenderMarkdownChecked: { fg: a.green }, RenderMarkdownUnchecked: { fg: p.fg2 },
+    RenderMarkdownInfo: { fg: a.blue }, RenderMarkdownWarn: { fg: a.yellow }, RenderMarkdownError: { fg: a.red }, RenderMarkdownHint: { fg: a.teal },
+    RenderMarkdownCode: { bg: p.bg1 }, RenderMarkdownCodeInline: { bg: p.bg2 }, RenderMarkdownBullet: { fg: a.orange },
+    RenderMarkdownDash: { fg: p.fg2 }, RenderMarkdownQuote: { fg: p.fg2 }, RenderMarkdownTableHead: { fg: p.fg1 }, RenderMarkdownTableRow: { fg: p.fg2 },
+    RenderMarkdownLink: { fg: a.teal, underline: true }, RenderMarkdownSign: { fg: p.fg2 },
+  });
+  // gitsigns extras (Add/Change/Delete already set in neovim.ts)
+  Object.assign(g, {
+    GitSignsStagedAdd: { fg: blend(a.green, p.fg0, 0.4) }, GitSignsStagedChange: { fg: blend(a.blue, p.fg0, 0.4) }, GitSignsStagedDelete: { fg: blend(a.red, p.fg0, 0.4) },
+    GitSignsAddInline: { bg: blend(p.bg0, a.green, 0.25) }, GitSignsChangeInline: { bg: blend(p.bg0, a.blue, 0.25) }, GitSignsDeleteInline: { bg: blend(p.bg0, a.red, 0.25) },
+    GitSignsAddPreview: { bg: blend(p.bg0, a.green, 0.18) }, GitSignsDeletePreview: { bg: blend(p.bg0, a.red, 0.18) },
+    GitSignsCurrentLineBlame: { fg: p.fg2, italic: true },
+  });
+  // mini.icons
+  Object.assign(g, {
+    MiniIconsRed: { fg: a.red }, MiniIconsOrange: { fg: a.orange }, MiniIconsYellow: { fg: a.yellow }, MiniIconsGreen: { fg: a.green },
+    MiniIconsCyan: { fg: a.cyan }, MiniIconsAzure: { fg: a.teal }, MiniIconsBlue: { fg: a.blue }, MiniIconsPurple: { fg: a.purple }, MiniIconsGrey: { fg: p.fg2 },
+  });
+  // lazy.nvim
+  Object.assign(g, {
+    LazyNormal: { bg: p.bg1 }, LazyButton: { fg: p.fg1, bg: p.bg2 }, LazyComment: { fg: p.fg2 }, LazyDimmed: { fg: p.fg2 }, LazyProp: { fg: p.fg2 },
+    LazyValue: { fg: p.fg1 }, LazyDir: { fg: a.teal }, LazyUrl: { fg: a.teal }, LazyCommit: { fg: a.green },
+    LazyButtonActive: { fg: p.bg0, bg: ui, bold: true }, LazyH1: { fg: p.bg0, bg: ui, bold: true }, LazySpecial: { fg: ui },
+    LazyProgressDone: { fg: a.green }, LazyProgressTodo: { fg: p.bg3 },
+    LazyReasonPlugin: { fg: a.purple }, LazyReasonEvent: { fg: a.yellow }, LazyReasonKeys: { fg: a.teal }, LazyReasonCmd: { fg: a.orange }, LazyReasonFt: { fg: a.blue },
+  });
+  // mason
+  Object.assign(g, {
+    MasonNormal: { bg: p.bg1 }, MasonMuted: { fg: p.fg2 }, MasonMutedBlock: { fg: p.fg2 },
+    MasonHeader: { fg: p.bg0, bg: ui, bold: true }, MasonHeaderSecondary: { fg: p.bg0, bg: ui, bold: true }, MasonHighlight: { fg: ui },
+    MasonHighlightBlock: { fg: p.bg0, bg: ui }, MasonHighlightBlockBold: { fg: p.bg0, bg: ui, bold: true },
+    MasonError: { fg: a.red }, MasonWarning: { fg: a.yellow },
+  });
+  // LSP refs/codelens + treesitter-context
+  Object.assign(g, {
+    LspReferenceText: { bg: p.bg2 }, LspReferenceRead: { bg: p.bg2 }, LspReferenceWrite: { bg: p.bg2 },
+    LspSignatureActiveParameter: { fg: ui, bold: true }, LspCodeLens: { fg: p.fg2, italic: true }, LspCodeLensSeparator: { fg: p.fg2, italic: true }, LspInfoBorder: { fg: ui },
+    TreesitterContext: { bg: p.bg1 }, TreesitterContextLineNumber: { fg: p.fg2 }, TreesitterContextSeparator: { fg: p.bg3 },
+  });
+
   return g;
 }

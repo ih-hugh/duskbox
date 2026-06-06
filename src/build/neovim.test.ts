@@ -98,4 +98,16 @@ describe("neovim emitter", () => {
     expect(base.CursorLineNr!.fg).toBe(bp.accents.yellow);
     expect(base.FloatBorder!.fg).toBe(bp.accents.blue);
   });
+  it("more plugins: accent follows variant, semantic fixed, LSP refs neutral", () => {
+    const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+    const sp = buildPalette(cs);
+    const hl = buildNeovim(cs, { bold: true });
+    for (const k of ["WhichKey", "TroubleCount", "LspSignatureActiveParameter", "MasonHighlight", "LazySpecial"])
+      expect(hl[k]!.fg, k).toBe(sp.signature);
+    expect(hl.FlashLabel!.bg).toBe(sp.signature);
+    expect(hl.MiniIconsGreen!.fg).toBe(sp.accents.green);
+    expect(hl.RenderMarkdownChecked!.fg).toBe(sp.accents.green);
+    expect(hl.LspReferenceText!.bg).toBe(sp.bg2);
+    expect(Object.keys(hl).length).toBeGreaterThanOrEqual(200);
+  });
 });
