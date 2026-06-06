@@ -76,4 +76,14 @@ describe("vscode emitter", () => {
     expect(t.colors["testing.iconPassed"]).toBe(a.green);
     expect(t.colors["minimapGutter.deletedBackground"]).toBe(a.red);
   });
+  it("neutral surfaces come from the bg/fg ramp; alpha on overlays; coverage floor", () => {
+    const p = buildPalette(dusk);
+    const t = buildVscode(dusk, { bold: true });
+    expect(t.colors["editorWidget.background"]).toBe(p.bg1);
+    expect(t.colors["menu.background"]).toBe(p.bg1);
+    expect(t.colors["quickInput.background"]).toBe(p.bg1);
+    expect(t.colors["scrollbarSlider.background"]).toMatch(/^#[0-9a-f]{6}[0-9a-f]{2}$/);
+    expect(t.colors["menu.foreground"]).toBe(p.fg0);
+    expect(Object.keys(t.colors).length).toBeGreaterThanOrEqual(200);
+  });
 });

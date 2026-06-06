@@ -130,6 +130,34 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "inputValidation.infoBackground": A(a.blue, "33"), "inputValidation.infoBorder": a.blue,
     "list.errorForeground": a.red, "list.warningForeground": a.yellow,
   });
+  // (3) Neutral — surfaces from the bg/fg ramp
+  Object.assign(colors, {
+    "editorWidget.background": p.bg1, "editorWidget.border": p.bg3, "editorWidget.foreground": p.fg0,
+    "editorSuggestWidget.background": p.bg1, "editorSuggestWidget.border": p.bg3, "editorSuggestWidget.foreground": p.fg0, "editorSuggestWidget.selectedBackground": p.bg2,
+    "editorHoverWidget.background": p.bg1, "editorHoverWidget.border": p.bg3, "editorHoverWidget.foreground": p.fg0,
+    "dropdown.background": p.bg1, "dropdown.listBackground": p.bg1, "dropdown.border": p.bg3, "dropdown.foreground": p.fg0,
+    "quickInput.background": p.bg1, "quickInput.foreground": p.fg0, "quickInputList.focusBackground": p.bg2, "quickInputList.focusForeground": p.fg0,
+    "menu.background": p.bg1, "menu.foreground": p.fg0, "menu.border": p.bg3, "menu.selectionBackground": p.bg2, "menu.selectionForeground": p.fg0, "menu.separatorBackground": p.bg3,
+    "menubar.selectionBackground": p.bg2,
+    "scrollbarSlider.background": A(p.bg3, "80"), "scrollbarSlider.hoverBackground": A(p.bg3, "aa"), "scrollbarSlider.activeBackground": A(p.bg3, "cc"),
+    "breadcrumb.foreground": p.fg2, "breadcrumb.focusForeground": p.fg0, "breadcrumb.background": p.bg0, "breadcrumbPicker.background": p.bg1,
+    "peekViewEditor.background": p.bg1, "peekViewResult.background": p.bg1, "peekViewTitle.background": p.bg1,
+    "peekViewResult.selectionBackground": p.bg2,
+    "peekViewResult.matchHighlightBackground": A(a.yellow, "33"), "peekViewEditor.matchHighlightBackground": A(a.yellow, "33"),
+    "peekViewTitleLabel.foreground": p.fg0, "peekViewTitleDescription.foreground": p.fg2,
+    "peekViewResult.fileForeground": p.fg1, "peekViewResult.lineForeground": p.fg2,
+    "notifications.background": p.bg1, "notifications.border": p.bg3, "notifications.foreground": p.fg0,
+    "notificationCenterHeader.background": p.bg2,
+    "editorGutter.background": p.bg0, "editorRuler.foreground": p.bg2,
+    "sideBar.border": p.bg3, "sideBarSectionHeader.background": p.bg1, "sideBarSectionHeader.foreground": p.fg1, "sideBarSectionHeader.border": p.bg3,
+    "panelSectionHeader.background": p.bg1,
+    "editorGroup.border": p.bg3, "editorGroupHeader.tabsBorder": p.bg3, "tab.border": p.bg1,
+    "titleBar.inactiveBackground": p.bg1, "titleBar.inactiveForeground": p.fg2, "titleBar.border": p.bg3,
+    "statusBar.border": p.bg3, "statusBarItem.hoverBackground": p.bg2,
+    "terminal.selectionBackground": p.bg3, "terminalCursor.foreground": p.fg0, "terminalCursor.background": p.bg0,
+    "tree.indentGuidesStroke": p.bg3, "checkbox.background": p.bg2, "checkbox.border": p.bg3,
+    "input.placeholderForeground": p.fg2, "widget.border": p.bg3,
+  });
 
   const tokenColors: VsTheme["tokenColors"] = [];
   (Object.keys(ROLE_SCOPES) as Role[]).forEach((role) => {
