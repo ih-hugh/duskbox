@@ -1,5 +1,12 @@
 name: ci
 on: { push: {}, pull_request: {} }
+
+# CI runs on fork PRs. Keep the token read-only and reference NO secrets here, so a
+# malicious PR has nothing to steal and can't write to the repo. (Uses `pull_request`,
+# never `pull_request_target`, so fork code never runs with repo credentials.)
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest

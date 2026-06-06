@@ -1,11 +1,31 @@
 name: release
-on: { push: { tags: ["v*"] } }
+
+# Publishing fires ONLY when a v* tag is pushed. Pushing a tag requires write access
+# to THIS repo, so a fork (which has its own copy of this file but none of the secrets)
+# can never publish to your publisher. See docs/RELEASING.md "Who can publish" for the
+# full threat model.
+on:
+  push:
+    tags: ["v*"]
+
+# Least privilege by default.
+permissions:
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # The marketplace tokens live in this Environment (repo Settings → Environments →
+    # "marketplace"), which is restricted to v* tags and — recommended — requires your
+    # approval. GitHub never exposes environment/repo secrets to pull_request runs from
+    # forks, so VSCE_PAT/OVSX_PAT are unreachable by outside contributors.
+    environment: marketplace
+    permissions:
+      contents: write # create the GitHub Release + upload the .vsix
     env:
       VSCE_PAT: ${{ secrets.VSCE_PAT }}
       OVSX_PAT: ${{ secrets.OVSX_PAT }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -13,6 +33,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - run: pnpm test # never publish a red build
       - run: pnpm build
       - run: npx @vscode/vsce package --no-dependencies -o duskbox.vsix --readme-path README.marketplace.md
       - name: Publish to VS Marketplace
@@ -24,3 +45,11 @@ jobs:
       - name: Publish to Open VSX
         if: ${{ env.OVSX_PAT != '' }}
         run: npx ovsx publish duskbox.vsix -p "$OVSX_PAT"
+      - name: GitHub Release (attach .vsix)
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" duskbox.vsix --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" duskbox.vsix \
+              --title "duskbox $GITHUB_REF_NAME" --generate-notes
+          fi
