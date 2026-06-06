@@ -3,6 +3,20 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.2.0] — 2026-06-06
+
+### Fixed
+- High-contrast variants now color the focused-element border with the variant's accent
+  (the signature, for signature variants) instead of VS Code's default teal; ambient HC
+  borders are a calm neutral.
+
+### Changed
+- Comprehensive VS Code color coverage (~230 keys): accent UI follows the variant, semantic
+  markers (gutter/ruler/diff/merge/minimap) stay fixed, and widget/menu/peek surfaces come from
+  the palette — no key falls back to a VS Code default.
+
+[1.2.0]: https://github.com/ih-hugh/duskbox/releases/tag/v1.2.0
+
 ## [1.1.1] — 2026-06-06
 
 ### Added
