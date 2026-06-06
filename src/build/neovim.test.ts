@@ -47,4 +47,23 @@ describe("neovim emitter", () => {
     expect(hl["@variable.parameter"]!.fg).not.toBe(p.fg0);
     expect(hl["@string.escape"]!.fg).not.toBe(hl.String!.fg);
   });
+  it("strings render green", () => {
+    const hl = buildNeovim(dusk, { bold: true });
+    expect(hl.String!.fg).toBe(buildPalette(dusk).accents.green);
+  });
+  it("file-explorer ignored/hidden entries stay readable (not near-bg) on every variant", () => {
+    for (const v of VARIANTS) {
+      const hl = buildNeovim(v, { bold: true });
+      const p = buildPalette(v);
+      expect(contrastRatio(hl.SnacksPickerPathIgnored!.fg as string, p.bg0), v.name)
+        .toBeGreaterThanOrEqual(3.0);
+    }
+  });
+  it("LSP inlay hints are readable against their pill background on every variant", () => {
+    for (const v of VARIANTS) {
+      const hl = buildNeovim(v, { bold: true });
+      expect(contrastRatio(hl.LspInlayHint!.fg as string, hl.LspInlayHint!.bg as string), v.name)
+        .toBeGreaterThanOrEqual(3.0);
+    }
+  });
 });

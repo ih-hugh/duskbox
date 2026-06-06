@@ -73,6 +73,13 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl.TelescopeBorder = { fg: p.bg3, bg: p.bg1 }; hl.TelescopeNormal = { fg: p.fg0, bg: p.bg1 };
   hl.TelescopeSelection = { bg: p.bg2, bold: true }; hl.TelescopeMatching = { fg: p.accents.orange, bold: true };
   hl.SnacksPickerBorder = { fg: p.bg3, bg: p.bg1 }; hl.SnacksPickerMatch = { fg: p.accents.orange, bold: true };
+  // file explorer: ignored/hidden/dimmed entries default to NonText (near-bg) — keep them readable
+  hl.SnacksPickerPathIgnored = { fg: p.fg2 }; hl.SnacksPickerPathHidden = { fg: p.fg2 };
+  hl.SnacksPickerDimmed = { fg: p.fg2 };
+  hl.NeoTreeDimText = { fg: p.fg2 }; hl.NeoTreeGitIgnored = { fg: p.fg2 }; hl.NeoTreeDotfile = { fg: p.fg2 };
+  // LSP inlay hints (inferred types / param names) default near-bg — readable text in a subtle pill
+  hl.LspInlayHint = { fg: p.fg2, bg: p.bg1 };
+  hl["@lsp.type.comment"] = { fg: p.fg2 };
   hl.CmpItemAbbrMatch = { fg: p.accents.blue, bold: true }; hl.CmpItemKind = { fg: p.accents.yellow };
   hl.IndentBlanklineChar = { fg: p.bg2 }; hl.IblIndent = { fg: p.bg2 }; hl.IblScope = { fg: p.accents.blue };
 

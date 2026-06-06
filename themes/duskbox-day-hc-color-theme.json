@@ -56,6 +56,12 @@
     "gitDecoration.addedResourceForeground": "#056519",
     "gitDecoration.modifiedResourceForeground": "#01519f",
     "gitDecoration.deletedResourceForeground": "#9d0221",
+    "gitDecoration.ignoredResourceForeground": "#2e3036",
+    "list.deemphasizedForeground": "#2e3036",
+    "editorInlayHint.foreground": "#2e3036",
+    "editorInlayHint.background": "#f7f7f7",
+    "editorInlayHint.typeForeground": "#2e3036",
+    "editorInlayHint.parameterForeground": "#2e3036",
     "editorError.foreground": "#9d0221",
     "editorWarning.foreground": "#694e05",
     "editorInfo.foreground": "#01519f",
@@ -64,7 +70,7 @@
     "terminal.ansiGreen": "#056519",
     "terminal.ansiYellow": "#694e05",
     "terminal.ansiBlue": "#01519f",
-    "terminal.ansiMagenta": "#851980",
+    "terminal.ansiMagenta": "#8d007c",
     "terminal.ansiCyan": "#005c71",
     "terminal.ansiWhite": "#1b1d22",
     "terminal.ansiBrightBlack": "#e4e4e4",
@@ -72,7 +78,7 @@
     "terminal.ansiBrightGreen": "#056519",
     "terminal.ansiBrightYellow": "#694e05",
     "terminal.ansiBrightBlue": "#01519f",
-    "terminal.ansiBrightMagenta": "#851980",
+    "terminal.ansiBrightMagenta": "#8d007c",
     "terminal.ansiBrightCyan": "#005c71",
     "terminal.ansiBrightWhite": "#0b0d12"
   },
@@ -114,7 +120,7 @@
         "entity.name.type.constructor"
       ],
       "settings": {
-        "foreground": "#813d02",
+        "foreground": "#8d007c",
         "fontStyle": "bold"
       }
     },
@@ -137,7 +143,7 @@
         "constant.language"
       ],
       "settings": {
-        "foreground": "#5e2f07"
+        "foreground": "#8d007c"
       }
     },
     {
@@ -155,7 +161,7 @@
         "string.template"
       ],
       "settings": {
-        "foreground": "#005c71"
+        "foreground": "#056519"
       }
     },
     {
@@ -163,7 +169,7 @@
         "constant.character.escape"
       ],
       "settings": {
-        "foreground": "#851980"
+        "foreground": "#005c71"
       }
     },
     {
@@ -217,7 +223,7 @@
         "keyword.control.export"
       ],
       "settings": {
-        "foreground": "#5e2f07"
+        "foreground": "#8d007c"
       }
     },
     {
@@ -322,7 +328,7 @@
       "foreground": "#056058"
     },
     "string": {
-      "foreground": "#005c71"
+      "foreground": "#056519"
     },
     "number": {
       "foreground": "#01519f"
@@ -331,7 +337,7 @@
       "foreground": "#5634ac"
     },
     "macro": {
-      "foreground": "#5e2f07"
+      "foreground": "#8d007c"
     },
     "comment": {
       "foreground": "#2e3036",

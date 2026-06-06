@@ -3,9 +3,10 @@ import type { AccentName } from "./palette/types";
 export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2";
 export interface TokenStyle { color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean; }
 
-// The duskbox identity (shared by all variants). Targeted de-collapse within an 8-hue budget;
-// green is reserved for diagnostics/git. `mute` desaturates the accent toward fg0 (sand/soft).
-// Color is spent on meaningful, less-frequent tokens; variables/operators/punctuation stay neutral.
+// The duskbox identity (shared by all variants). Targeted de-collapse within an 8-hue budget.
+// Strings are green (near-neon on HC variants); green is otherwise only diagnostics/git.
+// `mute` desaturates the accent toward fg0 (sand/soft). Color is spent on meaningful,
+// less-frequent tokens; variables/operators/punctuation stay neutral.
 export const TOKENS = {
   keyword:      { color: "red" as ColorSlot, bold: true },
   conditional:  { color: "red" as ColorSlot, bold: true },
@@ -14,14 +15,14 @@ export const TOKENS = {
   keywordReturn:{ color: "red" as ColorSlot, bold: true },
   function:     { color: "yellow" as ColorSlot, bold: true },
   method:       { color: "yellow" as ColorSlot, bold: true },
-  ctor:         { color: "orange" as ColorSlot, bold: true },
+  ctor:         { color: "magenta" as ColorSlot, bold: true },
   type:         { color: "orange" as ColorSlot, bold: true },
   typeBuiltin:  { color: "orange" as ColorSlot, bold: true },
   parameter:    { color: "yellow" as ColorSlot, mute: true },
-  builtin:      { color: "orange" as ColorSlot, mute: true },
-  preproc:      { color: "orange" as ColorSlot, mute: true },
-  string:       { color: "cyan" as ColorSlot },
-  escape:       { color: "magenta" as ColorSlot },
+  builtin:      { color: "magenta" as ColorSlot },
+  preproc:      { color: "magenta" as ColorSlot },
+  string:       { color: "green" as ColorSlot },
+  escape:       { color: "cyan" as ColorSlot },
   number:       { color: "blue" as ColorSlot },
   constant:     { color: "purple" as ColorSlot },
   boolean:      { color: "purple" as ColorSlot },

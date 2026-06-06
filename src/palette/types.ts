@@ -5,7 +5,7 @@ export type AccentName =
 
 /** Shared hue wheel (degrees). Per-variant L/C come from VariantConfig; cyber overrides hues. */
 export const BASE_HUES: Record<AccentName, number> = {
-  red: 22, orange: 52, yellow: 85, green: 145, teal: 185, cyan: 220, blue: 255, purple: 290, magenta: 330,
+  red: 22, orange: 52, yellow: 85, green: 145, teal: 185, cyan: 220, blue: 255, purple: 290, magenta: 335,
 };
 
 export interface VariantConfig {
@@ -50,7 +50,10 @@ export function buildPalette(v: VariantConfig): Palette {
   const accents = {} as Record<AccentName, string>;
   for (const name of Object.keys(BASE_HUES) as AccentName[]) {
     const hue = v.hues?.[name] ?? BASE_HUES[name];
-    const [L, C] = v.accentLC?.[name] ?? [v.accentL, v.accentC];
+    let [L, C] = v.accentLC?.[name] ?? [v.accentL, v.accentC];
+    // magenta is the "fuchsia" standout (this / import / constructor) — boost its chroma so it
+    // pops/neon, unless the variant already pins it explicitly (e.g. cyber's neon wheel).
+    if (name === "magenta" && !v.accentLC?.magenta) C = C * 1.4;
     accents[name] = oklchToHex(L, C, hue);
   }
 

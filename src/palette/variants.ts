@@ -28,7 +28,7 @@ export const VARIANTS: VariantConfig[] = [
       red: [0.74, 0.20], orange: [0.82, 0.17], yellow: [0.88, 0.15], green: [0.84, 0.18],
       teal: [0.85, 0.14], cyan: [0.88, 0.16], blue: [0.80, 0.17], purple: [0.80, 0.16], magenta: [0.80, 0.20],
     },
-    hues: { red: 25, orange: 60, yellow: 95, green: 145, teal: 210, cyan: 195, blue: 245, purple: 280, magenta: 330 },
+    hues: { red: 25, orange: 60, yellow: 95, green: 145, teal: 210, cyan: 195, blue: 245, purple: 280, magenta: 335 },
   },
 ];
 

@@ -15,11 +15,12 @@ describe("tokens", () => {
     expect(TOKENS.comment.italic).toBe(true);
     expect(TOKENS.comment.color).toBe("fg2");
   });
-  it("green is reserved for diagnostics/git, never code syntax", () => {
-    const syntax = ["keyword","function","method","type","ctor","typeBuiltin","builtin","parameter",
-      "string","escape","number","constant","boolean","property","variable","preproc","operator",
-      "punctuation","tagNative","tagComponent","tagAttr","tagDelim"];
-    for (const r of syntax) expect((TOKENS as any)[r].color, r).not.toBe("green");
+  it("green is limited to string + diagnostics/git (no other syntax role is green)", () => {
+    const allowedGreen = new Set(["string", "ok", "gitAdd"]);
+    for (const [role, s] of Object.entries(TOKENS)) {
+      if (s.color === "green") expect(allowedGreen.has(role), `${role} unexpectedly green`).toBe(true);
+    }
+    expect(TOKENS.string.color).toBe("green");
   });
   it("high-frequency roles are mutually distinct (slot+mute combo)", () => {
     const hi = ["keyword","function","type","parameter","string","number","constant","property"];
