@@ -19,6 +19,7 @@ export interface VariantConfig {
   bgHex?: string;               // exact bg override (e.g. cyber's #0a0a0f)
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
   accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides
+  signature?: number;          // signature hue°: marks a signature variant — sets the magenta slot hue + bg3 tint here; the emitters also recolor the UI accent
 }
 
 export interface Palette {
@@ -28,6 +29,7 @@ export interface Palette {
   bg0: string; bg1: string; bg2: string; bg3: string; // editor, panel/darker, cursorline, selection
   fg0: string; fg1: string; fg2: string;              // text, dim, muted/comment
   accents: Record<AccentName, string>;
+  signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
 export function buildPalette(v: VariantConfig): Palette {
@@ -38,7 +40,7 @@ export function buildPalette(v: VariantConfig): Palette {
   const bg0 = v.bgHex ?? oklchToHex(clamp01(bgL), bgC, bgH);
   const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
   const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
-  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, 255); // selection (cool tint)
+  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, v.signature ?? 255); // selection (cool, or signature-tinted)
   // High-contrast variants keep secondary text much closer to the main fg so
   // comments / dim text stay legible against the near-black (or near-white) bg.
   const dimDrop = v.uiContrast === "high" ? 0.07 : 0.12;
@@ -49,7 +51,9 @@ export function buildPalette(v: VariantConfig): Palette {
 
   const accents = {} as Record<AccentName, string>;
   for (const name of Object.keys(BASE_HUES) as AccentName[]) {
-    const hue = v.hues?.[name] ?? BASE_HUES[name];
+    let hue = v.hues?.[name] ?? BASE_HUES[name];
+    // signature is the semantic override; it wins over hues.magenta for the magenta slot
+    if (name === "magenta" && v.signature !== undefined) hue = v.signature;
     let [L, C] = v.accentLC?.[name] ?? [v.accentL, v.accentC];
     // magenta is the "fuchsia" standout (this / import / constructor) — boost its chroma so it
     // pops/neon, unless the variant already pins it explicitly (e.g. cyber's neon wheel).
@@ -57,5 +61,9 @@ export function buildPalette(v: VariantConfig): Palette {
     accents[name] = oklchToHex(L, C, hue);
   }
 
-  return { name: v.name, kind: v.kind, uiContrast: v.uiContrast, bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents };
+  return {
+    name: v.name, kind: v.kind, uiContrast: v.uiContrast,
+    bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents,
+    signature: v.signature !== undefined ? accents.magenta : undefined,
+  };
 }

@@ -24,4 +24,15 @@ describe("buildPalette", () => {
     for (const k of Object.keys(p.accents))
       expect(contrastRatio((p.accents as any)[k], p.bg0)).toBeGreaterThanOrEqual(4.5);
   });
+  it("signature variant overrides the magenta slot hue, tints bg3, and exposes palette.signature", () => {
+    const azureDusk: VariantConfig = { ...dusk, name: "dusk-azure", signature: 235 };
+    const p = buildPalette(azureDusk);
+    expect(p.signature).toMatch(/^#[0-9a-f]{6}$/);
+    expect(p.signature).toBe(p.accents.magenta); // signature IS the magenta slot
+    // base dusk: no signature, magenta stays the fuchsia default, bg3 stays blue-tinted
+    const base = buildPalette(dusk);
+    expect(base.signature).toBeUndefined();
+    expect(base.accents.magenta).not.toBe(p.accents.magenta);
+    expect(base.bg3).not.toBe(p.bg3); // selection tint shifts toward the signature hue
+  });
 });
