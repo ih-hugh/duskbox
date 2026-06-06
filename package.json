@@ -64,6 +64,46 @@
         "label": "Duskbox Cyber",
         "uiTheme": "hc-black",
         "path": "./themes/duskbox-cyber-color-theme.json"
+      },
+      {
+        "label": "Duskbox Dusk Azure",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-dusk-azure-color-theme.json"
+      },
+      {
+        "label": "Duskbox Cyber Azure",
+        "uiTheme": "hc-black",
+        "path": "./themes/duskbox-cyber-azure-color-theme.json"
+      },
+      {
+        "label": "Duskbox Dusk Neon Purple",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-dusk-neon-purple-color-theme.json"
+      },
+      {
+        "label": "Duskbox Cyber Neon Purple",
+        "uiTheme": "hc-black",
+        "path": "./themes/duskbox-cyber-neon-purple-color-theme.json"
+      },
+      {
+        "label": "Duskbox Dusk Magenta",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-dusk-magenta-color-theme.json"
+      },
+      {
+        "label": "Duskbox Cyber Magenta",
+        "uiTheme": "hc-black",
+        "path": "./themes/duskbox-cyber-magenta-color-theme.json"
+      },
+      {
+        "label": "Duskbox Dusk Salmon",
+        "uiTheme": "vs-dark",
+        "path": "./themes/duskbox-dusk-salmon-color-theme.json"
+      },
+      {
+        "label": "Duskbox Cyber Salmon",
+        "uiTheme": "hc-black",
+        "path": "./themes/duskbox-cyber-salmon-color-theme.json"
       }
     ]
   },
