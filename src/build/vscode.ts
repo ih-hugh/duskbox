@@ -2,7 +2,7 @@ import type { Palette, AccentName } from "../palette/types";
 import { buildPalette, type VariantConfig } from "../palette/types";
 import { TOKENS, type ColorSlot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_SCOPES, SEMANTIC_ROLE } from "./groups-vscode";
-import { muteHex } from "./blend";
+import { blend, muteHex } from "./blend";
 
 export interface VsTheme {
   name: string; type: "dark" | "light"; semanticHighlighting: true;
@@ -30,6 +30,10 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
   const ui = sig ?? a.blue;           // decorative accents already blue
   const uiYellow = sig ?? a.yellow;   // active line number
   const uiOrange = sig ?? a.orange;   // fuzzy-match highlight
+  const isHC = v.uiContrast === "high";
+  const ann = blend(p.bg0, p.fg0, 0.34);                 // calm-but-visible ambient border (HC contrastBorder)
+  const sel = p.bg3;                                     // tinted selection / active surface
+  const A = (hex: string, alpha: string) => hex + alpha; // hex + 2-digit alpha
   const colors: Record<string, string> = {
     "editor.background": p.bg0, "editor.foreground": p.fg0,
     "editorLineNumber.foreground": p.fg2, "editorLineNumber.activeForeground": uiYellow,
@@ -62,6 +66,44 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "terminal.ansiBrightBlue": a.blue, "terminal.ansiBrightMagenta": a.magenta, "terminal.ansiBrightCyan": a.cyan, "terminal.ansiBrightWhite": p.fg0,
   };
   if (sig) colors["editorBracketMatch.border"] = sig;
+  // (1) Accent — foreground/border/thin surfaces follow the variant (signature ?? blue)
+  Object.assign(colors, {
+    "selection.background": sel,
+    "progressBar.background": ui,
+    "pickerGroup.foreground": ui,
+    "textLink.foreground": ui,
+    "textLink.activeForeground": blend(ui, p.fg0, 0.25),
+    "editorLink.activeForeground": ui,
+    "notificationLink.foreground": ui,
+    "breadcrumb.activeSelectionForeground": ui,
+    "panelTitle.activeBorder": ui,
+    "tab.activeBorder": ui,
+    "sash.hoverBorder": ui,
+    "button.hoverBackground": blend(ui, p.fg0, 0.18),
+    "list.focusOutline": ui,
+    "list.focusAndSelectionOutline": ui,
+    "inputOption.activeBorder": ui,
+    "inputOption.activeForeground": p.fg0,
+    "keybindingLabel.foreground": ui,
+    "peekView.border": ui,
+    "editorSuggestWidget.highlightForeground": ui,
+    "editorSuggestWidget.focusHighlightForeground": ui,
+    "statusBarItem.remoteBackground": ui,
+    "statusBarItem.remoteForeground": p.bg0,
+    "notebook.focusedCellBorder": ui,
+    "editorBracketHighlight.foreground1": a.yellow,
+    "editorBracketHighlight.foreground2": a.purple,
+    "editorBracketHighlight.foreground3": a.blue,
+    "editorBracketHighlight.foreground4": a.green,
+    "editorBracketHighlight.foreground5": a.orange,
+    "editorBracketHighlight.foreground6": a.teal,
+    "editorBracketHighlight.unexpectedBracket.foreground": a.red,
+  });
+  // (HC fix) only high-contrast variants get element borders; active = signature, ambient = calm
+  if (isHC) {
+    colors["contrastActiveBorder"] = ui;
+    colors["contrastBorder"] = ann;
+  }
 
   const tokenColors: VsTheme["tokenColors"] = [];
   (Object.keys(ROLE_SCOPES) as Role[]).forEach((role) => {

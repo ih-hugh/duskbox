@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { buildVscode, uiThemeFor } from "./vscode";
 import { VARIANTS } from "../palette/variants";
 import { buildPalette } from "../palette/types";
+import { contrastRatio } from "../oklch";
 
 const dusk = VARIANTS.find((v) => v.name === "dusk")!;
 const cyber = VARIANTS.find((v) => v.name === "cyber")!;
@@ -42,5 +43,27 @@ describe("vscode emitter", () => {
     const bt = buildVscode(dusk, { bold: true });
     expect(bt.colors["focusBorder"]).toBe(buildPalette(dusk).accents.blue);
     expect(bt.colors["editorBracketMatch.border"]).toBeUndefined();
+  });
+  it("HC contrast borders: active = signature, ambient = calm; normal variants set neither", () => {
+    const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+    const sp = buildPalette(cs);
+    const t = buildVscode(cs, { bold: true });
+    expect(t.colors["contrastActiveBorder"]).toBe(sp.signature);
+    expect(t.colors["contrastBorder"]).toBeDefined();
+    expect(t.colors["contrastBorder"]).not.toBe(sp.signature);
+    expect(t.colors["contrastBorder"]!.toLowerCase()).not.toBe("#6fc3df");
+    expect(contrastRatio(t.colors["contrastBorder"]!, sp.bg0)).toBeGreaterThanOrEqual(2.0);
+    const d = buildVscode(dusk, { bold: true });
+    expect(d.colors["contrastActiveBorder"]).toBeUndefined();
+    expect(d.colors["contrastBorder"]).toBeUndefined();
+  });
+  it("accent UI keys follow the variant; selection stays a tinted surface (not the raw accent)", () => {
+    const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+    const sp = buildPalette(cs);
+    const t = buildVscode(cs, { bold: true });
+    for (const k of ["textLink.foreground", "progressBar.background", "pickerGroup.foreground", "peekView.border", "list.focusOutline", "keybindingLabel.foreground"])
+      expect(t.colors[k], k).toBe(sp.signature);
+    expect(t.colors["selection.background"]).toBe(sp.bg3);
+    expect(buildVscode(dusk, { bold: true }).colors["textLink.foreground"]).toBe(buildPalette(dusk).accents.blue);
   });
 });
