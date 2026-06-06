@@ -2,7 +2,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { VARIANTS } from "../src/palette/variants";
-import { buildPalette, type AccentName } from "../src/palette/types";
+import { buildPalette, BASE_HUES, type AccentName } from "../src/palette/types";
 
 const ACCENTS: AccentName[] = ["red","orange","yellow","green","teal","cyan","blue","purple","magenta"];
 const MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
@@ -32,7 +32,55 @@ function svg(name: string): string {
 </svg>`;
 }
 
+// palette.svg — the "color diagram": an OKLCH hue wheel (9 equiluminant accents placed by
+// hue angle) beside a syntax legend (role -> color). Uses the default `dusk` palette.
+function diagram(): string {
+  const p = buildPalette(VARIANTS.find((x) => x.name === "dusk")!);
+  const a = p.accents;
+  const W = 820, H = 400, cx = 200, cy = 212, R = 122;
+  const rad = (d: number) => (d * Math.PI) / 180;
+  let wheel = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${p.fg2}" stroke-opacity="0.22"/>`;
+  for (const acc of ACCENTS) {
+    const h = BASE_HUES[acc], c = Math.cos(rad(h)), s = Math.sin(rad(h));
+    const dx = cx + R * c, dy = cy - R * s, lx = cx + (R + 26) * c, ly = cy - (R + 26) * s;
+    const anchor = c > 0.2 ? "start" : c < -0.2 ? "end" : "middle";
+    wheel += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="11" fill="${a[acc]}" stroke="${p.bg0}" stroke-width="2"/>`;
+    wheel += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" font-family="${MONO}" font-size="11" fill="${p.fg2}" text-anchor="${anchor}">${acc}</text>`;
+  }
+  wheel += `<text x="${cx}" y="${cy - 1}" font-family="${MONO}" font-size="12" fill="${p.fg1}" text-anchor="middle">equiluminant</text>`;
+  wheel += `<text x="${cx}" y="${cy + 16}" font-family="${MONO}" font-size="10" fill="${p.fg2}" text-anchor="middle">variety from hue</text>`;
+  const rows: [string, string, boolean, boolean][] = [
+    ["keyword", a.red, true, false],
+    ["function", a.yellow, true, false],
+    ["type", a.orange, true, false],
+    ["property", a.teal, false, false],
+    ["string", a.green, false, false],
+    ["escape", a.cyan, false, false],
+    ["number", a.blue, false, false],
+    ["constant", a.purple, false, false],
+    ["this / import / constructor", a.magenta, false, false],
+    ["comment", p.fg2, false, true],
+  ];
+  const lx0 = 440;
+  let y = 92;
+  let legend = `<text x="${lx0}" y="${y - 22}" font-family="${MONO}" font-size="12" fill="${p.fg1}">syntax → color</text>`;
+  for (const [role, color, bold, italic] of rows) {
+    const st = [bold ? 'font-weight="700"' : "", italic ? 'font-style="italic"' : ""].filter(Boolean).join(" ");
+    legend += `<rect x="${lx0}" y="${y - 13}" width="18" height="18" rx="4" fill="${color}"/>`;
+    legend += `<text x="${lx0 + 28}" y="${y + 1}" font-family="${MONO}" font-size="13" fill="${p.fg0}" ${st}>${esc(role)}</text>`;
+    y += 28;
+  }
+  legend += `<text x="${lx0}" y="${y + 4}" font-family="${MONO}" font-size="10" fill="${p.fg2}">signature variants recolor this row + the UI accent</text>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="duskbox OKLCH palette diagram">
+  <rect width="${W}" height="${H}" rx="14" fill="${p.bg0}"/>
+  <text x="32" y="40" font-family="${MONO}" font-size="14" fill="${p.fg1}">duskbox — OKLCH palette</text>
+  ${wheel}
+  ${legend}
+</svg>`;
+}
+
 const root = resolve(import.meta.dirname, "..");
 mkdirSync(resolve(root, "docs/img"), { recursive: true });
 for (const v of VARIANTS) writeFileSync(resolve(root, `docs/img/${v.name}.svg`), svg(v.name) + "\n");
-console.log(`gallery: wrote ${VARIANTS.length} SVGs to docs/img/`);
+writeFileSync(resolve(root, "docs/img/palette.svg"), diagram() + "\n");
+console.log(`gallery: wrote ${VARIANTS.length} variant SVGs + palette.svg to docs/img/`);

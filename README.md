@@ -4,6 +4,12 @@ A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks:
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
+## Palette
+
+![duskbox OKLCH palette](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/palette.svg)
+
+Designed in **OKLCH**: the nine accents share one lightness band (**equiluminant**) and get their variety from *hue, not brightness*, so nothing vibrates. In the **signature** variants, `this`/`import`/`constructor` and the UI accent take a single signature color.
+
 ## Variants
 
 | Variant | Mood |
@@ -31,6 +37,8 @@ A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks:
 
 ## Gallery
 
+The eight core variants:
+
 ![dusk](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk.svg)
 ![cyber](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/cyber.svg)
 ![night-hc](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/night-hc.svg)
@@ -39,6 +47,22 @@ A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks:
 ![day](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/day.svg)
 ![day-hc](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/day-hc.svg)
 ![dawn](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dawn.svg)
+
+<details>
+<summary><b>Signature variants</b> — eight more (azure · neon-purple · magenta · salmon, each on dusk and cyber)</summary>
+
+<br>
+
+![dusk-azure](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk-azure.svg)
+![cyber-azure](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/cyber-azure.svg)
+![dusk-neon-purple](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk-neon-purple.svg)
+![cyber-neon-purple](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/cyber-neon-purple.svg)
+![dusk-magenta](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk-magenta.svg)
+![cyber-magenta](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/cyber-magenta.svg)
+![dusk-salmon](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk-salmon.svg)
+![cyber-salmon](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/cyber-salmon.svg)
+
+</details>
 
 ## Neovim
 
