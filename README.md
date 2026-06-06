@@ -17,6 +17,18 @@ A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks:
 | `duskbox-night-hc` | high-contrast dark |
 | `duskbox-cyber` | neon-on-black (high contrast) |
 
+### Signature variants
+
+`dusk` and `cyber` also come in four **signature** flavors — the standout tokens
+(`this`/`import`/`constructor`) and the UI accent take a signature color:
+
+| signature | dark | neon |
+| --- | --- | --- |
+| Azure | `duskbox-dusk-azure` | `duskbox-cyber-azure` |
+| Neon Purple | `duskbox-dusk-neon-purple` | `duskbox-cyber-neon-purple` |
+| Magenta | `duskbox-dusk-magenta` | `duskbox-cyber-magenta` |
+| Salmon | `duskbox-dusk-salmon` | `duskbox-cyber-salmon` |
+
 ## Gallery
 
 ![dusk](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk.svg)
