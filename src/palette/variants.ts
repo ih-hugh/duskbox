@@ -32,4 +32,20 @@ export const VARIANTS: VariantConfig[] = [
   },
 ];
 
+// Signature variants: dusk/cyber bases recolored around a chosen accent. The signature
+// overrides the magenta slot (this/import/constructor/builtins) AND the UI accent (emitters).
+// cyber inherits its neon magenta L/C [0.80,0.20] (clears 7:1 at ~9-10:1); dusk gets the ×1.4 boost.
+const SIGNATURES: { slug: string; hue: number }[] = [
+  { slug: "azure", hue: 235 },
+  { slug: "neon-purple", hue: 300 },
+  { slug: "magenta", hue: 322 },
+  { slug: "salmon", hue: 32 },
+];
+const _duskBase = VARIANTS.find((v) => v.name === "dusk")!;
+const _cyberBase = VARIANTS.find((v) => v.name === "cyber")!;
+for (const s of SIGNATURES) {
+  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue });
+  VARIANTS.push({ ..._cyberBase, name: `cyber-${s.slug}`, signature: s.hue });
+}
+
 export const VARIANT_NAMES = VARIANTS.map((v) => v.name);

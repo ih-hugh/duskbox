@@ -4,8 +4,12 @@ import { buildPalette, BASE_HUES } from "./types";
 import { contrastRatio } from "../oklch";
 
 describe("variants", () => {
-  it("defines exactly the 8 expected variants", () => {
-    expect(VARIANT_NAMES).toEqual(["dawn","day","day-hc","storm","dusk","midnight","night-hc","cyber"]);
+  it("defines the 8 base + 8 signature variants", () => {
+    expect(VARIANT_NAMES).toEqual([
+      "dawn", "day", "day-hc", "storm", "dusk", "midnight", "night-hc", "cyber",
+      "dusk-azure", "cyber-azure", "dusk-neon-purple", "cyber-neon-purple",
+      "dusk-magenta", "cyber-magenta", "dusk-salmon", "cyber-salmon",
+    ]);
   });
   it("all variants build without gamut errors", () => {
     for (const v of VARIANTS) expect(buildPalette(v).bg0).toMatch(/^#[0-9a-f]{6}$/);
@@ -45,5 +49,13 @@ describe("variants", () => {
       const fg = buildPalette(v).fg0.toLowerCase();
       expect(["#ffffff", "#fefefe", "#fdfdfd"], v.name).not.toContain(fg);
     }
+  });
+  it("signature variants set palette.signature; base variants do not", () => {
+    const sigNames = ["dusk-azure", "cyber-salmon", "dusk-magenta", "cyber-neon-purple"];
+    for (const n of sigNames) {
+      const p = buildPalette(VARIANTS.find((v) => v.name === n)!);
+      expect(p.signature, n).toBe(p.accents.magenta);
+    }
+    expect(buildPalette(VARIANTS.find((v) => v.name === "dusk")!).signature).toBeUndefined();
   });
 });
