@@ -18,6 +18,9 @@ jobs:
       - name: Publish to VS Marketplace
         if: ${{ env.VSCE_PAT != '' }}
         run: npx @vscode/vsce publish --no-dependencies -p "$VSCE_PAT" --readme-path README.marketplace.md
+      - name: Ensure Open VSX namespace
+        if: ${{ env.OVSX_PAT != '' }}
+        run: npx ovsx create-namespace ihhugh -p "$OVSX_PAT" || echo "namespace already exists"
       - name: Publish to Open VSX
         if: ${{ env.OVSX_PAT != '' }}
         run: npx ovsx publish duskbox.vsix -p "$OVSX_PAT"
