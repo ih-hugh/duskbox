@@ -17,26 +17,32 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   const hl: Record<string, Attrs> = {};
   const bgEditor = opts.transparent ? undefined : p.bg0;
 
+  // Signature variants recolor the decorative UI accent. Fall back to the ORIGINAL accent
+  // per group so base variants stay byte-identical (p.signature is undefined for them).
+  const uiBlue = p.signature ?? p.accents.blue;     // groups already blue
+  const uiOrange = p.signature ?? p.accents.orange; // MatchParen + fuzzy-match groups
+  const uiYellow = p.signature ?? p.accents.yellow; // CursorLineNr
+
   Object.assign(hl, {
     Normal: { fg: p.fg0, bg: bgEditor },
     NormalNC: { fg: p.fg0, bg: bgEditor },
     NormalFloat: { fg: p.fg0, bg: p.bg1 },
-    FloatBorder: { fg: p.accents.blue, bg: p.bg1 },
-    FloatTitle: { fg: p.accents.blue, bg: p.bg1, bold: true },
+    FloatBorder: { fg: uiBlue, bg: p.bg1 },
+    FloatTitle: { fg: uiBlue, bg: p.bg1, bold: true },
     Cursor: { fg: p.bg0, bg: p.fg0 },
     CursorLine: { bg: p.bg2 }, CursorColumn: { bg: p.bg2 },
-    CursorLineNr: { fg: p.accents.yellow, bold: true },
+    CursorLineNr: { fg: uiYellow, bold: true },
     LineNr: { fg: p.fg2 }, SignColumn: { bg: bgEditor },
     Visual: { bg: p.bg3 }, VisualNOS: { bg: p.bg3 },
     Search: { fg: p.bg0, bg: p.accents.yellow }, IncSearch: { fg: p.bg0, bg: p.accents.orange }, CurSearch: { fg: p.bg0, bg: p.accents.orange },
-    Pmenu: { fg: p.fg0, bg: p.bg1 }, PmenuSel: { fg: p.bg0, bg: p.accents.blue, bold: true },
+    Pmenu: { fg: p.fg0, bg: p.bg1 }, PmenuSel: { fg: p.bg0, bg: uiBlue, bold: true },
     PmenuSbar: { bg: p.bg1 }, PmenuThumb: { bg: p.bg3 },
     StatusLine: { fg: p.fg1, bg: p.bg1 }, StatusLineNC: { fg: p.fg2, bg: p.bg1 },
-    TabLine: { fg: p.fg2, bg: p.bg1 }, TabLineSel: { fg: p.bg0, bg: p.accents.blue }, TabLineFill: { bg: p.bg1 },
+    TabLine: { fg: p.fg2, bg: p.bg1 }, TabLineSel: { fg: p.bg0, bg: uiBlue }, TabLineFill: { bg: p.bg1 },
     WinSeparator: { fg: p.bg3, bold: true }, VertSplit: { fg: p.bg3 },
-    Folded: { fg: p.accents.blue, bg: p.bg1 }, FoldColumn: { fg: p.fg2, bg: bgEditor },
-    MatchParen: { fg: p.accents.orange, bold: true },
-    Title: { fg: p.accents.blue, bold: true }, Directory: { fg: p.accents.blue },
+    Folded: { fg: uiBlue, bg: p.bg1 }, FoldColumn: { fg: p.fg2, bg: bgEditor },
+    MatchParen: { fg: uiOrange, bold: true },
+    Title: { fg: uiBlue, bold: true }, Directory: { fg: uiBlue },
     NonText: { fg: p.bg3 }, Whitespace: { fg: p.bg3 }, SpecialKey: { fg: p.bg3 },
     ColorColumn: { bg: p.bg1 }, QuickFixLine: { bg: p.bg3, bold: true },
     ErrorMsg: { fg: p.accents.red }, WarningMsg: { fg: p.accents.yellow }, ModeMsg: { fg: p.fg1, bold: true },
@@ -71,8 +77,8 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl.Added = { fg: gAdd }; hl.Changed = { fg: gChg }; hl.Removed = { fg: gDel };
 
   hl.TelescopeBorder = { fg: p.bg3, bg: p.bg1 }; hl.TelescopeNormal = { fg: p.fg0, bg: p.bg1 };
-  hl.TelescopeSelection = { bg: p.bg2, bold: true }; hl.TelescopeMatching = { fg: p.accents.orange, bold: true };
-  hl.SnacksPickerBorder = { fg: p.bg3, bg: p.bg1 }; hl.SnacksPickerMatch = { fg: p.accents.orange, bold: true };
+  hl.TelescopeSelection = { bg: p.bg2, bold: true }; hl.TelescopeMatching = { fg: uiOrange, bold: true };
+  hl.SnacksPickerBorder = { fg: p.bg3, bg: p.bg1 }; hl.SnacksPickerMatch = { fg: uiOrange, bold: true };
   // file explorer: ignored/hidden/dimmed entries default to NonText (near-bg) — keep them readable
   hl.SnacksPickerPathIgnored = { fg: p.fg2 }; hl.SnacksPickerPathHidden = { fg: p.fg2 };
   hl.SnacksPickerDimmed = { fg: p.fg2 };
@@ -80,7 +86,7 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   // LSP inlay hints (inferred types / param names) default near-bg — readable text in a subtle pill
   hl.LspInlayHint = { fg: p.fg2, bg: p.bg1 };
   hl["@lsp.type.comment"] = { fg: p.fg2 };
-  hl.CmpItemAbbrMatch = { fg: p.accents.blue, bold: true }; hl.CmpItemKind = { fg: p.accents.yellow };
+  hl.CmpItemAbbrMatch = { fg: uiBlue, bold: true }; hl.CmpItemKind = { fg: p.accents.yellow };
   hl.IndentBlanklineChar = { fg: p.bg2 }; hl.IblIndent = { fg: p.bg2 }; hl.IblScope = { fg: p.accents.blue };
 
   hl["@markup.heading"] = { fg: p.accents.blue, bold: true }; hl["@markup.link"] = { fg: p.accents.teal, underline: true };

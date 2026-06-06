@@ -66,4 +66,26 @@ describe("neovim emitter", () => {
         .toBeGreaterThanOrEqual(3.0);
     }
   });
+  it("signature variants paint syntax + UI accent with the signature; base stays unchanged", () => {
+    const azureDusk = VARIANTS.find((v) => v.name === "dusk-azure")!;
+    const sp = buildPalette(azureDusk);
+    const hl = buildNeovim(azureDusk, { bold: true });
+    // UI accent -> signature
+    for (const g of ["FloatBorder", "FloatTitle", "Title", "Directory", "Folded", "MatchParen", "CursorLineNr"]) {
+      expect(hl[g]!.fg, g).toBe(sp.signature);
+    }
+    expect(hl.PmenuSel!.bg).toBe(sp.signature);
+    expect(hl.TabLineSel!.bg).toBe(sp.signature);
+    expect(hl.SnacksPickerMatch!.fg).toBe(sp.signature);
+    // syntax standout -> signature (same slot)
+    expect(hl["@variable.builtin"]!.fg).toBe(sp.signature);
+    // semantics stay put: info stays blue, not the signature
+    expect(hl.DiagnosticInfo!.fg).toBe(sp.accents.blue);
+    // base dusk: original colors preserved (orange paren, yellow line-nr, blue border)
+    const bp = buildPalette(dusk);
+    const base = buildNeovim(dusk, { bold: true });
+    expect(base.MatchParen!.fg).toBe(bp.accents.orange);
+    expect(base.CursorLineNr!.fg).toBe(bp.accents.yellow);
+    expect(base.FloatBorder!.fg).toBe(bp.accents.blue);
+  });
 });
