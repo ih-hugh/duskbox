@@ -25,7 +25,9 @@ jobs:
       - uses: rhysd/action-setup-vim@v1
         with: { neovim: true, version: stable }
       - name: neovim smoke (all variants)
+        # Derive the variant list from the generated colors/ so it never drifts as variants are added.
         run: |
-          for v in dawn day day-hc storm dusk midnight night-hc cyber; do
+          for f in colors/duskbox-*.lua; do
+            v=$(basename "$f" .lua); v=${v#duskbox-}
             nvim -u NONE --headless -c "lua vim.g.duskbox_test_variant='$v'" -c "luafile scripts/nvim-smoke.lua" -c "qa!"
           done
