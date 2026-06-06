@@ -14,6 +14,10 @@ All notable changes to **duskbox** are documented here. Format follows
 - Comprehensive VS Code color coverage (~230 keys): accent UI follows the variant, semantic
   markers (gutter/ruler/diff/merge/minimap) stay fixed, and widget/menu/peek surfaces come from
   the palette — no key falls back to a VS Code default.
+- Neovim: comprehensive plugin coverage (blink.cmp, bufferline, noice, snacks, which-key, flash,
+  trouble, render-markdown, gitsigns, mini.icons, lazy, mason, LSP references) — accent groups
+  follow the variant; plus a per-variant lualine theme whose mode segment follows the variant
+  (`duskbox.load` applies it; opt out with `setup({ lualine = false })`).
 
 [1.2.0]: https://github.com/ih-hugh/duskbox/releases/tag/v1.2.0
 
