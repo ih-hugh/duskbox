@@ -7,7 +7,7 @@ from this Git repo, so every push to `main` reaches them via `:Lazy update`.
 ## One-time setup — publisher accounts + secrets
 
 ### VS Code Marketplace
-1. Create a publisher with ID **`ih-hugh`** at <https://marketplace.visualstudio.com/manage>
+1. Create a publisher with ID **`ihhugh`** at <https://marketplace.visualstudio.com/manage>
    (must match `publisher` in `package.json`).
 2. Create an Azure DevOps Personal Access Token at <https://dev.azure.com> →
    *Organization* = **All accessible organizations**, *Scopes* = **Marketplace › Manage**.
@@ -15,7 +15,7 @@ from this Git repo, so every push to `main` reaches them via `:Lazy update`.
 
 ### Open VSX
 4. Sign in at <https://open-vsx.org> with GitHub, create an **Access Token**, claim the
-   **`ih-hugh`** namespace, and sign the one-time Eclipse Publisher Agreement.
+   **`ihhugh`** namespace, and sign the one-time Eclipse Publisher Agreement.
 5. `gh secret set OVSX_PAT --repo ih-hugh/duskbox`
 
 If a secret is absent, that marketplace's publish step is skipped — the `.vsix` is still built.
@@ -37,5 +37,5 @@ If a secret is absent, that marketplace's publish step is skipped — the `.vsix
    ```
 
 ## Verify
-- VS Marketplace: <https://marketplace.visualstudio.com/items?itemName=ih-hugh.duskbox>
-- Open VSX: <https://open-vsx.org/extension/ih-hugh/duskbox>
+- VS Marketplace: <https://marketplace.visualstudio.com/items?itemName=ihhugh.duskbox>
+- Open VSX: <https://open-vsx.org/extension/ihhugh/duskbox>
