@@ -16,6 +16,7 @@ describe("build orchestrator", () => {
       expect(existsSync(resolve(root, `colors/duskbox-${v}.lua`))).toBe(true);
       expect(existsSync(resolve(root, `lua/duskbox/themes/${v}.lua`))).toBe(true);
       expect(existsSync(resolve(root, `themes/duskbox-${v}-color-theme.json`))).toBe(true);
+      expect(existsSync(resolve(root, `lua/lualine/themes/duskbox-${v}.lua`))).toBe(true);
     }
   });
   it("registers all themes in package.json contributes", () => {
