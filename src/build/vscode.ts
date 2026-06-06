@@ -104,6 +104,32 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     colors["contrastActiveBorder"] = ui;
     colors["contrastBorder"] = ann;
   }
+  // (2) Semantic — fixed meaning, never the variant accent
+  Object.assign(colors, {
+    "editorGutter.addedBackground": a.green, "editorGutter.modifiedBackground": a.blue, "editorGutter.deletedBackground": a.red,
+    "editorGutter.foldingControlForeground": p.fg2,
+    "editorOverviewRuler.errorForeground": a.red, "editorOverviewRuler.warningForeground": a.yellow, "editorOverviewRuler.infoForeground": a.blue,
+    "editorOverviewRuler.addedForeground": a.green, "editorOverviewRuler.modifiedForeground": a.blue, "editorOverviewRuler.deletedForeground": a.red,
+    "editorOverviewRuler.findMatchForeground": A(a.yellow, "99"), "editorOverviewRuler.bracketMatchForeground": p.fg2,
+    "editorHint.foreground": a.teal,
+    "diffEditor.insertedTextBackground": A(a.green, "22"), "diffEditor.removedTextBackground": A(a.red, "22"),
+    "diffEditor.insertedLineBackground": A(a.green, "14"), "diffEditor.removedLineBackground": A(a.red, "14"),
+    "merge.currentHeaderBackground": A(a.blue, "66"), "merge.currentContentBackground": A(a.blue, "22"),
+    "merge.incomingHeaderBackground": A(a.purple, "66"), "merge.incomingContentBackground": A(a.purple, "22"),
+    "minimap.findMatchHighlight": a.yellow, "minimap.errorHighlight": a.red, "minimap.warningHighlight": a.yellow,
+    "minimapGutter.addedBackground": a.green, "minimapGutter.modifiedBackground": a.blue, "minimapGutter.deletedBackground": a.red,
+    "gitDecoration.untrackedResourceForeground": a.green, "gitDecoration.conflictingResourceForeground": a.orange,
+    "gitDecoration.stageModifiedResourceForeground": a.blue, "gitDecoration.submoduleResourceForeground": a.purple,
+    "problemsErrorIcon.foreground": a.red, "problemsWarningIcon.foreground": a.yellow, "problemsInfoIcon.foreground": a.blue,
+    "notificationsErrorIcon.foreground": a.red, "notificationsWarningIcon.foreground": a.yellow, "notificationsInfoIcon.foreground": a.blue,
+    "testing.iconPassed": a.green, "testing.iconFailed": a.red, "testing.iconQueued": a.yellow,
+    "debugIcon.breakpointForeground": a.red,
+    "debugConsole.errorForeground": a.red, "debugConsole.infoForeground": a.blue, "debugConsole.warningForeground": a.yellow,
+    "inputValidation.errorBackground": A(a.red, "33"), "inputValidation.errorBorder": a.red,
+    "inputValidation.warningBackground": A(a.yellow, "33"), "inputValidation.warningBorder": a.yellow,
+    "inputValidation.infoBackground": A(a.blue, "33"), "inputValidation.infoBorder": a.blue,
+    "list.errorForeground": a.red, "list.warningForeground": a.yellow,
+  });
 
   const tokenColors: VsTheme["tokenColors"] = [];
   (Object.keys(ROLE_SCOPES) as Role[]).forEach((role) => {

@@ -66,4 +66,14 @@ describe("vscode emitter", () => {
     expect(t.colors["selection.background"]).toBe(sp.bg3);
     expect(buildVscode(dusk, { bold: true }).colors["textLink.foreground"]).toBe(buildPalette(dusk).accents.blue);
   });
+  it("semantic keys stay fixed (green/blue/red/yellow) even on a signature variant", () => {
+    const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+    const a = buildPalette(cs).accents;
+    const t = buildVscode(cs, { bold: true });
+    expect(t.colors["editorGutter.addedBackground"]).toBe(a.green);
+    expect(t.colors["editorGutter.deletedBackground"]).toBe(a.red);
+    expect(t.colors["editorOverviewRuler.modifiedForeground"]).toBe(a.blue);
+    expect(t.colors["testing.iconPassed"]).toBe(a.green);
+    expect(t.colors["minimapGutter.deletedBackground"]).toBe(a.red);
+  });
 });
