@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { VARIANTS } from "../palette/variants";
 import { buildNeovim, toLua } from "./neovim";
 import { buildVscode, uiThemeFor } from "./vscode";
+import { buildLazygit } from "./lazygit";
 
 const BOLD = true; // default-on; nvim runtime can toggle at load time
 
@@ -10,6 +11,7 @@ export function runBuild(root: string): void {
   mkdirSync(resolve(root, "colors"), { recursive: true });
   mkdirSync(resolve(root, "lua/duskbox/themes"), { recursive: true });
   mkdirSync(resolve(root, "themes"), { recursive: true });
+  mkdirSync(resolve(root, "extras/lazygit"), { recursive: true });
 
   const themesContrib: { label: string; uiTheme: string; path: string }[] = [];
 
@@ -23,6 +25,8 @@ export function runBuild(root: string): void {
     const file = `themes/duskbox-${v.name}-color-theme.json`;
     writeFileSync(resolve(root, file), JSON.stringify(theme, null, 2) + "\n");
     themesContrib.push({ label: theme.name, uiTheme: uiThemeFor(v), path: `./${file}` });
+
+    writeFileSync(resolve(root, `extras/lazygit/duskbox-${v.name}.yml`), buildLazygit(v));
   }
 
   const pkgPath = resolve(root, "package.json");

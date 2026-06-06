@@ -60,6 +60,18 @@ Switch variants anytime with `:colorscheme duskbox-<variant>` (e.g. `:colorschem
 - **VS Code:** install **Duskbox** from the Marketplace, then *Preferences: Color Theme* and pick a Duskbox variant.
 - **Forks (Cursor, VSCodium, Windsurf…):** install **Duskbox** from [Open VSX](https://open-vsx.org/), or download the `.vsix` from [Releases](https://github.com/ih-hugh/duskbox/releases) and run `code --install-extension duskbox.vsix` (or your fork's equivalent CLI).
 
+## Lazygit
+
+duskbox ships a matching [lazygit](https://github.com/jesseduffield/lazygit) theme for every variant under [`extras/lazygit/`](./extras/lazygit).
+
+- **From inside Neovim (recommended, zero setup):** LazyVim/[Snacks](https://github.com/folke/snacks.nvim) auto-generate a lazygit theme from your *active* colorscheme, so `<leader>gg` already matches whichever duskbox variant is loaded.
+- **Standalone `lazygit`:** append a variant's `gui.theme` block to your lazygit config (`~/Library/Application Support/lazygit/config.yml` on macOS, else `~/.config/lazygit/config.yml`):
+
+  ```sh
+  curl -fsSL https://raw.githubusercontent.com/ih-hugh/duskbox/main/extras/lazygit/duskbox-dusk.yml \
+    >> "$(lazygit --print-config-dir)/config.yml"
+  ```
+
 ## Build from source
 
 ```sh
