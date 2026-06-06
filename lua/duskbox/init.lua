@@ -1,7 +1,7 @@
 -- duskbox: standalone theme family runtime.
 local M = {}
 
-M.config = { variant = "dusk", bold = true, transparent = false, on_highlights = nil }
+M.config = { variant = "dusk", bold = true, transparent = false, on_highlights = nil, lualine = true }
 
 function M.setup(opts)
   M.config = vim.tbl_deep_extend("force", M.config, opts or {})
@@ -28,6 +28,15 @@ function M.load(name)
     end
     if bold == false then hl.bold = nil end
     vim.api.nvim_set_hl(0, group, hl)
+  end
+
+  if M.config.lualine ~= false then
+    pcall(function()
+      local ll = require("lualine")
+      local cfg = ll.get_config()                 -- current config preserves the user's sections
+      cfg.options.theme = "duskbox-" .. name
+      ll.setup(cfg)
+    end)
   end
 
   if type(M.config.on_highlights) == "function" then M.config.on_highlights(name) end
