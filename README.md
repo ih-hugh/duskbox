@@ -1,6 +1,6 @@
 # duskbox
 
-A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks: Cursor, VSCodium, Windsurf…). Eight variants spanning light → dark plus high-contrast and a neon "cyber" option — all generated from one OKLCH source of truth, so the two editors never drift.
+A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks: Cursor, VSCodium, Windsurf…). Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so the two editors never drift.
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
