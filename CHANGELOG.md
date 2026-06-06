@@ -3,6 +3,16 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.1.0] — 2026-06-06
+
+### Added
+- **8 signature variants** — `duskbox-{dusk,cyber}-{azure,neon-purple,magenta,salmon}` —
+  each recoloring `this`/`import`/`constructor`/builtins AND the decorative UI accent
+  (borders, selection, matched-paren, cursor-line number, picker match) to the signature
+  color. Semantic colors (diagnostics, git, literals) are unchanged. Bundle is now 16 variants.
+
+[1.1.0]: https://github.com/ih-hugh/duskbox/releases/tag/v1.1.0
+
 ## [1.0.0] — 2026-06-05
 
 First stable release. One OKLCH source of truth → Neovim, VS Code (+ forks), and lazygit,

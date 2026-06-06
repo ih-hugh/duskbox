@@ -2,7 +2,7 @@
   "name": "duskbox",
   "displayName": "Duskbox",
   "description": "A calm, equiluminant theme family (8 variants incl. high-contrast & neon) for Neovim and VS Code.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "ihhugh",
   "license": "MIT",
   "repository": {
