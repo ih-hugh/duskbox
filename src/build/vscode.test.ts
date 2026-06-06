@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { buildVscode, uiThemeFor } from "./vscode";
 import { VARIANTS } from "../palette/variants";
+import { buildPalette } from "../palette/types";
 
 const dusk = VARIANTS.find((v) => v.name === "dusk")!;
 const cyber = VARIANTS.find((v) => v.name === "cyber")!;
@@ -24,5 +25,22 @@ describe("vscode emitter", () => {
     expect(uiThemeFor(cyber)).toBe("hc-black");
     expect(uiThemeFor(dawn)).toBe("vs");
     expect(uiThemeFor(dayHc)).toBe("hc-light");
+  });
+  it("signature variants accent the UI with the signature; base unchanged; git stays semantic", () => {
+    const azureDusk = VARIANTS.find((v) => v.name === "dusk-azure")!;
+    const sp = buildPalette(azureDusk);
+    const t = buildVscode(azureDusk, { bold: true });
+    expect(t.colors["focusBorder"]).toBe(sp.signature);
+    expect(t.colors["editorLineNumber.activeForeground"]).toBe(sp.signature);
+    expect(t.colors["button.background"]).toBe(sp.signature);
+    expect(t.colors["list.highlightForeground"]).toBe(sp.signature);
+    expect(t.colors["editorBracketMatch.border"]).toBe(sp.signature);
+    // semantic stays: git-modified & info remain blue
+    expect(t.colors["gitDecoration.modifiedResourceForeground"]).toBe(sp.accents.blue);
+    expect(t.colors["editorInfo.foreground"]).toBe(sp.accents.blue);
+    // base dusk unchanged; no bracket-match key added
+    const bt = buildVscode(dusk, { bold: true });
+    expect(bt.colors["focusBorder"]).toBe(buildPalette(dusk).accents.blue);
+    expect(bt.colors["editorBracketMatch.border"]).toBeUndefined();
   });
 });

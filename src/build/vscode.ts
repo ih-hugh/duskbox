@@ -26,27 +26,31 @@ export function uiThemeFor(v: VariantConfig): "vs" | "vs-dark" | "hc-black" | "h
 export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme {
   const p = buildPalette(v);
   const a = p.accents;
+  const sig = p.signature;            // undefined for base variants
+  const ui = sig ?? a.blue;           // decorative accents already blue
+  const uiYellow = sig ?? a.yellow;   // active line number
+  const uiOrange = sig ?? a.orange;   // fuzzy-match highlight
   const colors: Record<string, string> = {
     "editor.background": p.bg0, "editor.foreground": p.fg0,
-    "editorLineNumber.foreground": p.fg2, "editorLineNumber.activeForeground": a.yellow,
+    "editorLineNumber.foreground": p.fg2, "editorLineNumber.activeForeground": uiYellow,
     "editorCursor.foreground": p.fg0, "editor.selectionBackground": p.bg3,
     "editor.lineHighlightBackground": p.bg2, "editorWhitespace.foreground": p.bg3,
-    "editorIndentGuide.background1": p.bg2, "editorIndentGuide.activeBackground1": a.blue,
+    "editorIndentGuide.background1": p.bg2, "editorIndentGuide.activeBackground1": ui,
     "editor.findMatchBackground": p.bg3, "editor.findMatchHighlightBackground": p.bg2,
     "sideBar.background": p.bg1, "sideBar.foreground": p.fg1, "sideBarTitle.foreground": p.fg0,
-    "activityBar.background": p.bg1, "activityBar.foreground": p.fg0, "activityBarBadge.background": a.blue, "activityBarBadge.foreground": p.bg0,
+    "activityBar.background": p.bg1, "activityBar.foreground": p.fg0, "activityBarBadge.background": ui, "activityBarBadge.foreground": p.bg0,
     "statusBar.background": p.bg1, "statusBar.foreground": p.fg1,
     "statusBar.noFolderBackground": p.bg1, "statusBar.debuggingBackground": a.orange,
     "titleBar.activeBackground": p.bg1, "titleBar.activeForeground": p.fg0,
     "tab.activeBackground": p.bg0, "tab.inactiveBackground": p.bg1, "tab.activeForeground": p.fg0, "tab.inactiveForeground": p.fg2,
-    "tab.activeBorderTop": a.blue, "editorGroupHeader.tabsBackground": p.bg1,
+    "tab.activeBorderTop": ui, "editorGroupHeader.tabsBackground": p.bg1,
     "panel.background": p.bg1, "panel.border": p.bg3, "terminal.background": p.bg0, "terminal.foreground": p.fg0,
     "list.activeSelectionBackground": p.bg3, "list.activeSelectionForeground": p.fg0,
-    "list.inactiveSelectionBackground": p.bg2, "list.hoverBackground": p.bg2, "list.highlightForeground": a.orange,
+    "list.inactiveSelectionBackground": p.bg2, "list.hoverBackground": p.bg2, "list.highlightForeground": uiOrange,
     "input.background": p.bg1, "input.foreground": p.fg0, "input.border": p.bg3,
-    "focusBorder": a.blue, "foreground": p.fg1, "widget.shadow": "#00000066",
-    "button.background": a.blue, "button.foreground": p.bg0,
-    "badge.background": a.blue, "badge.foreground": p.bg0,
+    "focusBorder": ui, "foreground": p.fg1, "widget.shadow": "#00000066",
+    "button.background": ui, "button.foreground": p.bg0,
+    "badge.background": ui, "badge.foreground": p.bg0,
     "gitDecoration.addedResourceForeground": a.green, "gitDecoration.modifiedResourceForeground": a.blue, "gitDecoration.deletedResourceForeground": a.red,
     "gitDecoration.ignoredResourceForeground": p.fg2, "list.deemphasizedForeground": p.fg2,
     "editorInlayHint.foreground": p.fg2, "editorInlayHint.background": p.bg1,
@@ -57,6 +61,7 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "terminal.ansiBrightBlack": p.bg3, "terminal.ansiBrightRed": a.red, "terminal.ansiBrightGreen": a.green, "terminal.ansiBrightYellow": a.yellow,
     "terminal.ansiBrightBlue": a.blue, "terminal.ansiBrightMagenta": a.magenta, "terminal.ansiBrightCyan": a.cyan, "terminal.ansiBrightWhite": p.fg0,
   };
+  if (sig) colors["editorBracketMatch.border"] = sig;
 
   const tokenColors: VsTheme["tokenColors"] = [];
   (Object.keys(ROLE_SCOPES) as Role[]).forEach((role) => {
