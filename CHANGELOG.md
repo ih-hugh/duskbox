@@ -3,6 +3,14 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.1.1] — 2026-06-06
+
+### Added
+- A store **icon** — a dusk-horizon mark in the theme palette — plus an on-brand
+  Marketplace gallery banner (`#23242e`, dark).
+
+[1.1.1]: https://github.com/ih-hugh/duskbox/releases/tag/v1.1.1
+
 ## [1.1.0] — 2026-06-06
 
 ### Added

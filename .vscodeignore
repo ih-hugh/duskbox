@@ -9,5 +9,6 @@ vitest.config.*
 node_modules/**
 **/*.test.ts
 *.vsix
+icon.svg
 README.md
 README.marketplace.md
