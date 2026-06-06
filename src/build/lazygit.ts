@@ -15,12 +15,13 @@ function entry(indent: string, key: string, hex: string, ...attrs: string[]): st
 export function buildLazygit(v: VariantConfig): string {
   const p = buildPalette(v);
   const a = p.accents;
+  const ui = p.signature ?? a.blue; // signature variants accent the git TUI too
   const t = "    "; // entries sit under gui: > theme:
   const theme = [
-    entry(t, "activeBorderColor", a.blue, "bold"),
+    entry(t, "activeBorderColor", ui, "bold"),
     entry(t, "inactiveBorderColor", p.fg2),
     entry(t, "searchingActiveBorderColor", a.yellow, "bold"),
-    entry(t, "optionsTextColor", a.blue),
+    entry(t, "optionsTextColor", ui),
     entry(t, "selectedLineBgColor", p.bg2),
     entry(t, "cherryPickedCommitBgColor", p.bg3),
     entry(t, "cherryPickedCommitFgColor", a.magenta),

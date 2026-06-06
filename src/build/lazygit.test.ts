@@ -30,4 +30,14 @@ describe("lazygit emitter", () => {
   it("is deterministic", () => {
     expect(buildLazygit(dusk)).toBe(buildLazygit(dusk));
   });
+  it("signature variants use the signature for the active border + options; base uses blue", () => {
+    const azureDusk = VARIANTS.find((v) => v.name === "dusk-azure")!;
+    const sp = buildPalette(azureDusk);
+    const yml = buildLazygit(azureDusk);
+    expect(yml).toContain(`activeBorderColor:\n      - "${sp.signature}"`);
+    expect(yml).toContain(`optionsTextColor:\n      - "${sp.signature}"`);
+    // base dusk keeps blue
+    const bp = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
+    expect(buildLazygit(VARIANTS.find((v) => v.name === "dusk")!)).toContain(`- "${bp.accents.blue}"`);
+  });
 });
