@@ -3,6 +3,7 @@ import { buildPalette, type VariantConfig } from "../palette/types";
 import { TOKENS, type ColorSlot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_GROUPS } from "./groups-nvim";
 import { blend, muteHex } from "./blend";
+import { buildPluginGroups } from "./plugins-nvim";
 
 export interface Attrs { fg?: string; bg?: string; sp?: string; bold?: boolean; italic?: boolean; underline?: boolean; undercurl?: boolean; }
 export interface NvimOpts { bold: boolean; transparent?: boolean; }
@@ -91,6 +92,8 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
 
   hl["@markup.heading"] = { fg: p.accents.blue, bold: true }; hl["@markup.link"] = { fg: p.accents.teal, underline: true };
   hl["@markup.list"] = { fg: p.accents.orange }; hl["@markup.strong"] = { bold: true }; hl["@markup.italic"] = { italic: true };
+
+  Object.assign(hl, buildPluginGroups(p, uiBlue));
 
   return hl;
 }

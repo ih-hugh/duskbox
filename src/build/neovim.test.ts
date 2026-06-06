@@ -66,6 +66,16 @@ describe("neovim emitter", () => {
         .toBeGreaterThanOrEqual(3.0);
     }
   });
+  it("plugin accent groups follow the variant; semantic plugin groups stay fixed", () => {
+    const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+    const sp = buildPalette(cs);
+    const hl = buildNeovim(cs, { bold: true });
+    for (const k of ["BlinkCmpMenuBorder", "BufferLineIndicatorSelected", "NoiceCmdlinePopupBorder", "SnacksIndentScope", "SnacksPickerTitle"])
+      expect(hl[k]!.fg, k).toBe(sp.signature);
+    expect(hl.SnacksNotifierIconError!.fg).toBe(sp.accents.red);
+    expect(hl.BufferLineModified!.fg).toBe(sp.accents.green);
+    expect(buildNeovim(dusk, { bold: true }).BlinkCmpMenuBorder!.fg).toBe(buildPalette(dusk).accents.blue);
+  });
   it("signature variants paint syntax + UI accent with the signature; base stays unchanged", () => {
     const azureDusk = VARIANTS.find((v) => v.name === "dusk-azure")!;
     const sp = buildPalette(azureDusk);
