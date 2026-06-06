@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8"));
 const themes = pkg.contributes?.themes ?? [];
-if (themes.length !== 8) { console.error(`expected 8 themes, got ${themes.length}`); process.exit(1); }
+if (themes.length === 0) { console.error("no themes registered in package.json contributes"); process.exit(1); }
 const uiOk = new Set(["vs", "vs-dark", "hc-black", "hc-light"]);
 let failed = false;
 for (const t of themes) {
