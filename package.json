@@ -7,7 +7,7 @@
     "color": "#23242e",
     "theme": "dark"
   },
-  "version": "1.2.0",
+  "version": "1.2.1",
   "publisher": "ihhugh",
   "license": "MIT",
   "repository": {
@@ -117,7 +117,8 @@
     "test": "vitest run",
     "validate:vscode": "node scripts/validate-vscode.mjs",
     "package": "vsce package --no-dependencies -o duskbox.vsix --readme-path README.marketplace.md",
-    "gallery": "tsx scripts/gallery.ts"
+    "gallery": "tsx scripts/gallery.ts",
+    "gallery:png": "node scripts/rasterize-gallery.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

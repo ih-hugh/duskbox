@@ -89,6 +89,7 @@ Switch variants anytime with `:colorscheme duskbox-<variant>` (e.g. `:colorschem
 | `variant` | `"dusk"` | default variant for `require("duskbox").load()` |
 | `bold` | `true` | bold keywords & types (set `false` to disable) |
 | `transparent` | `false` | clear the editor background |
+| `lualine` | `true` | apply the matching lualine theme on load (set `false` to keep your own) |
 | `on_highlights` | `nil` | `function(variant) ... end` hook after load |
 
 ## VS Code / Cursor / VSCodium / Windsurf

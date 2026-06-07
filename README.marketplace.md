@@ -4,6 +4,12 @@ A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks:
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
+## Palette
+
+![duskbox OKLCH palette](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/palette.png)
+
+Designed in **OKLCH**: the nine accents share one lightness band (**equiluminant**) and get their variety from *hue, not brightness*, so nothing vibrates. In the **signature** variants, `this`/`import`/`constructor` and the UI accent take a single signature color.
+
 ## Variants
 
 | Variant | Mood |
@@ -19,7 +25,20 @@ A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks:
 
 **Signature variants:** `dusk` and `cyber` also come in four signature flavors — the standout tokens (`this`/`import`/`constructor`) and the UI accent take a signature color: `duskbox-{dusk,cyber}-{azure,neon-purple,magenta,salmon}`.
 
-Gallery previews: [github.com/ih-hugh/duskbox](https://github.com/ih-hugh/duskbox)
+## Gallery
+
+The eight core variants:
+
+![dusk](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dusk.png)
+![cyber](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/cyber.png)
+![night-hc](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/night-hc.png)
+![midnight](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/midnight.png)
+![storm](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/storm.png)
+![day](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/day.png)
+![day-hc](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/day-hc.png)
+![dawn](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/dawn.png)
+
+**Signature variant previews** (azure · neon-purple · magenta · salmon, each on `dusk` and `cyber`): see the [full gallery on GitHub](https://github.com/ih-hugh/duskbox#gallery).
 
 ## Neovim
 
@@ -46,6 +65,7 @@ Switch variants anytime with `:colorscheme duskbox-<variant>` (e.g. `:colorschem
 | `variant` | `"dusk"` | default variant for `require("duskbox").load()` |
 | `bold` | `true` | bold keywords & types (set `false` to disable) |
 | `transparent` | `false` | clear the editor background |
+| `lualine` | `true` | apply the matching lualine theme on load (set `false` to keep your own) |
 | `on_highlights` | `nil` | `function(variant) ... end` hook after load |
 
 ## VS Code / Cursor / VSCodium / Windsurf

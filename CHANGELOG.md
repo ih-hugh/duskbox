@@ -3,6 +3,16 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.2.1] — 2026-06-06
+
+### Changed
+- The VS Marketplace / Open VSX listing now shows the **OKLCH palette diagram and the eight core
+  variant previews** inline (rendered to PNG, since the stores reject SVG in the README). New
+  `pnpm gallery:png` rasterizes `docs/img/*.svg` → PNG from the same source; GitHub keeps the SVGs.
+- Documented the `lualine` setup option in the README.
+
+[1.2.1]: https://github.com/ih-hugh/duskbox/releases/tag/v1.2.1
+
 ## [1.2.0] — 2026-06-06
 
 ### Fixed
