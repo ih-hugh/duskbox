@@ -3,6 +3,18 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.2.2] — 2026-06-06
+
+### Fixed
+- Neovim: `duskbox.load()` no longer force-loads `lualine` while applying the colorscheme. Under
+  lazy.nvim, `require("lualine")` *triggers* the plugin to load, and because the colorscheme is
+  applied very early in startup — before `Snacks` is initialized — running LazyVim's lualine config
+  then crashed with "attempt to index global 'Snacks' (a nil value)". The statusline theme now
+  applies only to an already-loaded lualine, so startup is clean and live `:colorscheme` switches
+  still make the statusline follow the variant.
+
+[1.2.2]: https://github.com/ih-hugh/duskbox/releases/tag/v1.2.2
+
 ## [1.2.1] — 2026-06-06
 
 ### Changed
