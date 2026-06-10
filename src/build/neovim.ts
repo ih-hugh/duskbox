@@ -86,8 +86,22 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl.CmpItemAbbrMatch = { fg: uiBlue, bold: true }; hl.CmpItemKind = { fg: p.accents.yellow };
   hl.IndentBlanklineChar = { fg: p.bg2 }; hl.IblIndent = { fg: p.bg2 }; hl.IblScope = { fg: p.accents.blue };
 
-  hl["@markup.heading"] = { fg: p.accents.blue, bold: true }; hl["@markup.link"] = { fg: p.accents.teal, underline: true };
-  hl["@markup.list"] = { fg: p.accents.orange }; hl["@markup.strong"] = { bold: true }; hl["@markup.italic"] = { italic: true };
+  // Detail-pass extras that need more than a TokenStyle: chips (bg), yaml anchors, @lsp mirrors
+  // of the semantic depth (parameter/decorator/readonly/interface/defaultLibrary).
+  hl["@markup.raw"] = { fg: p.accents.teal, bg: p.bg2 };
+  hl["@markup.raw.block"] = { fg: p.fg0 };
+  hl["@punctuation.special"] = { fg: p.accents.cyan };        // ${} interpolation
+  hl["@label.yaml"] = { fg: p.accents.purple };               // anchors & aliases
+  hl["@lsp.type.parameter"] = { fg: p.fg0, italic: true };
+  hl["@lsp.type.decorator"] = { fg: p.accents.magenta };      // rides the signature slot
+  hl["@lsp.type.selfParameter"] = { fg: p.accents.magenta };
+  hl["@lsp.type.clsParameter"] = { fg: p.accents.magenta };
+  hl["@lsp.type.interface"] = { fg: p.accents.orange, italic: true };
+  hl["@lsp.type.typeParameter"] = { fg: p.accents.orange, italic: true };
+  hl["@lsp.typemod.variable.readonly"] = { fg: p.accents.purple };
+  hl["@lsp.typemod.property.readonly"] = { fg: p.accents.purple };
+  hl["@lsp.typemod.function.defaultLibrary"] = { fg: p.accents.magenta };
+  hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.accents.magenta };
 
   Object.assign(hl, buildPluginGroups(p, uiBlue));
 

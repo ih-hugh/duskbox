@@ -114,3 +114,31 @@ describe("neovim emitter", () => {
     expect(Object.keys(hl).length).toBeGreaterThanOrEqual(200);
   });
 });
+
+describe("detail pass — neovim", () => {
+  const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+  const p = buildPalette(cs);
+  const hl = buildNeovim(cs, { bold: true });
+
+  it("heading ladder lands on @markup.heading.1..4 (5/6 reuse 4)", () => {
+    expect(hl["@markup.heading.1"]!.fg).toBe(p.headings[0]);
+    expect(hl["@markup.heading.2"]!.fg).toBe(p.headings[1]);
+    expect(hl["@markup.heading.4"]!.fg).toBe(p.headings[3]);
+    expect(hl["@markup.heading.6"]!.fg).toBe(p.headings[3]);
+    expect(hl["@markup.heading"]!.fg).toBe(p.headings[0]);
+  });
+  it("@markup.raw is a teal chip on bg2 (not plain string green)", () => {
+    expect(hl["@markup.raw"]).toMatchObject({ fg: p.accents.teal, bg: p.bg2 });
+  });
+  it("punctuation dims to fgPunct; wordy operators stay keyword red", () => {
+    expect(hl["@punctuation.delimiter"]!.fg).toBe(p.fgPunct);
+    expect(hl["@operator"]!.fg).toBe(p.fgPunct);
+    expect(hl["@keyword.operator"]!.fg).toBe(p.accents.red);
+  });
+  it("@lsp mirrors: parameter italic, decorator signature-magenta, readonly purple, interface italic", () => {
+    expect(hl["@lsp.type.parameter"]).toMatchObject({ fg: p.fg0, italic: true });
+    expect(hl["@lsp.type.decorator"]!.fg).toBe(p.accents.magenta);
+    expect(hl["@lsp.typemod.variable.readonly"]!.fg).toBe(p.accents.purple);
+    expect(hl["@lsp.type.interface"]).toMatchObject({ fg: p.accents.orange, italic: true });
+  });
+});

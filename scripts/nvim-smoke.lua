@@ -24,4 +24,12 @@ assert(vim.api.nvim_get_hl(0, { name = "Keyword", link = false }).bold == true, 
 assert(vim.api.nvim_get_hl(0, { name = "Comment", link = false }).italic == true, "Comment not italic")
 local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
 assert(normal.bg ~= nil and normal.fg ~= nil, "Normal incomplete")
+
+-- Detail pass: heading ladder is graded, punctuation recedes (all variants).
+local h1 = vim.api.nvim_get_hl(0, { name = "@markup.heading.1", link = false })
+local h2 = vim.api.nvim_get_hl(0, { name = "@markup.heading.2", link = false })
+assert(h1.fg and h2.fg and h1.fg ~= h2.fg, "heading ladder not graded")
+local punct = vim.api.nvim_get_hl(0, { name = "@punctuation.delimiter", link = false })
+assert(punct.fg and punct.fg ~= normal.fg, "punctuation not dimmed vs Normal")
+
 io.stdout:write("SMOKE OK " .. variant .. " Keyword=" .. fg("Keyword") .. "\n")
