@@ -3,6 +3,25 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.3.0] — 2026-06-10
+
+### Added
+- **Markdown & docs styling**: hue-graded heading ladder anchored at each variant's signature
+  (`signature ?? blue`, −25° OKLCH walk), real bold/italic, inline-code (chips in Neovim),
+  styled links, quotes, list markers, separators, strikethrough.
+- **Per-language detail**: JSON/YAML keys, CSS properties/units/hex-colors/`!important`/selectors,
+  regex internals, JSDoc tags, diff/patch styling.
+- **Semantic-token depth**: parameters italic, decorators/`self` on the builtin slot (follows the
+  signature on signature variants), readonly + enum members purple, interfaces & type parameters
+  distinct from classes.
+
+### Changed
+- **Punctuation calm-down**: separators, delimiters and symbolic operators recede to a dedicated
+  punctuation tone (WCAG-floored: ≥3:1, ≥4.5:1 on high-contrast variants). Wordy operators
+  (`typeof`, `instanceof`, `new`) stay keywords; string quotes stay string-colored.
+
+[1.3.0]: https://github.com/ih-hugh/duskbox/releases/tag/v1.3.0
+
 ## [1.2.2] — 2026-06-06
 
 ### Fixed
