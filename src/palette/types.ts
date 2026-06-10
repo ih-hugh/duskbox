@@ -20,6 +20,7 @@ export interface VariantConfig {
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
   accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides
   signature?: number;          // signature hue°: marks a signature variant — sets the magenta slot hue + bg3 tint here; the emitters also recolor the UI accent
+  bgLean?: number;             // mood hue°: A1.5 atmosphere — bg chroma ×2.0, hue walks halfway toward this (falls back to `signature`)
 }
 
 export interface Palette {
@@ -34,15 +35,28 @@ export interface Palette {
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
+/** Circular midpoint between two hues, going the short way around the wheel. */
+function halfLean(from: number, to: number): number {
+  const d = ((to - from + 540) % 360) - 180;
+  return ((from + d / 2) % 360 + 360) % 360;
+}
+
 export function buildPalette(v: VariantConfig): Palette {
   const dir = v.kind === "dark" ? 1 : -1; // dark: surfaces step lighter; light: step darker
   const [bgL, bgC, bgH] = v.bg;
   const [fgL, fgC, fgH] = v.fg;
   const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
-  const bg0 = v.bgHex ?? oklchToHex(clamp01(bgL), bgC, bgH);
-  const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
-  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
-  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, v.signature ?? 255); // selection (cool, or signature-tinted)
+  // A1.5 atmosphere: when a mood lean exists (explicit bgLean, or the signature hue), the whole
+  // bg ramp tints toward it — chroma ×2.0, hue at the circular midpoint. Same lightness, so all
+  // fg contrast is preserved by construction. A leaned variant ignores bgHex (cyber's signature
+  // children compute their mood; plain cyber keeps its pinned near-black identity).
+  const lean = v.bgLean ?? v.signature;
+  const moodC = lean !== undefined ? bgC * 2.0 : bgC;
+  const moodH = lean !== undefined ? halfLean(bgH, lean) : bgH;
+  const bg0 = lean === undefined && v.bgHex ? v.bgHex : oklchToHex(clamp01(bgL), moodC, moodH);
+  const bg1 = oklchToHex(clamp01(bgL - 0.025), moodC, moodH);        // panel always recedes (darker)
+  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), moodC, moodH);   // cursorline: lighter(dark)/darker(light)
+  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), moodC * 1.5, v.signature ?? 255); // selection (cool, or signature-tinted)
   // High-contrast variants keep secondary text much closer to the main fg so
   // comments / dim text stay legible against the near-black (or near-white) bg.
   const dimDrop = v.uiContrast === "high" ? 0.07 : 0.12;

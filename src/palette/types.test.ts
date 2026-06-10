@@ -85,3 +85,26 @@ describe("fgPunct", () => {
     expect(contrastRatio(p.fgPunct, p.bg0)).toBeLessThanOrEqual(contrastRatio(p.fg0, p.bg0));
   });
 });
+
+describe("atmosphere (A1.5)", () => {
+  const bg0 = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!).bg0;
+  it("previewed recipe fixtures hold (chroma ×2.0, half hue-lean)", () => {
+    expect(bg0("dusk")).toBe("#232336");
+    expect(bg0("storm")).toBe("#262e3e");
+    expect(bg0("midnight")).toBe("#0a0f22");
+    expect(bg0("dawn")).toBe("#faf2e8");
+    expect(bg0("dusk-azure")).toBe("#1a2637");   // lean = signature 235
+    expect(bg0("cyber-salmon")).toBe("#1a0e16"); // lean = signature 32, bgHex ignored
+  });
+  it("non-leaned variants stay byte-identical", () => {
+    expect(bg0("day")).toBe("#f9fafc");
+    expect(bg0("day-hc")).toBe("#ffffff");
+    expect(bg0("cyber")).toBe("#13131c");
+  });
+  it("the whole ramp inherits the mood (bg1 differs from the un-leaned build on dusk)", () => {
+    const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+    const moody = buildPalette(dusk);
+    const neutral = buildPalette({ ...dusk, bgLean: undefined, name: "x" });
+    expect(moody.bg1).not.toBe(neutral.bg1);
+  });
+});
