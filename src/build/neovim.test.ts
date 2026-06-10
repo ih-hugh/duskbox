@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildNeovim, toLua } from "./neovim";
 import { VARIANTS } from "../palette/variants";
-import { muteHex } from "./blend";
 import { buildPalette } from "../palette/types";
 import { contrastRatio } from "../oklch";
 
@@ -48,6 +47,7 @@ describe("neovim emitter", () => {
     expect(new Set(vals).size).toBe(vals.length);
     // parameter is now fg0/italic (detail-pass identity change); italic distinguishes from plain variable
     expect(hl["@variable.parameter"]!.italic).toBe(true);
+    expect(hl["@variable"]!.italic).toBeUndefined();
     expect(hl["@string.escape"]!.fg).not.toBe(hl.String!.fg);
   });
   it("strings render green", () => {

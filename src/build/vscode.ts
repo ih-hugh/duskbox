@@ -1,4 +1,3 @@
-import type { Palette } from "../palette/types";
 import { buildPalette, type VariantConfig } from "../palette/types";
 import { TOKENS, slot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_SCOPES, SEMANTIC_ROLE } from "./groups-vscode";

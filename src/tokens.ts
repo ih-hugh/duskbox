@@ -6,14 +6,17 @@ export interface TokenStyle {
   underline?: boolean; strikethrough?: boolean;
 }
 
+// Literal lookup (not arithmetic on the slot name) so adding an h5 slot without a 5th
+// ladder entry is a compile/test error instead of a silent undefined index.
+const HEADING_SLOT = { h1: 0, h2: 1, h3: 2, h4: 3 } as const;
+
 /** Resolve a ColorSlot to a hex for a palette (single source; both emitters import this). */
 export function slot(p: Palette, c: ColorSlot): string {
   if (c === "fg0") return p.fg0;
   if (c === "fg1") return p.fg1;
   if (c === "fg2") return p.fg2;
   if (c === "punct") return p.fgPunct;
-  if (c === "h1" || c === "h2" || c === "h3" || c === "h4")
-    return p.headings[Number(c[1]) - 1]!;
+  if (c in HEADING_SLOT) return p.headings[HEADING_SLOT[c as keyof typeof HEADING_SLOT]];
   return p.accents[c as AccentName];
 }
 

@@ -23,9 +23,9 @@ describe("tokens", () => {
     }
     expect(TOKENS.string.color).toBe("green");
   });
-  it("high-frequency roles are mutually distinct (slot+mute combo)", () => {
-    const hi = ["keyword","function","type","parameter","string","number","constant","property"];
-    const keys = hi.map((r) => { const t = (TOKENS as any)[r]; return `${t.color}:${t.mute ? 1 : 0}`; });
+  it("high-frequency roles are mutually distinct (slot+mute+italic combo)", () => {
+    const hi = ["keyword","function","type","parameter","variable","string","number","constant","property"];
+    const keys = hi.map((r) => { const t = (TOKENS as any)[r]; return `${t.color}:${t.mute ? 1 : 0}:${t.italic ? 1 : 0}`; });
     expect(new Set(keys).size).toBe(hi.length);
   });
   it("native tag and custom component are distinct colors", () => {
