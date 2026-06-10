@@ -32,5 +32,6 @@ describe("hexToOklch", () => {
     expect(isPinkish(oklchToHex(0.66, 0.2, 26))).toBe(false);  // v2 ember keyword
     expect(isPinkish(oklchToHex(0.74, 0.22, 25))).toBe(false); // cyber keyword (light but chromatic)
     expect(isPinkish(oklchToHex(0.74, 0.1, 297))).toBe(false); // muted constant purple
+    expect(isPinkish(oklchToHex(0.66, 0.10, 22))).toBe(false); // dusty muted red — dim, not pink
   });
 });

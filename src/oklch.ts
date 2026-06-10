@@ -33,14 +33,8 @@ export function oklchToHex(L: number, C: number, H: number): string {
 
 /** sRGB hex -> OKLCH (inverse of oklchToHex; for gates/audits, not generation). */
 export function hexToOklch(hex: string): { L: number; C: number; H: number } {
-  const n = parseInt(hex.slice(1), 16);
-  const toLinear = (v: number): number => {
-    const c = v / 255;
-    return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  };
-  const r = toLinear((n >> 16) & 255);
-  const g = toLinear((n >> 8) & 255);
-  const b = toLinear(n & 255);
+  const [r8, g8, b8] = hexToRgb(hex);
+  const r = srgbToLin(r8), g = srgbToLin(g8), b = srgbToLin(b8);
   // sRGB linear -> LMS (cube root space) — inverse of the 4.076/−3.307/… forward matrix
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
   const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
