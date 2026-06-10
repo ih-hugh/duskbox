@@ -41,7 +41,8 @@ export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   mdListMarker: ["@markup.list"],
   mdStrike: ["@markup.strikethrough"],
   // --- detail pass: guards & docs ---
+  // (no docTag binding here: nvim's @comment.documentation is the WHOLE doc comment body,
+  // not just the @param-style tag like VS Code's jsdoc scopes — the default link is sensible)
   wordOperator: ["@keyword.operator"],
-  docTag: ["@comment.documentation"],
-  diffMeta: ["@diff.delta", "diffLine", "diffSubname"],
+  diffMeta: ["@diff.delta", "@attribute.diff", "diffLine", "diffSubname"],
 };

@@ -140,5 +140,8 @@ describe("detail pass — neovim", () => {
     expect(hl["@lsp.type.decorator"]!.fg).toBe(p.accents.magenta);
     expect(hl["@lsp.typemod.variable.readonly"]!.fg).toBe(p.accents.purple);
     expect(hl["@lsp.type.interface"]).toMatchObject({ fg: p.accents.orange, italic: true });
+    // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> magenta)
+    expect(hl["@lsp.typemod.method.defaultLibrary"]!.fg).toBe(p.accents.magenta);
+    expect(hl["@lsp.typemod.class.defaultLibrary"]!.fg).toBe(p.accents.magenta);
   });
 });
