@@ -8,7 +8,9 @@ export const TIER_HUES: Record<AccentName, number> = {
 };
 
 /** Per-slot OKLCH [L, C] by archetype — hierarchy from lightness×chroma (spec anchors).
- *  Tier 1 = red (darker+max chroma on normal variants; chroma-only at floor-safe L on HC).
+ *  Tier 1 = red — darkest+max-chroma on normal-dark; max-chroma (not darkest) on light and HC archetypes.
+ *  Cyber carve-out: cyber's neon wheel predates the tier story; on the cyber family red is
+ *  among-the-most chromatic, not strictly max — continuity wins.
  *  magenta is CHROME-ONLY (signature carrier + legacy notifier colors); syntax bindings drop it
  *  in the v2 role retarget (until then it remains the legacy builtin slot). */
 export const SLOT_LC: Record<Archetype, Record<AccentName, [number, number]>> = {
@@ -33,8 +35,11 @@ export const SLOT_LC: Record<Archetype, Record<AccentName, [number, number]>> = 
 export const archetypeOf = (kind: "dark" | "light", ui: "normal" | "high"): Archetype =>
   `${ui === "high" ? "hc" : "normal"}-${kind}` as Archetype;
 
-/** The builtin slot (this/self/ctor targets): orange's warm cousin — slightly brighter, hue +2. */
+/** The builtin slot (this/self/ctor targets): orange's warm cousin at hue +2 — brighter on
+ *  normal-dark, DARKER on the other archetypes: at the bright/deep bands the h57 chroma ceiling
+ *  crushes builtin into orange (hc-dark ΔE 0.008, hc-light 0.020); the darker cousin survives
+ *  the clamp (ΔE vs orange: night-hc 0.051, cyber 0.047, dawn/day 0.050, day-hc 0.032). */
 export const BUILTIN_LC: Record<Archetype, [number, number]> = {
-  "normal-dark": [0.77, 0.145], "hc-dark": [0.82, 0.160],
-  "normal-light": [0.52, 0.130], "hc-light": [0.45, 0.150],
+  "normal-dark": [0.77, 0.145], "hc-dark": [0.78, 0.145],
+  "normal-light": [0.55, 0.125], "hc-light": [0.40, 0.145],
 };

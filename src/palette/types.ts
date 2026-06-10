@@ -33,7 +33,7 @@ export interface Palette {
   accents: Record<AccentName, string>;
   headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
   fgPunct: string;                            // punctuation tone between fg0 and fg2 (HC-floored)
-  builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2, slightly brighter)
+  builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2); consumed by the v2 role retarget (Task 4)
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
