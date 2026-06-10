@@ -96,6 +96,14 @@ describe("atmosphere (A1.5)", () => {
     expect(bg0("dusk-azure")).toBe("#1a2637");   // lean = signature 235
     expect(bg0("cyber-salmon")).toBe("#1a0e16"); // lean = signature 32, bgHex ignored
   });
+  it("gallery-approved fixtures: every leaned variant pinned", () => {
+    const PINNED: Record<string, string> = {
+      dawn: "#faf2e8", storm: "#262e3e", dusk: "#232336", midnight: "#0a0f22", "night-hc": "#161a26",
+      "dusk-azure": "#1a2637", "dusk-neon-purple": "#252236", "dusk-magenta": "#282134", "dusk-salmon": "#301e2c",
+      "cyber-azure": "#0c131d", "cyber-neon-purple": "#13111c", "cyber-magenta": "#15101b", "cyber-salmon": "#1a0e16",
+    };
+    for (const [name, hex] of Object.entries(PINNED)) expect(bg0(name), name).toBe(hex);
+  });
   it("non-leaned variants stay byte-identical", () => {
     expect(bg0("day")).toBe("#f9fafc");
     expect(bg0("day-hc")).toBe("#ffffff");

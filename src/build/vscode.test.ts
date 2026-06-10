@@ -163,4 +163,9 @@ describe("soul pass — vscode", () => {
     // HC halves
     expect(soulCS.colors["diffEditor.insertedTextBackground"]).toBe(pcs.accents.green + "13");
   });
+  it("cyber family merges use green for 'current' (M1 — teal/blue too close on the neon wheel)", () => {
+    expect(soulCS.colors["merge.currentContentBackground"]).toBe(pcs.accents.green + "0a");
+    expect(soulCS.colors["merge.currentHeaderBackground"]).toBe(pcs.accents.green + "1a");
+    expect(soulCS.colors["merge.incomingContentBackground"]).toBe(pcs.accents.blue + "0a");
+  });
 });

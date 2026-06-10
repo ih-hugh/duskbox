@@ -111,7 +111,10 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "editorHint.foreground": a.teal,
     "diffEditor.insertedTextBackground": AW(a.green, "26", "13"), "diffEditor.removedTextBackground": AW(a.red, "26", "13"),
     "diffEditor.insertedLineBackground": AW(a.green, "14", "0a"), "diffEditor.removedLineBackground": AW(a.red, "14", "0a"),
-    "merge.currentHeaderBackground": AW(a.teal, "33", "1a"), "merge.currentContentBackground": AW(a.teal, "14", "0a"),
+    // merge "current" is teal — except the cyber family (neon hue wheel), where teal(210°)/blue(245°)
+    // washes composite below JND at HC alpha; green doubles the separation (gallery-approved M1).
+    "merge.currentHeaderBackground": AW(v.hues ? a.green : a.teal, "33", "1a"),
+    "merge.currentContentBackground": AW(v.hues ? a.green : a.teal, "14", "0a"),
     "merge.incomingHeaderBackground": AW(a.blue, "33", "1a"), "merge.incomingContentBackground": AW(a.blue, "14", "0a"),
     "minimap.findMatchHighlight": a.yellow, "minimap.errorHighlight": a.red, "minimap.warningHighlight": a.yellow,
     "minimapGutter.addedBackground": a.green, "minimapGutter.modifiedBackground": a.blue, "minimapGutter.deletedBackground": a.red,
