@@ -56,10 +56,10 @@ describe("headings ladder", () => {
 });
 
 describe("fgPunct", () => {
-  it("sits strictly between fg0 and fg2 on dusk", () => {
+  it("contrast vs bg0 sits strictly between fg0 and fg2 on dusk", () => {
     const p = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
-    expect(p.fgPunct).not.toBe(p.fg0);
-    expect(p.fgPunct).not.toBe(p.fg2);
+    expect(contrastRatio(p.fg0, p.bg0)).toBeGreaterThan(contrastRatio(p.fgPunct, p.bg0));
+    expect(contrastRatio(p.fgPunct, p.bg0)).toBeGreaterThan(contrastRatio(p.fg2, p.bg0));
   });
   it("meets the contrast floor on every variant (3:1 normal, 4.5:1 HC)", () => {
     for (const v of VARIANTS) {
@@ -67,5 +67,14 @@ describe("fgPunct", () => {
       const floor = v.uiContrast === "high" ? 4.5 : 3.0;
       expect(contrastRatio(p.fgPunct, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
     }
+  });
+  it("raise loop lifts a low-contrast fg to the floor without passing fg0", () => {
+    const synthetic: VariantConfig = {
+      name: "synthetic-low", kind: "dark", uiContrast: "normal",
+      bg: [0.265, 0.018, 278], fg: [0.55, 0.035, 265], accentL: 0.78, accentC: 0.12,
+    };
+    const p = buildPalette(synthetic);
+    expect(contrastRatio(p.fgPunct, p.bg0)).toBeGreaterThanOrEqual(3.0);
+    expect(contrastRatio(p.fgPunct, p.bg0)).toBeLessThanOrEqual(contrastRatio(p.fg0, p.bg0));
   });
 });

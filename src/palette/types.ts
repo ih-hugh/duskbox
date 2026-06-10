@@ -73,10 +73,10 @@ export function buildPalette(v: VariantConfig): Palette {
   // Punctuation tone: fg stepped 60% of the mute drop (HC variants start at the dim drop), then
   // raised deterministically until it clears the readability floor (3:1 normal, 4.5:1 HC vs bg0).
   const punctFloor = v.uiContrast === "high" ? 4.5 : 3.0;
-  let punctDrop = v.uiContrast === "high" ? 0.07 : muteDrop * 0.6;
+  let punctDrop = v.uiContrast === "high" ? dimDrop : muteDrop * 0.6;
   let fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
   while (contrastRatio(fgPunct, bg0) < punctFloor && punctDrop > 0) {
-    punctDrop -= 0.01;
+    punctDrop = Math.max(0, punctDrop - 0.01); // clamp so we never overshoot brighter than fg0 itself
     fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
   }
 
