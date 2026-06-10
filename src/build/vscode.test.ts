@@ -87,3 +87,46 @@ describe("vscode emitter", () => {
     expect(Object.keys(t.colors).length).toBeGreaterThanOrEqual(200);
   });
 });
+
+describe("detail pass — vscode", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+  const theme = buildVscode(dusk, { bold: true });
+  const themeCS = buildVscode(cs, { bold: true });
+  const ruleFor = (t: ReturnType<typeof buildVscode>, sel: string) =>
+    t.tokenColors.find((r) => r.scope.includes(sel));
+
+  it("coverage floors: ≥80 scope selectors, ≥30 semantic keys", () => {
+    const selectors = theme.tokenColors.flatMap((r) => r.scope);
+    expect(selectors.length).toBeGreaterThanOrEqual(80);
+    expect(Object.keys(theme.semanticTokenColors).length).toBeGreaterThanOrEqual(30);
+  });
+  it("h2 heading rides the signature ladder on cyber-salmon", () => {
+    const p = buildPalette(cs);
+    expect(ruleFor(themeCS, "heading.2.markdown")!.settings.foreground).toBe(p.headings[1]);
+  });
+  it("JSON/CSS keys are teal via propertyKey", () => {
+    const p = buildPalette(dusk);
+    expect(ruleFor(theme, "support.type.property-name")!.settings.foreground).toBe(p.accents.teal);
+  });
+  it("string quotes are protected from the punctuation dim", () => {
+    const p = buildPalette(dusk);
+    expect(ruleFor(theme, "punctuation.definition.string")!.settings.foreground).toBe(p.accents.green);
+    expect(ruleFor(theme, "punctuation")!.settings.foreground).toBe(p.fgPunct);
+  });
+  it("wordy operators stay keyword red while symbolic ops dim", () => {
+    const p = buildPalette(dusk);
+    expect(ruleFor(theme, "keyword.operator.expression")!.settings.foreground).toBe(p.accents.red);
+    expect(ruleFor(theme, "keyword.operator")!.settings.foreground).toBe(p.fgPunct);
+  });
+  it("semantic: parameter italic; decorator rides the signature slot; readonly is constant-purple", () => {
+    const p = buildPalette(cs);
+    expect(themeCS.semanticTokenColors["parameter"]!.italic).toBe(true);
+    expect(themeCS.semanticTokenColors["decorator"]!.foreground).toBe(p.accents.magenta); // = signature
+    expect(themeCS.semanticTokenColors["variable.readonly"]!.foreground).toBe(p.accents.purple);
+    expect(themeCS.semanticTokenColors["interface"]!.italic).toBe(true);
+  });
+  it("markdown link underlines via fontStyle", () => {
+    expect(ruleFor(theme, "markup.underline.link")!.settings.fontStyle).toContain("underline");
+  });
+});

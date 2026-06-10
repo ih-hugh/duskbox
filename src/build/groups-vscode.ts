@@ -22,12 +22,69 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   tagComponent: ["support.class.component", "entity.name.tag.namespace"],
   tagAttr: ["entity.other.attribute-name"],
   tagDelim: ["punctuation.definition.tag"],
+  // --- detail pass: git diff line bodies (TextMate scopes emitted by diff/git grammars) ---
+  gitAdd: ["markup.inserted", "markup.inserted punctuation.definition.inserted"],
+  gitChange: ["markup.changed", "markup.changed punctuation.definition.changed"],
+  gitDelete: ["markup.deleted", "markup.deleted punctuation.definition.deleted"],
+  // --- detail pass: markdown / docs (descendant selectors keep #-marks & bullets in their
+  // ladder/marker colors despite the generic punctuation dim — deeper match wins) ---
+  mdH1: ["heading.1.markdown", "heading.1.markdown punctuation.definition.heading"],
+  mdH2: ["heading.2.markdown", "heading.2.markdown punctuation.definition.heading"],
+  mdH3: ["heading.3.markdown", "heading.3.markdown punctuation.definition.heading"],
+  mdH4: [
+    "heading.4.markdown", "heading.4.markdown punctuation.definition.heading",
+    "heading.5.markdown", "heading.5.markdown punctuation.definition.heading",
+    "heading.6.markdown", "heading.6.markdown punctuation.definition.heading",
+  ],
+  mdBold: ["markup.bold"],
+  mdItalic: ["markup.italic"],
+  mdCodeInline: ["markup.inline.raw", "markup.raw.inline", "fenced_code.block.language", "entity.name.language.markdown"],
+  mdLink: [
+    "markup.underline.link", "string.other.link.title.markdown",
+    "string.other.link.description.markdown", "constant.other.reference.link.markdown",
+  ],
+  mdQuote: ["markup.quote"],
+  mdListMarker: ["punctuation.definition.list.begin.markdown", "markup.list.numbered.bullet"],
+  mdSeparator: ["meta.separator.markdown"],
+  mdStrike: ["markup.strikethrough"],
+  // --- detail pass: per-language ---
+  propertyKey: [
+    "support.type.property-name", "support.type.property-name punctuation",
+    "entity.name.tag.yaml",
+  ],
+  yamlAnchor: [
+    "entity.name.type.anchor.yaml", "variable.other.alias.yaml",
+    "punctuation.definition.anchor.yaml", "punctuation.definition.alias.yaml",
+  ],
+  cssUnit: ["keyword.other.unit"],
+  cssColorHex: ["constant.other.color"],
+  cssImportant: ["keyword.other.important"],
+  cssClassSel: ["entity.other.attribute-name.class.css", "entity.other.attribute-name.id.css"],
+  cssPseudo: ["entity.other.attribute-name.pseudo-class", "entity.other.attribute-name.pseudo-element"],
+  regexClass: ["constant.other.character-class.regexp", "constant.other.character-class.set.regexp"],
+  regexQuant: ["keyword.operator.quantifier.regexp"],
+  regexAnchor: ["keyword.control.anchor.regexp"],
+  docTag: ["storage.type.class.jsdoc", "punctuation.definition.block.tag.jsdoc", "entity.name.type.instance.jsdoc"],
+  docParam: ["variable.other.jsdoc"],
+  diffMeta: ["meta.diff.header", "meta.diff.range", "punctuation.definition.range.diff"],
+  // --- detail pass: guards (protect from the generic punctuation dim / keep wordy ops as keywords) ---
+  stringQuote: ["punctuation.definition.string"],
+  wordOperator: [
+    "keyword.operator.expression", "keyword.operator.new",
+    "keyword.operator.delete", "keyword.operator.logical.python",
+  ],
 };
 
 // VS Code semantic token type -> role
 export const SEMANTIC_ROLE: Record<string, Role> = {
   keyword: "keyword", function: "function", method: "function", type: "type", class: "type",
-  struct: "type", interface: "type", enum: "type", typeParameter: "type", parameter: "parameter",
+  struct: "type", interface: "typeInterface", enum: "type", typeParameter: "typeInterface", parameter: "parameter",
   variable: "variable", property: "property", string: "string", number: "number",
   enumMember: "constant", macro: "preproc", comment: "comment", operator: "operator", namespace: "type",
+  decorator: "builtin", annotation: "builtin",
+  selfParameter: "builtin", clsParameter: "builtin",
+  "variable.readonly": "constant", "property.readonly": "constant",
+  "function.defaultLibrary": "builtin", "method.defaultLibrary": "builtin",
+  "class.defaultLibrary": "builtin", "variable.defaultLibrary": "builtin",
+  regexp: "string", event: "property",
 };
