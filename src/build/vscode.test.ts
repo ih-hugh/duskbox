@@ -135,3 +135,32 @@ describe("detail pass — vscode", () => {
     expect(selectors).toContain("support.type.property-name punctuation");
   });
 });
+
+describe("soul pass — vscode", () => {
+  const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+  const soulCS = buildVscode(cs, { bold: true });
+  const pcs = buildPalette(cs);
+  it("cursor rides the variant accent", () => {
+    expect(soulCS.colors["editorCursor.foreground"]).toBe(pcs.signature);
+    expect(soulCS.colors["editorCursor.background"]).toBe(pcs.bg0);
+    expect(soulCS.colors["terminalCursor.foreground"]).toBe(pcs.signature);
+  });
+  it("severity ranges get faint washes (halved alpha on HC)", () => {
+    const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+    const t = buildVscode(dusk, { bold: true });
+    const pd = buildPalette(dusk);
+    expect(t.colors["editorError.background"]).toBe(pd.accents.red + "1a");
+    expect(soulCS.colors["editorError.background"]).toBe(pcs.accents.red + "0d"); // cyber-salmon is HC
+  });
+  it("diff factors per spec; merge uses teal/blue", () => {
+    const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+    const t = buildVscode(dusk, { bold: true });
+    const pd = buildPalette(dusk);
+    expect(t.colors["diffEditor.insertedTextBackground"]).toBe(pd.accents.green + "26");
+    expect(t.colors["diffEditor.insertedLineBackground"]).toBe(pd.accents.green + "14");
+    expect(t.colors["merge.currentContentBackground"]).toBe(pd.accents.teal + "14");
+    expect(t.colors["merge.incomingContentBackground"]).toBe(pd.accents.blue + "14");
+    // HC halves
+    expect(soulCS.colors["diffEditor.insertedTextBackground"]).toBe(pcs.accents.green + "13");
+  });
+});

@@ -29,10 +29,11 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
   const ann = blend(p.bg0, p.fg0, 0.34);                 // calm-but-visible ambient border (HC contrastBorder)
   const sel = p.bg3;                                     // tinted selection / active surface
   const A = (hex: string, alpha: string) => hex + alpha; // hex + 2-digit alpha
+  const AW = (hex: string, full: string, hc: string) => A(hex, isHC ? hc : full); // washes halve on HC (≥7:1 world)
   const colors: Record<string, string> = {
     "editor.background": p.bg0, "editor.foreground": p.fg0,
     "editorLineNumber.foreground": p.fg2, "editorLineNumber.activeForeground": uiYellow,
-    "editorCursor.foreground": p.fg0, "editor.selectionBackground": p.bg3,
+    "editorCursor.foreground": ui, "editorCursor.background": p.bg0, "editor.selectionBackground": p.bg3,
     "editor.lineHighlightBackground": p.bg2, "editorWhitespace.foreground": p.bg3,
     "editorIndentGuide.background1": p.bg2, "editorIndentGuide.activeBackground1": ui,
     "editor.findMatchBackground": p.bg3, "editor.findMatchHighlightBackground": p.bg2,
@@ -55,6 +56,7 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "editorInlayHint.foreground": p.fg2, "editorInlayHint.background": p.bg1,
     "editorInlayHint.typeForeground": p.fg2, "editorInlayHint.parameterForeground": p.fg2,
     "editorError.foreground": a.red, "editorWarning.foreground": a.yellow, "editorInfo.foreground": a.blue,
+    "editorError.background": AW(a.red, "1a", "0d"), "editorWarning.background": AW(a.yellow, "1a", "0d"), "editorInfo.background": AW(a.blue, "1a", "0d"),
     "terminal.ansiBlack": p.bg2, "terminal.ansiRed": a.red, "terminal.ansiGreen": a.green, "terminal.ansiYellow": a.yellow,
     "terminal.ansiBlue": a.blue, "terminal.ansiMagenta": a.magenta, "terminal.ansiCyan": a.cyan, "terminal.ansiWhite": p.fg1,
     "terminal.ansiBrightBlack": p.bg3, "terminal.ansiBrightRed": a.red, "terminal.ansiBrightGreen": a.green, "terminal.ansiBrightYellow": a.yellow,
@@ -107,10 +109,10 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "editorOverviewRuler.addedForeground": a.green, "editorOverviewRuler.modifiedForeground": a.blue, "editorOverviewRuler.deletedForeground": a.red,
     "editorOverviewRuler.findMatchForeground": A(a.yellow, "99"), "editorOverviewRuler.bracketMatchForeground": p.fg2,
     "editorHint.foreground": a.teal,
-    "diffEditor.insertedTextBackground": A(a.green, "22"), "diffEditor.removedTextBackground": A(a.red, "22"),
-    "diffEditor.insertedLineBackground": A(a.green, "14"), "diffEditor.removedLineBackground": A(a.red, "14"),
-    "merge.currentHeaderBackground": A(a.blue, "66"), "merge.currentContentBackground": A(a.blue, "22"),
-    "merge.incomingHeaderBackground": A(a.purple, "66"), "merge.incomingContentBackground": A(a.purple, "22"),
+    "diffEditor.insertedTextBackground": AW(a.green, "26", "13"), "diffEditor.removedTextBackground": AW(a.red, "26", "13"),
+    "diffEditor.insertedLineBackground": AW(a.green, "14", "0a"), "diffEditor.removedLineBackground": AW(a.red, "14", "0a"),
+    "merge.currentHeaderBackground": AW(a.teal, "33", "1a"), "merge.currentContentBackground": AW(a.teal, "14", "0a"),
+    "merge.incomingHeaderBackground": AW(a.blue, "33", "1a"), "merge.incomingContentBackground": AW(a.blue, "14", "0a"),
     "minimap.findMatchHighlight": a.yellow, "minimap.errorHighlight": a.red, "minimap.warningHighlight": a.yellow,
     "minimapGutter.addedBackground": a.green, "minimapGutter.modifiedBackground": a.blue, "minimapGutter.deletedBackground": a.red,
     "gitDecoration.untrackedResourceForeground": a.green, "gitDecoration.conflictingResourceForeground": a.orange,
@@ -149,7 +151,7 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "editorGroup.border": p.bg3, "editorGroupHeader.tabsBorder": p.bg3, "tab.border": p.bg1,
     "titleBar.inactiveBackground": p.bg1, "titleBar.inactiveForeground": p.fg2, "titleBar.border": p.bg3,
     "statusBar.border": p.bg3, "statusBarItem.hoverBackground": p.bg2,
-    "terminal.selectionBackground": p.bg3, "terminalCursor.foreground": p.fg0, "terminalCursor.background": p.bg0,
+    "terminal.selectionBackground": p.bg3, "terminalCursor.foreground": ui, "terminalCursor.background": p.bg0,
     "tree.indentGuidesStroke": p.bg3, "checkbox.background": p.bg2, "checkbox.border": p.bg3,
     "input.placeholderForeground": p.fg2, "widget.border": p.bg3,
   });
