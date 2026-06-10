@@ -156,12 +156,12 @@ describe("soul pass — neovim", () => {
     expect(hl.Cursor).toMatchObject({ fg: p.bg0, bg: p.signature });
     expect(hl.TermCursor).toMatchObject({ fg: p.bg0, bg: p.signature });
   });
-  it("comment badges are tinted pills with readable fg (≥3:1 on all variants)", () => {
+  it("comment badges are tinted pills with readable fg (≥4:1 on all variants)", () => {
     expect(hl["@comment.todo"]!.bg).not.toBe(p.bg0);
     for (const v of VARIANTS) {
       const hh = buildNeovim(v, { bold: true });
       for (const g of ["@comment.todo", "@comment.error", "@comment.warning", "@comment.note"]) {
-        expect(contrastRatio(hh[g]!.fg!, hh[g]!.bg!), `${v.name} ${g}`).toBeGreaterThanOrEqual(3);
+        expect(contrastRatio(hh[g]!.fg!, hh[g]!.bg!), `${v.name} ${g}`).toBeGreaterThanOrEqual(4);
       }
     }
   });
@@ -169,13 +169,22 @@ describe("soul pass — neovim", () => {
     expect(hl.DiagnosticVirtualTextError!.bg).not.toBe(p.bg1);
     for (const v of VARIANTS) {
       const hh = buildNeovim(v, { bold: true });
-      expect(contrastRatio(hh.DiagnosticVirtualTextError!.fg!, hh.DiagnosticVirtualTextError!.bg!), v.name).toBeGreaterThanOrEqual(3);
+      expect(contrastRatio(hh.DiagnosticVirtualTextError!.fg!, hh.DiagnosticVirtualTextError!.bg!), v.name).toBeGreaterThanOrEqual(4);
     }
+  });
+  it("@lsp.type.comment is a no-op so treesitter codetag pills win over LSP comment tokens", () => {
+    expect(hl["@lsp.type.comment"]).toEqual({});
   });
   it("diff washes use spec factors, halved on HC", () => {
     const dusk = VARIANTS.find((v) => v.name === "dusk")!;
     const pd = buildPalette(dusk);
-    expect(buildNeovim(dusk, { bold: true }).DiffAdd!.bg).toBe(blend(pd.bg0, pd.accents.green, 0.14));
+    const hd = buildNeovim(dusk, { bold: true });
+    expect(hd.DiffAdd!.bg).toBe(blend(pd.bg0, pd.accents.green, 0.14));
+    expect(hd.DiffChange!.bg).toBe(blend(pd.bg0, pd.accents.blue, 0.12)); // gitChange resolves to blue
+    expect(hd.DiffText!.bg).toBe(blend(pd.bg0, pd.accents.blue, 0.28));
+    expect(hd.DiffText!.bold).toBe(true);
+    expect(hd.DiffDelete!.fg).toBeDefined();
+    expect(hd.DiffDelete!.fg).not.toBe(pd.accents.red); // muted, not raw gitDelete red
     const hc = VARIANTS.find((v) => v.name === "night-hc")!;
     const ph = buildPalette(hc);
     expect(buildNeovim(hc, { bold: true }).DiffAdd!.bg).toBe(blend(ph.bg0, ph.accents.green, 0.07));

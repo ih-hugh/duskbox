@@ -62,11 +62,15 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
     for (const g of groups) hl[g] = { ...attrs };
   });
 
+  // Pill/chip fg: on light variants the raw accents only reach ~4:1 over their tinted washes —
+  // darken toward fg0 (dark there) to buy legibility while preserving hue. Dark variants keep raw accents.
+  const pillFg = (acc: string) => (v.kind === "light" ? blend(acc, p.fg0, 0.2) : acc);
+
   const diag: [string, Role][] = [["Error","error"],["Warn","warning"],["Info","info"],["Hint","hint"],["Ok","ok"]];
   for (const [name, role] of diag) {
     const fg = slot(p, TOKENS[role].color);
     hl[`Diagnostic${name}`] = { fg };
-    hl[`DiagnosticVirtualText${name}`] = { fg, bg: blend(p.bg0, fg, washT(0.13)) };
+    hl[`DiagnosticVirtualText${name}`] = { fg: pillFg(fg), bg: blend(p.bg0, fg, washT(0.13)) };
     hl[`DiagnosticUnderline${name}`] = { undercurl: true, sp: fg };
   }
   hl.SpellBad = { undercurl: true, sp: slot(p, TOKENS.error.color) };
@@ -89,7 +93,7 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl.NeoTreeDimText = { fg: p.fg2 }; hl.NeoTreeGitIgnored = { fg: p.fg2 }; hl.NeoTreeDotfile = { fg: p.fg2 };
   // LSP inlay hints (inferred types / param names) default near-bg — readable text in a subtle pill
   hl.LspInlayHint = { fg: p.fg2, bg: p.bg1 };
-  hl["@lsp.type.comment"] = { fg: p.fg2 };
+  hl["@lsp.type.comment"] = {}; // no-op: let treesitter comment captures (incl. codetag pills) win over LSP comment tokens
   hl.CmpItemAbbrMatch = { fg: uiBlue, bold: true }; hl.CmpItemKind = { fg: p.accents.yellow };
   hl.IndentBlanklineChar = { fg: p.bg2 }; hl.IblIndent = { fg: p.bg2 }; hl.IblScope = { fg: p.accents.blue };
 
@@ -114,9 +118,9 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@lsp.typemod.method.defaultLibrary"] = { fg: p.accents.magenta };
   hl["@lsp.typemod.class.defaultLibrary"] = { fg: p.accents.magenta };
 
-  // Soul pass: codetag badges — tinted pills so intent pops out of comment-gray. (VS Code's stock
-  // grammars don't scope codetags; this is a documented nvim-only delight.)
-  const pill = (acc: string) => ({ fg: acc, bg: blend(p.bg0, acc, washT(0.18)), bold: true });
+  // Soul pass: codetag badges — tinted pills (render bold+italic — comment italics merge in) so intent
+  // pops out of comment-gray. (VS Code's stock grammars don't scope codetags; documented nvim-only delight.)
+  const pill = (acc: string) => ({ fg: pillFg(acc), bg: blend(p.bg0, acc, washT(0.18)), bold: true });
   hl["@comment.todo"] = pill(p.accents.yellow);
   hl["@comment.error"] = pill(p.accents.red);
   hl["@comment.warning"] = pill(p.accents.orange);
