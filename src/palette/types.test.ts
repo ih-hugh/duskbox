@@ -5,34 +5,35 @@ import { VARIANTS } from "./variants";
 import { contrastRatio, hexToOklch, oklchToHex } from "../oklch";
 import { blend } from "../build/blend";
 
-const dusk: VariantConfig = {
-  name: "dusk", kind: "dark", uiContrast: "normal",
+// Synthetic config for generic invariants — NOT the shipped dusk variant (see VARIANTS for that).
+const fixture: VariantConfig = {
+  name: "fixture", kind: "dark", uiContrast: "normal",
   bg: [0.265, 0.018, 278], fg: [0.86, 0.035, 265], accentL: 0.78, accentC: 0.12,
 };
 
 describe("buildPalette", () => {
   it("derives canvas + 9 accents as hex", () => {
-    const p = buildPalette(dusk);
+    const p = buildPalette(fixture);
     expect(p.bg0).toMatch(/^#[0-9a-f]{6}$/);
     expect(Object.keys(p.accents).sort()).toEqual(Object.keys(BASE_HUES).sort());
     for (const k of Object.keys(BASE_HUES)) expect((p.accents as any)[k]).toMatch(/^#[0-9a-f]{6}$/);
   });
   it("dark variant: fg is much lighter than bg (>= 4.5:1)", () => {
-    const p = buildPalette(dusk);
+    const p = buildPalette(fixture);
     expect(contrastRatio(p.fg0, p.bg0)).toBeGreaterThanOrEqual(4.5);
   });
   it("every accent clears 4.5:1 on the dark bg", () => {
-    const p = buildPalette(dusk);
+    const p = buildPalette(fixture);
     for (const k of Object.keys(p.accents))
       expect(contrastRatio((p.accents as any)[k], p.bg0)).toBeGreaterThanOrEqual(4.5);
   });
   it("signature variant overrides the magenta slot hue, tints bg3, and exposes palette.signature", () => {
-    const azureDusk: VariantConfig = { ...dusk, name: "dusk-azure", signature: 235 };
-    const p = buildPalette(azureDusk);
+    const azure: VariantConfig = { ...fixture, name: "fixture-azure", signature: 235 };
+    const p = buildPalette(azure);
     expect(p.signature).toMatch(/^#[0-9a-f]{6}$/);
     expect(p.signature).toBe(p.accents.magenta); // signature IS the magenta slot
-    // base dusk: no signature, magenta stays the fuchsia default, bg3 stays blue-tinted
-    const base = buildPalette(dusk);
+    // base: no signature, magenta stays the fuchsia default, bg3 stays blue-tinted
+    const base = buildPalette(fixture);
     expect(base.signature).toBeUndefined();
     expect(base.accents.magenta).not.toBe(p.accents.magenta);
     expect(base.bg3).not.toBe(p.bg3); // selection tint shifts toward the signature hue
@@ -97,8 +98,19 @@ describe("v2 stages & ladder", () => {
     expect(get("cyber-salmon").bg0).toBe(get("cyber").bg0);
     expect(get("cyber").bg0).toBe("#13131c");
   });
-  it("bg3 still carries the signature tint (chrome)", () => {
-    expect(get("dusk-azure").bg3).not.toBe(get("dusk").bg3);
+  it("bg3 signature tint is perceptible (ΔE-ish gate, not just byte-inequality)", () => {
+    const dusk = get("dusk");
+    for (const child of ["dusk-azure", "dusk-salmon"]) {
+      const c = hexToOklch(get(child).bg3), b = hexToOklch(dusk.bg3);
+      const dE = Math.hypot(c.L - b.L, c.C * Math.cos(c.H * Math.PI/180) - b.C * Math.cos(b.H * Math.PI/180), c.C * Math.sin(c.H * Math.PI/180) - b.C * Math.sin(b.H * Math.PI/180));
+      expect(dE, child).toBeGreaterThanOrEqual(0.012);
+    }
+  });
+  it("fg2 (comments) clears the 3.8:1 readability floor on every variant", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      expect(contrastRatio(p.fg2, p.bg0), v.name).toBeGreaterThanOrEqual(3.8);
+    }
   });
   it("fgVar is brighter than fg0 (dark) / darker (light), capped off pure white/black", () => {
     const d = get("dusk"), l = get("dawn");

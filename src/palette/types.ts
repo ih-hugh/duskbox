@@ -48,14 +48,23 @@ export function buildPalette(v: VariantConfig): Palette {
   const bg0 = v.bgHex ?? oklchToHex(clamp01(bgL), bgC, bgH);
   const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
   const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
-  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, v.signature ?? 255); // selection (chrome: cool or signature-tinted)
+  // Signature bg3 floors its chroma so the tint stays perceptible (ΔE ≥ ~0.012) on near-neutral stages.
+  const bg3C = v.signature !== undefined ? Math.max(bgC * 1.5, 0.030) : bgC * 1.5;
+  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bg3C, v.signature ?? 255); // selection (chrome: cool or signature-tinted)
   // High-contrast variants keep secondary text much closer to the main fg so
   // comments / dim text stay legible against the near-black (or near-white) bg.
   const dimDrop = v.uiContrast === "high" ? 0.07 : 0.12;
   const muteDrop = v.uiContrast === "high" ? 0.15 : 0.24;
   const fg0 = oklchToHex(clamp01(fgL), fgC, fgH);
   const fg1 = oklchToHex(clamp01(fgL - dir * dimDrop), fgC, fgH);  // dim
-  const fg2 = oklchToHex(clamp01(fgL - dir * muteDrop), fgC, fgH); // muted/comment
+  // Muted/comment tone: raised deterministically until it clears the 3.8:1 readability floor vs bg0
+  // (the loop runs uniformly; HC drops already produce high contrast, so it never fires there).
+  let fg2Drop = muteDrop;
+  let fg2 = oklchToHex(clamp01(fgL - dir * fg2Drop), fgC, fgH);    // muted/comment
+  while (contrastRatio(fg2, bg0) < 3.8 && fg2Drop > 0) {
+    fg2Drop = Math.max(0, fg2Drop - 0.01);
+    fg2 = oklchToHex(clamp01(fgL - dir * fg2Drop), fgC, fgH);
+  }
 
   // Bright-variable tier: locals pop above body text without a hue shift; capped off pure white/black.
   const varL = v.kind === "dark" ? Math.min(fgL + 0.10, 0.975) : Math.max(fgL - 0.10, 0.125);
