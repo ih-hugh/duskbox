@@ -107,4 +107,8 @@ describe("atmosphere (A1.5)", () => {
     const neutral = buildPalette({ ...dusk, bgLean: undefined, name: "x" });
     expect(moody.bg1).not.toBe(neutral.bg1);
   });
+  it("dusk ramp fixtures (locks chroma×2 propagation incl. bg3's ×1.5)", () => {
+    const p = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
+    expect([p.bg1, p.bg2, p.bg3]).toEqual(["#1d1d30", "#2d2d41", "#253a55"]);
+  });
 });

@@ -16,7 +16,7 @@ export interface VariantConfig {
   fg: [number, number, number]; // OKLCH of the primary foreground
   accentL: number;              // default accent lightness
   accentC: number;              // default accent chroma
-  bgHex?: string;               // exact bg override (e.g. cyber's #0a0a0f)
+  bgHex?: string;               // exact bg override (e.g. cyber's #13131c); ignored when a mood lean applies (bgLean ?? signature)
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
   accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides
   signature?: number;          // signature hue°: marks a signature variant — sets the magenta slot hue + bg3 tint here; the emitters also recolor the UI accent
@@ -47,9 +47,10 @@ export function buildPalette(v: VariantConfig): Palette {
   const [fgL, fgC, fgH] = v.fg;
   const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
   // A1.5 atmosphere: when a mood lean exists (explicit bgLean, or the signature hue), the whole
-  // bg ramp tints toward it — chroma ×2.0, hue at the circular midpoint. Same lightness, so all
-  // fg contrast is preserved by construction. A leaned variant ignores bgHex (cyber's signature
-  // children compute their mood; plain cyber keeps its pinned near-black identity).
+  // bg ramp tints toward it — chroma ×2.0, hue at the circular midpoint. Same lightness, so fg
+  // contrast is essentially preserved (drift ≤~0.3:1; re-verified by the contrast gates). A leaned
+  // variant ignores bgHex (cyber's signature children compute their mood; plain cyber keeps its
+  // pinned near-black identity).
   const lean = v.bgLean ?? v.signature;
   const moodC = lean !== undefined ? bgC * 2.0 : bgC;
   const moodH = lean !== undefined ? halfLean(bgH, lean) : bgH;

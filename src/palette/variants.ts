@@ -2,7 +2,8 @@ import type { VariantConfig } from "./types";
 
 // Authored in OKLCH. Dark variants: low bg L, high fg L. Light: high bg L, low fg L (accents darkened).
 // HC variants widen the fg/bg gap and raise accent chroma. Cyber pins bg to the exact portfolio
-// near-black (#0a0a0f) and overrides hues/L,C to the neon wheel.
+// near-black (#13131c) and overrides hues/L,C to the neon wheel.
+// bgLean values are gallery-previewed moods; expect retuning at the soul-pass gallery checkpoint.
 export const VARIANTS: VariantConfig[] = [
   // --- light ---
   { name: "dawn", kind: "light", uiContrast: "normal",
