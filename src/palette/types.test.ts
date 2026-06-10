@@ -22,21 +22,22 @@ describe("buildPalette", () => {
     const p = buildPalette(fixture);
     expect(contrastRatio(p.fg0, p.bg0)).toBeGreaterThanOrEqual(4.5);
   });
-  it("every accent clears 4.5:1 on the dark bg", () => {
+  it("every accent clears 4:1 on the dark bg (red is tier-1: anchored low-L, high-C; floor is 4:1 not 4.5:1)", () => {
     const p = buildPalette(fixture);
     for (const k of Object.keys(p.accents))
-      expect(contrastRatio((p.accents as any)[k], p.bg0)).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio((p.accents as any)[k], p.bg0)).toBeGreaterThanOrEqual(4);
   });
-  it("signature variant overrides the magenta slot hue, tints bg3, and exposes palette.signature", () => {
+  it("signature variant exposes a chrome-only palette.signature; syntax palette is identical to base", () => {
     const azure: VariantConfig = { ...fixture, name: "fixture-azure", signature: 235 };
     const p = buildPalette(azure);
     expect(p.signature).toMatch(/^#[0-9a-f]{6}$/);
-    expect(p.signature).toBe(p.accents.magenta); // signature IS the magenta slot
-    // base: no signature, magenta stays the fuchsia default, bg3 stays blue-tinted
+    // v2: signature is chrome-only; it does NOT override the magenta syntax slot
+    expect(p.signature).not.toBe(p.accents.magenta);
+    // signature shares the base's syntax palette exactly
     const base = buildPalette(fixture);
     expect(base.signature).toBeUndefined();
-    expect(base.accents.magenta).not.toBe(p.accents.magenta);
-    expect(base.bg3).not.toBe(p.bg3); // selection tint shifts toward the signature hue
+    expect(base.accents.magenta).toBe(p.accents.magenta); // same magenta — no longer overridden
+    expect(base.bg3).not.toBe(p.bg3); // selection tint still shifts toward the signature hue
   });
 });
 

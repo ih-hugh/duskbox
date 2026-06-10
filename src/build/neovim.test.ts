@@ -91,8 +91,9 @@ describe("neovim emitter", () => {
     expect(hl.PmenuSel!.bg).toBe(sp.signature);
     expect(hl.TabLineSel!.bg).toBe(sp.signature);
     expect(hl.SnacksPickerMatch!.fg).toBe(sp.signature);
-    // syntax standout -> signature (same slot)
-    expect(hl["@variable.builtin"]!.fg).toBe(sp.signature);
+    // v2: syntax standout (@variable.builtin) uses the shared magenta accent, NOT the signature
+    // (signature is chrome-only; syntax palette is identical on base and signature variants)
+    expect(hl["@variable.builtin"]!.fg).toBe(sp.accents.magenta);
     // semantics stay put: info stays blue, not the signature
     expect(hl.DiagnosticInfo!.fg).toBe(sp.accents.blue);
     // base dusk: original colors preserved (orange paren, yellow line-nr, blue border)

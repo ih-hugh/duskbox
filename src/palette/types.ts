@@ -1,13 +1,12 @@
 import { oklchToHex, contrastRatio } from "../oklch";
 import { blend } from "../build/blend";
+import { TIER_HUES, SLOT_LC, BUILTIN_LC, archetypeOf } from "./tiers";
 
 export type AccentName =
   | "red" | "orange" | "yellow" | "green" | "teal" | "cyan" | "blue" | "purple" | "magenta";
 
-/** Shared hue wheel (degrees). Per-variant L/C come from VariantConfig; cyber overrides hues. */
-export const BASE_HUES: Record<AccentName, number> = {
-  red: 22, orange: 52, yellow: 85, green: 145, teal: 185, cyan: 220, blue: 255, purple: 290, magenta: 335,
-};
+/** @deprecated Use TIER_HUES from ./tiers — kept for gallery script and legacy test imports. */
+export const BASE_HUES: Record<AccentName, number> = TIER_HUES;
 
 export interface VariantConfig {
   name: string;
@@ -15,12 +14,12 @@ export interface VariantConfig {
   uiContrast: "normal" | "high";
   bg: [number, number, number]; // OKLCH of the editor background
   fg: [number, number, number]; // OKLCH of the primary foreground
-  accentL: number;              // default accent lightness
-  accentC: number;              // default accent chroma
+  accentL: number;              // heading-ladder band (syntax accents now come from SLOT_LC tiers)
+  accentC: number;              // heading-ladder band (syntax accents now come from SLOT_LC tiers)
   bgHex?: string;               // exact bg override (e.g. cyber's #13131c)
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
-  accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides
-  signature?: number;          // signature hue°: marks a signature variant — sets the magenta slot hue + bg3 tint here; the emitters also recolor the UI accent
+  accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides (cyber continuity)
+  signature?: number;          // signature hue°: chrome-only hex for cursor/UI accent/bg3 tint; syntax palette is identical to base
 }
 
 export interface Palette {
@@ -34,7 +33,7 @@ export interface Palette {
   accents: Record<AccentName, string>;
   headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
   fgPunct: string;                            // punctuation tone between fg0 and fg2 (HC-floored)
-  builtin: string;             // builtin tier placeholder — Task 3 wires the tier slot
+  builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2, slightly brighter)
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
@@ -70,17 +69,15 @@ export function buildPalette(v: VariantConfig): Palette {
   const varL = v.kind === "dark" ? Math.min(fgL + 0.10, 0.975) : Math.max(fgL - 0.10, 0.125);
   const fgVar = oklchToHex(clamp01(varL), fgC, fgH);
 
+  const arch = archetypeOf(v.kind, v.uiContrast);
   const accents = {} as Record<AccentName, string>;
-  for (const name of Object.keys(BASE_HUES) as AccentName[]) {
-    let hue = v.hues?.[name] ?? BASE_HUES[name];
-    // signature is the semantic override; it wins over hues.magenta for the magenta slot
-    if (name === "magenta" && v.signature !== undefined) hue = v.signature;
-    let [L, C] = v.accentLC?.[name] ?? [v.accentL, v.accentC];
-    // magenta is the "fuchsia" standout (this / import / constructor) — boost its chroma so it
-    // pops/neon, unless the variant already pins it explicitly (e.g. cyber's neon wheel).
-    if (name === "magenta" && !v.accentLC?.magenta) C = C * 1.4;
+  for (const name of Object.keys(TIER_HUES) as AccentName[]) {
+    const hue = v.hues?.[name] ?? TIER_HUES[name];
+    const [L, C] = v.accentLC?.[name] ?? SLOT_LC[arch][name];
     accents[name] = oklchToHex(L, C, hue);
   }
+  const [bL, bC] = BUILTIN_LC[arch];
+  const builtin = oklchToHex(bL, bC, (v.hues?.orange ?? TIER_HUES.orange) + 2);
 
   const fgParam = blend(fg0, accents.cyan, 0.30); // moonlit parameters
 
@@ -101,11 +98,16 @@ export function buildPalette(v: VariantConfig): Palette {
     fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
   }
 
+  // Chrome-only signature: resolved from the signature hue at the archetype's magenta L/C band.
+  const signature = v.signature !== undefined
+    ? oklchToHex(SLOT_LC[arch].magenta[0], SLOT_LC[arch].magenta[1], v.signature)
+    : undefined;
+
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
     bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam,
     accents, headings, fgPunct,
-    builtin: accents.orange, // placeholder — Task 3 wires the tier slot
-    signature: v.signature !== undefined ? accents.magenta : undefined,
+    builtin,
+    signature,
   };
 }

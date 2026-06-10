@@ -62,9 +62,11 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
     for (const g of groups) hl[g] = { ...attrs };
   });
 
-  // Pill/chip fg: on light variants the raw accents only reach ~4:1 over their tinted washes —
-  // darken toward fg0 (dark there) to buy legibility while preserving hue. Dark variants keep raw accents.
-  const pillFg = (acc: string) => (v.kind === "light" ? blend(acc, p.fg0, 0.2) : acc);
+  // Pill/chip fg: accents need a small hue-preserving nudge to clear 4:1 over their own washed bg.
+  // Light variants darken toward fg0; dark variants lighten toward fgVar (tier-1 red lands at L≈0.66
+  // so the raw accent alone falls short of 4:1 over the 18%-blend pill bg on near-neutral stages).
+  const pillFg = (acc: string) =>
+    v.kind === "light" ? blend(acc, p.fg0, 0.2) : blend(acc, p.fgVar, 0.15);
 
   const diag: [string, Role][] = [["Error","error"],["Warn","warning"],["Info","info"],["Hint","hint"],["Ok","ok"]];
   for (const [name, role] of diag) {

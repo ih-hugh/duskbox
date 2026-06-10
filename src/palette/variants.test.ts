@@ -50,11 +50,13 @@ describe("variants", () => {
       expect(["#ffffff", "#fefefe", "#fdfdfd"], v.name).not.toContain(fg);
     }
   });
-  it("signature variants set palette.signature; base variants do not", () => {
+  it("signature variants set palette.signature (chrome-only); base variants do not", () => {
     const sigNames = ["dusk-azure", "cyber-salmon", "dusk-magenta", "cyber-neon-purple"];
     for (const n of sigNames) {
       const p = buildPalette(VARIANTS.find((v) => v.name === n)!);
-      expect(p.signature, n).toBe(p.accents.magenta);
+      expect(p.signature, n).toMatch(/^#[0-9a-f]{6}$/);
+      // v2: signature is chrome-only — it does NOT equal accents.magenta
+      expect(p.signature, `${n} != magenta`).not.toBe(p.accents.magenta);
     }
     expect(buildPalette(VARIANTS.find((v) => v.name === "dusk")!).signature).toBeUndefined();
   });

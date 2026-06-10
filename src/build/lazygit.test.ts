@@ -21,7 +21,8 @@ describe("lazygit emitter", () => {
     for (const v of VARIANTS) {
       const yml = buildLazygit(v);
       const p = buildPalette(v);
-      const allowed = new Set([p.bg0, p.bg1, p.bg2, p.bg3, p.fg0, p.fg1, p.fg2, ...Object.values(p.accents)]);
+      const allowed = new Set([p.bg0, p.bg1, p.bg2, p.bg3, p.fg0, p.fg1, p.fg2, p.builtin,
+        ...(p.signature ? [p.signature] : []), ...Object.values(p.accents)]);
       const hexes = yml.match(/#[0-9a-f]{6}/g) ?? [];
       expect(hexes.length, v.name).toBeGreaterThan(0);
       for (const h of hexes) expect(allowed.has(h), `${v.name}: ${h}`).toBe(true);

@@ -14,7 +14,8 @@ export const VARIANTS: VariantConfig[] = [
     bg: [1.0, 0.0, 0], fg: [0.16, 0.01, 265], accentL: 0.44, accentC: 0.18 },
   // --- dark ---
   { name: "storm", kind: "dark", uiContrast: "normal",
-    bg: [0.30, 0.014, 270], fg: [0.85, 0.028, 265], accentL: 0.80, accentC: 0.085 },
+    bg: [0.30, 0.014, 270], fg: [0.85, 0.028, 265], accentL: 0.80, accentC: 0.085,
+    accentLC: { red: [0.74, 0.200] } }, // raised: storm's lighter bg (L=0.30) needs a higher L to clear 4:1 bg floor + pill badge contrast
   { name: "dusk", kind: "dark", uiContrast: "normal",
     bg: [0.250, 0.014, 270], fg: [0.88, 0.030, 265], accentL: 0.78, accentC: 0.12 },
   { name: "midnight", kind: "dark", uiContrast: "normal",
@@ -26,8 +27,8 @@ export const VARIANTS: VariantConfig[] = [
   { name: "cyber", kind: "dark", uiContrast: "high",
     bg: [0.185, 0.012, 285], bgHex: "#13131c", fg: [0.93, 0.014, 258], accentL: 0.84, accentC: 0.18,
     accentLC: {
-      red: [0.74, 0.20], orange: [0.82, 0.17], yellow: [0.88, 0.15], green: [0.84, 0.18],
-      teal: [0.85, 0.14], cyan: [0.88, 0.16], blue: [0.80, 0.17], purple: [0.80, 0.16], magenta: [0.80, 0.20],
+      red: [0.74, 0.22], orange: [0.82, 0.17], yellow: [0.88, 0.15], green: [0.84, 0.18],
+      teal: [0.85, 0.14], cyan: [0.88, 0.16], blue: [0.80, 0.17], purple: [0.80, 0.13], magenta: [0.80, 0.20],
     },
     hues: { red: 25, orange: 60, yellow: 95, green: 145, teal: 210, cyan: 195, blue: 245, purple: 280, magenta: 335 },
   },
