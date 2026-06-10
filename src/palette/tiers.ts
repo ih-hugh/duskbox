@@ -9,7 +9,8 @@ export const TIER_HUES: Record<AccentName, number> = {
 
 /** Per-slot OKLCH [L, C] by archetype — hierarchy from lightness×chroma (spec anchors).
  *  Tier 1 = red (darker+max chroma on normal variants; chroma-only at floor-safe L on HC).
- *  magenta is CHROME-ONLY (signature carrier + legacy notifier colors); never bound in syntax. */
+ *  magenta is CHROME-ONLY (signature carrier + legacy notifier colors); syntax bindings drop it
+ *  in the v2 role retarget (until then it remains the legacy builtin slot). */
 export const SLOT_LC: Record<Archetype, Record<AccentName, [number, number]>> = {
   "normal-dark": {
     red: [0.66, 0.200], orange: [0.74, 0.160], yellow: [0.83, 0.135], green: [0.78, 0.130],

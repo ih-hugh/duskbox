@@ -15,7 +15,8 @@ export const VARIANTS: VariantConfig[] = [
   // --- dark ---
   { name: "storm", kind: "dark", uiContrast: "normal",
     bg: [0.30, 0.014, 270], fg: [0.85, 0.028, 265], accentL: 0.80, accentC: 0.085,
-    accentLC: { red: [0.74, 0.200] } }, // raised: storm's lighter bg (L=0.30) needs a higher L to clear 4:1 bg floor + pill badge contrast
+    accentLC: { red: [0.72, 0.20] } }, // raised from archetype 0.66: storm's lighter bg (L=0.30) needs it for the 4:1
+    // floor + pill contrast; 0.72 keeps red uniquely darkest+most-chromatic (tier-1 identity) under orange [0.74,0.160]
   { name: "dusk", kind: "dark", uiContrast: "normal",
     bg: [0.250, 0.014, 270], fg: [0.88, 0.030, 265], accentL: 0.78, accentC: 0.12 },
   { name: "midnight", kind: "dark", uiContrast: "normal",
@@ -34,9 +35,8 @@ export const VARIANTS: VariantConfig[] = [
   },
 ];
 
-// Signature variants: dusk/cyber bases recolored around a chosen accent. The signature
-// overrides the magenta slot (this/import/constructor/builtins) AND the UI accent (emitters).
-// cyber inherits its neon magenta L/C [0.80,0.20] (clears 7:1 at ~9-10:1); dusk gets the ×1.4 boost.
+// Signature variants share their base's syntax palette EXACTLY; the signature is a CHROME hex
+// (cursor/borders/selection/headings) resolved at the archetype's magenta band (SLOT_LC[arch].magenta).
 const SIGNATURES: { slug: string; hue: number }[] = [
   { slug: "azure", hue: 235 },
   { slug: "neon-purple", hue: 300 },

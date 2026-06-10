@@ -108,7 +108,7 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@punctuation.special.markdown"] = { fg: p.fgPunct };    // table pipes, ---, > stay calm like VS Code
   hl["@label.yaml"] = { fg: p.accents.purple };               // anchors & aliases
   hl["@lsp.type.parameter"] = { fg: p.fg0, italic: true };
-  hl["@lsp.type.decorator"] = { fg: p.accents.magenta };      // builtin slot — matches VS Code decorator→builtin (magenta; = signature hue on signature variants)
+  hl["@lsp.type.decorator"] = { fg: p.accents.magenta };      // builtin slot — matches VS Code decorator→builtin (magenta)
   hl["@lsp.type.selfParameter"] = { fg: p.accents.magenta };
   hl["@lsp.type.clsParameter"] = { fg: p.accents.magenta };
   hl["@lsp.type.interface"] = { fg: p.accents.orange, italic: true };
