@@ -2,7 +2,8 @@ import { describe, it, expect } from "vitest";
 import { buildPalette, BASE_HUES } from "./types";
 import type { VariantConfig } from "./types";
 import { VARIANTS } from "./variants";
-import { contrastRatio } from "../oklch";
+import { contrastRatio, hexToOklch, oklchToHex } from "../oklch";
+import { blend } from "../build/blend";
 
 const dusk: VariantConfig = {
   name: "dusk", kind: "dark", uiContrast: "normal",
@@ -86,37 +87,31 @@ describe("fgPunct", () => {
   });
 });
 
-describe("atmosphere (A1.5)", () => {
-  const bg0 = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!).bg0;
-  it("previewed recipe fixtures hold (chroma ×2.0, half hue-lean)", () => {
-    expect(bg0("dusk")).toBe("#232336");
-    expect(bg0("storm")).toBe("#262e3e");
-    expect(bg0("midnight")).toBe("#0a0f22");
-    expect(bg0("dawn")).toBe("#faf2e8");
-    expect(bg0("dusk-azure")).toBe("#1a2637");   // lean = signature 235
-    expect(bg0("cyber-salmon")).toBe("#1a0e16"); // lean = signature 32, bgHex ignored
+describe("v2 stages & ladder", () => {
+  const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
+  it("dusk stage is the locked near-neutral", () => {
+    expect(get("dusk").bg0).toBe(oklchToHex(0.250, 0.014, 270));
   });
-  it("gallery-approved fixtures: every leaned variant pinned", () => {
-    const PINNED: Record<string, string> = {
-      dawn: "#faf2e8", storm: "#262e3e", dusk: "#232336", midnight: "#0a0f22", "night-hc": "#161a26",
-      "dusk-azure": "#1a2637", "dusk-neon-purple": "#252236", "dusk-magenta": "#282134", "dusk-salmon": "#301e2c",
-      "cyber-azure": "#0c131d", "cyber-neon-purple": "#13111c", "cyber-magenta": "#15101b", "cyber-salmon": "#1a0e16",
-    };
-    for (const [name, hex] of Object.entries(PINNED)) expect(bg0(name), name).toBe(hex);
+  it("signature children share their base's stage exactly", () => {
+    expect(get("dusk-azure").bg0).toBe(get("dusk").bg0);
+    expect(get("cyber-salmon").bg0).toBe(get("cyber").bg0);
+    expect(get("cyber").bg0).toBe("#13131c");
   });
-  it("non-leaned variants stay byte-identical", () => {
-    expect(bg0("day")).toBe("#f9fafc");
-    expect(bg0("day-hc")).toBe("#ffffff");
-    expect(bg0("cyber")).toBe("#13131c");
+  it("bg3 still carries the signature tint (chrome)", () => {
+    expect(get("dusk-azure").bg3).not.toBe(get("dusk").bg3);
   });
-  it("the whole ramp inherits the mood (bg1 differs from the un-leaned build on dusk)", () => {
-    const dusk = VARIANTS.find((v) => v.name === "dusk")!;
-    const moody = buildPalette(dusk);
-    const neutral = buildPalette({ ...dusk, bgLean: undefined, name: "x" });
-    expect(moody.bg1).not.toBe(neutral.bg1);
+  it("fgVar is brighter than fg0 (dark) / darker (light), capped off pure white/black", () => {
+    const d = get("dusk"), l = get("dawn");
+    expect(hexToOklch(d.fgVar).L).toBeGreaterThan(hexToOklch(d.fg0).L);
+    expect(hexToOklch(l.fgVar).L).toBeLessThan(hexToOklch(l.fg0).L);
+    for (const v of VARIANTS) {
+      const L = hexToOklch(buildPalette(v).fgVar).L;
+      expect(L, v.name).toBeLessThanOrEqual(0.978);
+      expect(L, v.name).toBeGreaterThanOrEqual(0.122);
+    }
   });
-  it("dusk ramp fixtures (locks chroma×2 propagation incl. bg3's ×1.5)", () => {
-    const p = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
-    expect([p.bg1, p.bg2, p.bg3]).toEqual(["#1d1d30", "#2d2d41", "#253a55"]);
+  it("fgParam is the moonlit blend", () => {
+    const p = get("dusk");
+    expect(p.fgParam).toBe(blend(p.fg0, p.accents.cyan, 0.30));
   });
 });

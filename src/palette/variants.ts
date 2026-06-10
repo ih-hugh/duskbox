@@ -3,25 +3,25 @@ import type { VariantConfig } from "./types";
 // Authored in OKLCH. Dark variants: low bg L, high fg L. Light: high bg L, low fg L (accents darkened).
 // HC variants widen the fg/bg gap and raise accent chroma. Cyber pins bg to the exact portfolio
 // near-black (#13131c) and overrides hues/L,C to the neon wheel.
-// bgLean values are gallery-previewed moods; expect retuning at the soul-pass gallery checkpoint.
+// v2: stages are near-neutral; tier tuning happens at the v2 gallery checkpoint.
 export const VARIANTS: VariantConfig[] = [
   // --- light ---
   { name: "dawn", kind: "light", uiContrast: "normal",
-    bg: [0.965, 0.008, 85], fg: [0.34, 0.02, 265], accentL: 0.52, accentC: 0.13, bgLean: 60 },
+    bg: [0.965, 0.008, 85], fg: [0.32, 0.02, 265], accentL: 0.52, accentC: 0.13 },
   { name: "day", kind: "light", uiContrast: "normal",
     bg: [0.985, 0.003, 250], fg: [0.30, 0.02, 265], accentL: 0.52, accentC: 0.14 },
   { name: "day-hc", kind: "light", uiContrast: "high",
     bg: [1.0, 0.0, 0], fg: [0.16, 0.01, 265], accentL: 0.44, accentC: 0.18 },
   // --- dark ---
   { name: "storm", kind: "dark", uiContrast: "normal",
-    bg: [0.30, 0.016, 278], fg: [0.83, 0.03, 265], accentL: 0.80, accentC: 0.085, bgLean: 250 },
+    bg: [0.30, 0.014, 270], fg: [0.85, 0.028, 265], accentL: 0.80, accentC: 0.085 },
   { name: "dusk", kind: "dark", uiContrast: "normal",
-    bg: [0.265, 0.018, 278], fg: [0.86, 0.035, 265], accentL: 0.78, accentC: 0.12, bgLean: 290 },
+    bg: [0.250, 0.014, 270], fg: [0.88, 0.030, 265], accentL: 0.78, accentC: 0.12 },
   { name: "midnight", kind: "dark", uiContrast: "normal",
-    bg: [0.175, 0.02, 278], fg: [0.80, 0.03, 265], accentL: 0.76, accentC: 0.105, bgLean: 265 },
+    bg: [0.175, 0.014, 270], fg: [0.82, 0.028, 265], accentL: 0.76, accentC: 0.105 },
   // --- high-contrast dark (bg lifted off pure-black; bright text + accents floored >=7:1) ---
   { name: "night-hc", kind: "dark", uiContrast: "high",
-    bg: [0.22, 0.012, 275], fg: [0.93, 0.016, 262], accentL: 0.84, accentC: 0.15, bgLean: 265 },
+    bg: [0.22, 0.012, 275], fg: [0.93, 0.016, 262], accentL: 0.84, accentC: 0.15 },
   // --- signature neon (portfolio), high-contrast ---
   { name: "cyber", kind: "dark", uiContrast: "high",
     bg: [0.185, 0.012, 285], bgHex: "#13131c", fg: [0.93, 0.014, 258], accentL: 0.84, accentC: 0.18,
@@ -45,9 +45,8 @@ const SIGNATURES: { slug: string; hue: number }[] = [
 const _duskBase = VARIANTS.find((v) => v.name === "dusk")!;
 const _cyberBase = VARIANTS.find((v) => v.name === "cyber")!;
 for (const s of SIGNATURES) {
-  // Signature children derive their mood from the signature, not the base's lean.
-  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue, bgLean: undefined });
-  VARIANTS.push({ ..._cyberBase, name: `cyber-${s.slug}`, signature: s.hue, bgLean: undefined });
+  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue });
+  VARIANTS.push({ ..._cyberBase, name: `cyber-${s.slug}`, signature: s.hue });
 }
 
 export const VARIANT_NAMES = VARIANTS.map((v) => v.name);

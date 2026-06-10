@@ -1,4 +1,5 @@
 import { oklchToHex, contrastRatio } from "../oklch";
+import { blend } from "../build/blend";
 
 export type AccentName =
   | "red" | "orange" | "yellow" | "green" | "teal" | "cyan" | "blue" | "purple" | "magenta";
@@ -16,11 +17,10 @@ export interface VariantConfig {
   fg: [number, number, number]; // OKLCH of the primary foreground
   accentL: number;              // default accent lightness
   accentC: number;              // default accent chroma
-  bgHex?: string;               // exact bg override (e.g. cyber's #13131c); ignored when a mood lean applies (bgLean ?? signature)
+  bgHex?: string;               // exact bg override (e.g. cyber's #13131c)
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
   accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides
   signature?: number;          // signature hue°: marks a signature variant — sets the magenta slot hue + bg3 tint here; the emitters also recolor the UI accent
-  bgLean?: number;             // mood hue°: A1.5 atmosphere — bg chroma ×2.0, hue walks halfway toward this (falls back to `signature`)
 }
 
 export interface Palette {
@@ -29,16 +29,13 @@ export interface Palette {
   uiContrast: "normal" | "high";
   bg0: string; bg1: string; bg2: string; bg3: string; // editor, panel/darker, cursorline, selection
   fg0: string; fg1: string; fg2: string;              // text, dim, muted/comment
+  fgVar: string;               // bright-variable tier: locals pop above body text without a hue shift
+  fgParam: string;             // moonlit-parameter tier: moonlit cyan blend for parameter slots
   accents: Record<AccentName, string>;
   headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
   fgPunct: string;                            // punctuation tone between fg0 and fg2 (HC-floored)
+  builtin: string;             // builtin tier placeholder — Task 3 wires the tier slot
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
-}
-
-/** Circular midpoint between two hues, going the short way around the wheel. */
-function halfLean(from: number, to: number): number {
-  const d = ((to - from + 540) % 360) - 180;
-  return ((from + d / 2) % 360 + 360) % 360;
 }
 
 export function buildPalette(v: VariantConfig): Palette {
@@ -46,18 +43,12 @@ export function buildPalette(v: VariantConfig): Palette {
   const [bgL, bgC, bgH] = v.bg;
   const [fgL, fgC, fgH] = v.fg;
   const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
-  // A1.5 atmosphere: when a mood lean exists (explicit bgLean, or the signature hue), the whole
-  // bg ramp tints toward it — chroma ×2.0, hue at the circular midpoint. Same lightness, so fg
-  // contrast is essentially preserved (drift ≤~0.3:1; re-verified by the contrast gates). A leaned
-  // variant ignores bgHex (cyber's signature children compute their mood; plain cyber keeps its
-  // pinned near-black identity).
-  const lean = v.bgLean ?? v.signature;
-  const moodC = lean !== undefined ? bgC * 2.0 : bgC;
-  const moodH = lean !== undefined ? halfLean(bgH, lean) : bgH;
-  const bg0 = lean === undefined && v.bgHex ? v.bgHex : oklchToHex(clamp01(bgL), moodC, moodH);
-  const bg1 = oklchToHex(clamp01(bgL - 0.025), moodC, moodH);        // panel always recedes (darker)
-  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), moodC, moodH);   // cursorline: lighter(dark)/darker(light)
-  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), moodC * 1.5, v.signature ?? 255); // selection (cool, or signature-tinted)
+  // v2 near-neutral stages: backgrounds are authored directly from the variant's bg tuple.
+  // bgHex provides an exact override (e.g. cyber's #13131c); signature children inherit it.
+  const bg0 = v.bgHex ?? oklchToHex(clamp01(bgL), bgC, bgH);
+  const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
+  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
+  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bgC * 1.5, v.signature ?? 255); // selection (chrome: cool or signature-tinted)
   // High-contrast variants keep secondary text much closer to the main fg so
   // comments / dim text stay legible against the near-black (or near-white) bg.
   const dimDrop = v.uiContrast === "high" ? 0.07 : 0.12;
@@ -65,6 +56,10 @@ export function buildPalette(v: VariantConfig): Palette {
   const fg0 = oklchToHex(clamp01(fgL), fgC, fgH);
   const fg1 = oklchToHex(clamp01(fgL - dir * dimDrop), fgC, fgH);  // dim
   const fg2 = oklchToHex(clamp01(fgL - dir * muteDrop), fgC, fgH); // muted/comment
+
+  // Bright-variable tier: locals pop above body text without a hue shift; capped off pure white/black.
+  const varL = v.kind === "dark" ? Math.min(fgL + 0.10, 0.975) : Math.max(fgL - 0.10, 0.125);
+  const fgVar = oklchToHex(clamp01(varL), fgC, fgH);
 
   const accents = {} as Record<AccentName, string>;
   for (const name of Object.keys(BASE_HUES) as AccentName[]) {
@@ -77,6 +72,8 @@ export function buildPalette(v: VariantConfig): Palette {
     if (name === "magenta" && !v.accentLC?.magenta) C = C * 1.4;
     accents[name] = oklchToHex(L, C, hue);
   }
+
+  const fgParam = blend(fg0, accents.cyan, 0.30); // moonlit parameters
 
   // Heading ladder: -25° OKLCH hue walk from the variant's anchor (signature ?? blue), at the
   // variant's equiluminant accent band — harmonious on every variant by construction.
@@ -97,7 +94,9 @@ export function buildPalette(v: VariantConfig): Palette {
 
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
-    bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents, headings, fgPunct,
+    bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam,
+    accents, headings, fgPunct,
+    builtin: accents.orange, // placeholder — Task 3 wires the tier slot
     signature: v.signature !== undefined ? accents.magenta : undefined,
   };
 }
