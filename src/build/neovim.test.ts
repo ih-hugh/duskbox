@@ -3,6 +3,7 @@ import { buildNeovim, toLua } from "./neovim";
 import { VARIANTS } from "../palette/variants";
 import { buildPalette } from "../palette/types";
 import { contrastRatio } from "../oklch";
+import { blend } from "./blend";
 
 const dusk = VARIANTS.find((v) => v.name === "dusk")!;
 
@@ -143,5 +144,40 @@ describe("detail pass — neovim", () => {
     // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> magenta)
     expect(hl["@lsp.typemod.method.defaultLibrary"]!.fg).toBe(p.accents.magenta);
     expect(hl["@lsp.typemod.class.defaultLibrary"]!.fg).toBe(p.accents.magenta);
+  });
+});
+
+describe("soul pass — neovim", () => {
+  const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+  const p = buildPalette(cs);
+  const hl = buildNeovim(cs, { bold: true });
+
+  it("cursor takes the variant accent (signature here)", () => {
+    expect(hl.Cursor).toMatchObject({ fg: p.bg0, bg: p.signature });
+    expect(hl.TermCursor).toMatchObject({ fg: p.bg0, bg: p.signature });
+  });
+  it("comment badges are tinted pills with readable fg (≥3:1 on all variants)", () => {
+    expect(hl["@comment.todo"]!.bg).not.toBe(p.bg0);
+    for (const v of VARIANTS) {
+      const hh = buildNeovim(v, { bold: true });
+      for (const g of ["@comment.todo", "@comment.error", "@comment.warning", "@comment.note"]) {
+        expect(contrastRatio(hh[g]!.fg!, hh[g]!.bg!), `${v.name} ${g}`).toBeGreaterThanOrEqual(3);
+      }
+    }
+  });
+  it("diagnostic virtual text sits on severity-tinted chips, fg readable", () => {
+    expect(hl.DiagnosticVirtualTextError!.bg).not.toBe(p.bg1);
+    for (const v of VARIANTS) {
+      const hh = buildNeovim(v, { bold: true });
+      expect(contrastRatio(hh.DiagnosticVirtualTextError!.fg!, hh.DiagnosticVirtualTextError!.bg!), v.name).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("diff washes use spec factors, halved on HC", () => {
+    const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+    const pd = buildPalette(dusk);
+    expect(buildNeovim(dusk, { bold: true }).DiffAdd!.bg).toBe(blend(pd.bg0, pd.accents.green, 0.14));
+    const hc = VARIANTS.find((v) => v.name === "night-hc")!;
+    const ph = buildPalette(hc);
+    expect(buildNeovim(hc, { bold: true }).DiffAdd!.bg).toBe(blend(ph.bg0, ph.accents.green, 0.07));
   });
 });

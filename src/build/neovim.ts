@@ -18,13 +18,18 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   const uiOrange = p.signature ?? p.accents.orange; // MatchParen + fuzzy-match groups
   const uiYellow = p.signature ?? p.accents.yellow; // CursorLineNr
 
+  const isHC = v.uiContrast === "high";
+  const washT = (t: number) => (isHC ? t / 2 : t); // HC variants keep their ≥7:1 world: half-strength washes
+
   Object.assign(hl, {
     Normal: { fg: p.fg0, bg: bgEditor },
     NormalNC: { fg: p.fg0, bg: bgEditor },
     NormalFloat: { fg: p.fg0, bg: p.bg1 },
     FloatBorder: { fg: uiBlue, bg: p.bg1 },
     FloatTitle: { fg: uiBlue, bg: p.bg1, bold: true },
-    Cursor: { fg: p.bg0, bg: p.fg0 },
+    Cursor: { fg: p.bg0, bg: uiBlue },      // the most-seen pixel carries the variant identity
+    lCursor: { fg: p.bg0, bg: uiBlue },
+    TermCursor: { fg: p.bg0, bg: uiBlue },
     CursorLine: { bg: p.bg2 }, CursorColumn: { bg: p.bg2 },
     CursorLineNr: { fg: uiYellow, bold: true },
     LineNr: { fg: p.fg2 }, SignColumn: { bg: bgEditor },
@@ -61,15 +66,17 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   for (const [name, role] of diag) {
     const fg = slot(p, TOKENS[role].color);
     hl[`Diagnostic${name}`] = { fg };
-    hl[`DiagnosticVirtualText${name}`] = { fg, bg: p.bg1 };
+    hl[`DiagnosticVirtualText${name}`] = { fg, bg: blend(p.bg0, fg, washT(0.13)) };
     hl[`DiagnosticUnderline${name}`] = { undercurl: true, sp: fg };
   }
   hl.SpellBad = { undercurl: true, sp: slot(p, TOKENS.error.color) };
   hl.SpellCap = { undercurl: true, sp: slot(p, TOKENS.warning.color) };
 
   const gAdd = slot(p, TOKENS.gitAdd.color), gChg = slot(p, TOKENS.gitChange.color), gDel = slot(p, TOKENS.gitDelete.color);
-  hl.DiffAdd = { bg: blend(p.bg0, gAdd, 0.18) }; hl.DiffChange = { bg: blend(p.bg0, gChg, 0.18) };
-  hl.DiffDelete = { bg: blend(p.bg0, gDel, 0.18) }; hl.DiffText = { bg: blend(p.bg2, gChg, 0.18) };
+  hl.DiffAdd = { bg: blend(p.bg0, gAdd, washT(0.14)) };
+  hl.DiffChange = { bg: blend(p.bg0, gChg, washT(0.12)) };
+  hl.DiffDelete = { bg: blend(p.bg0, gDel, washT(0.12)), fg: muteHex(gDel, p.fg0) };
+  hl.DiffText = { bg: blend(p.bg0, gChg, washT(0.28)), bold: true };
   hl.GitSignsAdd = { fg: gAdd }; hl.GitSignsChange = { fg: gChg }; hl.GitSignsDelete = { fg: gDel };
   hl.Added = { fg: gAdd }; hl.Changed = { fg: gChg }; hl.Removed = { fg: gDel };
 
@@ -106,6 +113,14 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.accents.magenta };
   hl["@lsp.typemod.method.defaultLibrary"] = { fg: p.accents.magenta };
   hl["@lsp.typemod.class.defaultLibrary"] = { fg: p.accents.magenta };
+
+  // Soul pass: codetag badges — tinted pills so intent pops out of comment-gray. (VS Code's stock
+  // grammars don't scope codetags; this is a documented nvim-only delight.)
+  const pill = (acc: string) => ({ fg: acc, bg: blend(p.bg0, acc, washT(0.18)), bold: true });
+  hl["@comment.todo"] = pill(p.accents.yellow);
+  hl["@comment.error"] = pill(p.accents.red);
+  hl["@comment.warning"] = pill(p.accents.orange);
+  hl["@comment.note"] = pill(p.accents.blue);
 
   Object.assign(hl, buildPluginGroups(p, uiBlue));
 

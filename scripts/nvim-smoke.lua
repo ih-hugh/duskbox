@@ -32,4 +32,10 @@ assert(h1.fg and h2.fg and h1.fg ~= h2.fg, "heading ladder not graded")
 local punct = vim.api.nvim_get_hl(0, { name = "@punctuation.delimiter", link = false })
 assert(punct.fg and punct.fg ~= normal.fg, "punctuation not dimmed vs Normal")
 
+-- Soul pass: badges + diff washes are present and distinct from the editor bg.
+local todo = vim.api.nvim_get_hl(0, { name = "@comment.todo", link = false })
+assert(todo.fg and todo.bg and todo.bg ~= normal.bg, "@comment.todo pill missing")
+local da = vim.api.nvim_get_hl(0, { name = "DiffAdd", link = false })
+assert(da.bg and da.bg ~= normal.bg, "DiffAdd wash missing")
+
 io.stdout:write("SMOKE OK " .. variant .. " Keyword=" .. fg("Keyword") .. "\n")
