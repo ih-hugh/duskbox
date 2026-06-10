@@ -1,6 +1,6 @@
-import type { Palette, AccentName } from "../palette/types";
+import type { Palette } from "../palette/types";
 import { buildPalette, type VariantConfig } from "../palette/types";
-import { TOKENS, type ColorSlot, type Role, type TokenStyle } from "../tokens";
+import { TOKENS, slot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_SCOPES, SEMANTIC_ROLE } from "./groups-vscode";
 import { blend, muteHex } from "./blend";
 
@@ -9,10 +9,6 @@ export interface VsTheme {
   colors: Record<string, string>;
   tokenColors: { scope: string[]; settings: { foreground?: string; fontStyle?: string } }[];
   semanticTokenColors: Record<string, { foreground?: string; bold?: boolean; italic?: boolean }>;
-}
-function slot(p: Palette, c: ColorSlot): string {
-  if (c === "fg0") return p.fg0; if (c === "fg1") return p.fg1; if (c === "fg2") return p.fg2;
-  return p.accents[c as AccentName];
 }
 function titleCase(name: string) {
   return "Duskbox " + name.split("-").map((s) => s[0]!.toUpperCase() + s.slice(1)).join(" ").replaceAll("Hc", "HC");
@@ -165,7 +161,10 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     const st: TokenStyle = TOKENS[role];
     const base = slot(p, st.color);
     const foreground = st.mute ? muteHex(base, p.fg0) : base;
-    const fontStyle = [st.italic ? "italic" : "", st.bold && opts.bold ? "bold" : ""].filter(Boolean).join(" ");
+    const fontStyle = [
+      st.italic ? "italic" : "", st.bold && opts.bold ? "bold" : "",
+      st.underline ? "underline" : "", st.strikethrough ? "strikethrough" : "",
+    ].filter(Boolean).join(" ");
     tokenColors.push({ scope: scopes, settings: { foreground, ...(fontStyle ? { fontStyle } : {}) } });
   });
 

@@ -21,10 +21,12 @@ describe("neovim emitter", () => {
     const hl = buildNeovim(dusk, { bold: false });
     expect(hl["Keyword"]!.bold).toBeUndefined();
   });
-  it("applies mute and distinguishes jsx tags", () => {
+  it("applies italic to parameter and distinguishes jsx tags", () => {
     const hl = buildNeovim(dusk, { bold: true });
     const p = buildPalette(dusk);
-    expect(hl["@variable.parameter"]!.fg).toBe(muteHex(p.accents.yellow, p.fg0));
+    // parameter: identity changed from yellow/mute to fg0/italic (detail-pass)
+    expect(hl["@variable.parameter"]!.fg).toBe(p.fg0);
+    expect(hl["@variable.parameter"]!.italic).toBe(true);
     expect(hl["@tag.builtin"]!.fg).not.toBe(hl["@tag"]!.fg);
   });
   it("serializes to a Lua return table", () => {
@@ -44,7 +46,8 @@ describe("neovim emitter", () => {
     const vals = [hl.Keyword!.fg, hl.Function!.fg, hl.Type!.fg, hl["@variable.parameter"]!.fg,
       hl.String!.fg, hl["@string.escape"]!.fg, hl.Number!.fg, hl.Constant!.fg, hl["@property"]!.fg];
     expect(new Set(vals).size).toBe(vals.length);
-    expect(hl["@variable.parameter"]!.fg).not.toBe(p.fg0);
+    // parameter is now fg0/italic (detail-pass identity change); italic distinguishes from plain variable
+    expect(hl["@variable.parameter"]!.italic).toBe(true);
     expect(hl["@string.escape"]!.fg).not.toBe(hl.String!.fg);
   });
   it("strings render green", () => {
