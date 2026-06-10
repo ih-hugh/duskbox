@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { buildPalette, BASE_HUES } from "./types";
 import type { VariantConfig } from "./types";
+import { VARIANTS } from "./variants";
 import { contrastRatio } from "../oklch";
 
 const dusk: VariantConfig = {
@@ -34,5 +35,37 @@ describe("buildPalette", () => {
     expect(base.signature).toBeUndefined();
     expect(base.accents.magenta).not.toBe(p.accents.magenta);
     expect(base.bg3).not.toBe(p.bg3); // selection tint shifts toward the signature hue
+  });
+});
+
+describe("headings ladder", () => {
+  it("dusk ladder matches the approved fixture (anchor blue 255, -25° walk)", () => {
+    const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+    expect(buildPalette(dusk).headings).toEqual(["#86bafe", "#59c5f5", "#3bcddc", "#4ad0ba"]);
+  });
+  it("cyber-salmon ladder anchors at the signature (32°)", () => {
+    const cs = VARIANTS.find((v) => v.name === "cyber-salmon")!;
+    expect(buildPalette(cs).headings).toEqual(["#ffb6a7", "#fdb3c1", "#fface0", "#eab2fe"]);
+  });
+  it("every variant gets 4 distinct heading colors", () => {
+    for (const v of VARIANTS) {
+      const h = buildPalette(v).headings;
+      expect(new Set(h).size).toBe(4);
+    }
+  });
+});
+
+describe("fgPunct", () => {
+  it("sits strictly between fg0 and fg2 on dusk", () => {
+    const p = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
+    expect(p.fgPunct).not.toBe(p.fg0);
+    expect(p.fgPunct).not.toBe(p.fg2);
+  });
+  it("meets the contrast floor on every variant (3:1 normal, 4.5:1 HC)", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 4.5 : 3.0;
+      expect(contrastRatio(p.fgPunct, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
+    }
   });
 });

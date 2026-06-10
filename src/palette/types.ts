@@ -1,4 +1,4 @@
-import { oklchToHex } from "../oklch";
+import { oklchToHex, contrastRatio } from "../oklch";
 
 export type AccentName =
   | "red" | "orange" | "yellow" | "green" | "teal" | "cyan" | "blue" | "purple" | "magenta";
@@ -29,6 +29,8 @@ export interface Palette {
   bg0: string; bg1: string; bg2: string; bg3: string; // editor, panel/darker, cursorline, selection
   fg0: string; fg1: string; fg2: string;              // text, dim, muted/comment
   accents: Record<AccentName, string>;
+  headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
+  fgPunct: string;                            // punctuation tone between fg0 and fg2 (HC-floored)
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
@@ -61,9 +63,26 @@ export function buildPalette(v: VariantConfig): Palette {
     accents[name] = oklchToHex(L, C, hue);
   }
 
+  // Heading ladder: -25° OKLCH hue walk from the variant's anchor (signature ?? blue), at the
+  // variant's equiluminant accent band — harmonious on every variant by construction.
+  const anchor = v.signature ?? 255;
+  const headings = [0, 1, 2, 3].map((k) =>
+    oklchToHex(v.accentL, v.accentC, ((anchor - 25 * k) % 360 + 360) % 360)
+  ) as [string, string, string, string];
+
+  // Punctuation tone: fg stepped 60% of the mute drop (HC variants start at the dim drop), then
+  // raised deterministically until it clears the readability floor (3:1 normal, 4.5:1 HC vs bg0).
+  const punctFloor = v.uiContrast === "high" ? 4.5 : 3.0;
+  let punctDrop = v.uiContrast === "high" ? 0.07 : muteDrop * 0.6;
+  let fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
+  while (contrastRatio(fgPunct, bg0) < punctFloor && punctDrop > 0) {
+    punctDrop -= 0.01;
+    fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
+  }
+
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
-    bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents,
+    bg0, bg1, bg2, bg3, fg0, fg1, fg2, accents, headings, fgPunct,
     signature: v.signature !== undefined ? accents.magenta : undefined,
   };
 }
