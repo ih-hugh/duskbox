@@ -129,4 +129,9 @@ describe("detail pass — vscode", () => {
   it("markdown link underlines via fontStyle", () => {
     expect(ruleFor(theme, "markup.underline.link")!.settings.fontStyle).toContain("underline");
   });
+  it("descendant guard selectors are present verbatim", () => {
+    const selectors = theme.tokenColors.flatMap((r) => r.scope);
+    expect(selectors).toContain("heading.2.markdown punctuation.definition.heading");
+    expect(selectors).toContain("support.type.property-name punctuation");
+  });
 });

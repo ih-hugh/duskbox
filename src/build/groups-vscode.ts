@@ -28,8 +28,8 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   gitDelete: ["markup.deleted", "markup.deleted punctuation.definition.deleted"],
   // --- detail pass: markdown / docs (descendant selectors keep #-marks & bullets in their
   // ladder/marker colors despite the generic punctuation dim — deeper match wins) ---
-  mdH1: ["heading.1.markdown", "heading.1.markdown punctuation.definition.heading"],
-  mdH2: ["heading.2.markdown", "heading.2.markdown punctuation.definition.heading"],
+  mdH1: ["heading.1.markdown", "heading.1.markdown punctuation.definition.heading", "markup.heading.setext.1.markdown"],
+  mdH2: ["heading.2.markdown", "heading.2.markdown punctuation.definition.heading", "markup.heading.setext.2.markdown"],
   mdH3: ["heading.3.markdown", "heading.3.markdown punctuation.definition.heading"],
   mdH4: [
     "heading.4.markdown", "heading.4.markdown punctuation.definition.heading",
@@ -53,6 +53,7 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
     "entity.name.tag.yaml",
   ],
   yamlAnchor: [
+    "variable.other.anchor.yaml", // current VS Code YAML grammar (&name); entity.name.type form is legacy
     "entity.name.type.anchor.yaml", "variable.other.alias.yaml",
     "punctuation.definition.anchor.yaml", "punctuation.definition.alias.yaml",
   ],
@@ -66,7 +67,10 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   regexAnchor: ["keyword.control.anchor.regexp"],
   docTag: ["storage.type.class.jsdoc", "punctuation.definition.block.tag.jsdoc", "entity.name.type.instance.jsdoc"],
   docParam: ["variable.other.jsdoc"],
-  diffMeta: ["meta.diff.header", "meta.diff.range", "punctuation.definition.range.diff"],
+  diffMeta: [
+    "meta.diff.header", "meta.diff.range", "punctuation.definition.range.diff",
+    "punctuation.definition.from-file.diff", "punctuation.definition.to-file.diff",
+  ],
   // --- detail pass: guards (protect from the generic punctuation dim / keep wordy ops as keywords) ---
   stringQuote: ["punctuation.definition.string"],
   wordOperator: [
@@ -81,6 +85,8 @@ export const SEMANTIC_ROLE: Record<string, Role> = {
   struct: "type", interface: "typeInterface", enum: "type", typeParameter: "typeInterface", parameter: "parameter",
   variable: "variable", property: "property", string: "string", number: "number",
   enumMember: "constant", macro: "preproc", comment: "comment", operator: "operator", namespace: "type",
+  // decorator: TS's LSP never emits decorator tokens (TextMate paints them yellow there); Python's
+  // Pylance does -> magenta. Each language stays internally consistent.
   decorator: "builtin", annotation: "builtin",
   selfParameter: "builtin", clsParameter: "builtin",
   "variable.readonly": "constant", "property.readonly": "constant",
