@@ -24,8 +24,8 @@ describe("neovim emitter", () => {
   it("applies italic to parameter and distinguishes jsx tags", () => {
     const hl = buildNeovim(dusk, { bold: true });
     const p = buildPalette(dusk);
-    // parameter: identity changed from yellow/mute to fg0/italic (detail-pass)
-    expect(hl["@variable.parameter"]!.fg).toBe(p.fg0);
+    // parameter: v2 slot change fg0→fgParam (moonlit-cyan blend); italic distinguishes from plain variable
+    expect(hl["@variable.parameter"]!.fg).toBe(p.fgParam);
     expect(hl["@variable.parameter"]!.italic).toBe(true);
     expect(hl["@tag.builtin"]!.fg).not.toBe(hl["@tag"]!.fg);
   });
@@ -46,7 +46,7 @@ describe("neovim emitter", () => {
     const vals = [hl.Keyword!.fg, hl.Function!.fg, hl.Type!.fg, hl["@variable.parameter"]!.fg,
       hl.String!.fg, hl["@string.escape"]!.fg, hl.Number!.fg, hl.Constant!.fg, hl["@property"]!.fg];
     expect(new Set(vals).size).toBe(vals.length);
-    // parameter is now fg0/italic (detail-pass identity change); italic distinguishes from plain variable
+    // parameter is now fgParam/italic (v2 slot); italic distinguishes from plain variable
     expect(hl["@variable.parameter"]!.italic).toBe(true);
     expect(hl["@variable"]!.italic).toBeUndefined();
     expect(hl["@string.escape"]!.fg).not.toBe(hl.String!.fg);
@@ -91,9 +91,9 @@ describe("neovim emitter", () => {
     expect(hl.PmenuSel!.bg).toBe(sp.signature);
     expect(hl.TabLineSel!.bg).toBe(sp.signature);
     expect(hl.SnacksPickerMatch!.fg).toBe(sp.signature);
-    // v2: syntax standout (@variable.builtin) uses the shared magenta accent, NOT the signature
+    // v2: syntax standout (@variable.builtin) uses the builtin slot (warm orange cousin), NOT magenta
     // (signature is chrome-only; syntax palette is identical on base and signature variants)
-    expect(hl["@variable.builtin"]!.fg).toBe(sp.accents.magenta);
+    expect(hl["@variable.builtin"]!.fg).toBe(sp.builtin);
     // semantics stay put: info stays blue, not the signature
     expect(hl.DiagnosticInfo!.fg).toBe(sp.accents.blue);
     // base dusk: original colors preserved (orange paren, yellow line-nr, blue border)
@@ -137,14 +137,36 @@ describe("detail pass — neovim", () => {
     expect(hl["@operator"]!.fg).toBe(p.fgPunct);
     expect(hl["@keyword.operator"]!.fg).toBe(p.accents.red);
   });
-  it("@lsp mirrors: parameter italic, decorator signature-magenta, readonly purple, interface italic", () => {
-    expect(hl["@lsp.type.parameter"]).toMatchObject({ fg: p.fg0, italic: true });
-    expect(hl["@lsp.type.decorator"]!.fg).toBe(p.accents.magenta);
+  it("@lsp mirrors: parameter italic fgParam, decorator/defaultLibrary builtin, readonly purple, interface italic", () => {
+    expect(hl["@lsp.type.parameter"]).toMatchObject({ fg: p.fgParam, italic: true });
+    expect(hl["@lsp.type.decorator"]!.fg).toBe(p.builtin);
     expect(hl["@lsp.typemod.variable.readonly"]!.fg).toBe(p.accents.purple);
     expect(hl["@lsp.type.interface"]).toMatchObject({ fg: p.accents.orange, italic: true });
-    // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> magenta)
-    expect(hl["@lsp.typemod.method.defaultLibrary"]!.fg).toBe(p.accents.magenta);
-    expect(hl["@lsp.typemod.class.defaultLibrary"]!.fg).toBe(p.accents.magenta);
+    // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> builtin slot)
+    expect(hl["@lsp.typemod.method.defaultLibrary"]!.fg).toBe(p.builtin);
+    expect(hl["@lsp.typemod.class.defaultLibrary"]!.fg).toBe(p.builtin);
+  });
+});
+
+describe("v2 — nvim", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const p = buildPalette(dusk);
+  const hl = buildNeovim(dusk, { bold: true });
+  it("calls are plain gold; declarations bold gold; tags plain red", () => {
+    expect(hl["@function.call"]).toMatchObject({ fg: p.accents.yellow });
+    expect(hl["@function.call"]!.bold).toBeUndefined();
+    expect(hl["@function"]).toMatchObject({ fg: p.accents.yellow, bold: true });
+    expect(hl["@tag.builtin"]!.bold).toBeUndefined();
+  });
+  it("this/ctor are warm builtin (no fuchsia anywhere)", () => {
+    expect(hl["@variable.builtin"]!.fg).toBe(p.builtin);
+    expect(hl["@constructor"]!.fg).toBe(p.builtin);
+  });
+  it("variables ride fgVar; params ride fgParam (incl. @lsp mirrors)", () => {
+    expect(hl["@variable"]!.fg).toBe(p.fgVar);
+    expect(hl["@variable.parameter"]).toMatchObject({ fg: p.fgParam, italic: true });
+    expect(hl["@lsp.type.parameter"]).toMatchObject({ fg: p.fgParam, italic: true });
+    expect(hl["@lsp.type.decorator"]!.fg).toBe(p.builtin);
   });
 });
 

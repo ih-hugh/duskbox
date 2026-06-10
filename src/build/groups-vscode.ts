@@ -3,7 +3,8 @@ import type { Role } from "../tokens";
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier"],
   operator: ["keyword.operator"],
-  function: ["entity.name.function", "support.function", "meta.function-call"],
+  function: ["entity.name.function"],
+  functionCall: ["meta.function-call", "support.function"],
   ctor: ["entity.name.function.constructor", "entity.name.type.constructor"],
   type: ["entity.name.type", "support.type", "entity.name.class", "support.class"],
   builtin: ["variable.language", "support.type.builtin", "constant.language"],
@@ -81,12 +82,14 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
 
 // VS Code semantic token type -> role
 export const SEMANTIC_ROLE: Record<string, Role> = {
-  keyword: "keyword", function: "function", method: "function", type: "type", class: "type",
+  keyword: "keyword", function: "functionCall", method: "functionCall", type: "type", class: "type",
   struct: "type", interface: "typeInterface", enum: "type", typeParameter: "typeInterface", parameter: "parameter",
   variable: "variable", property: "property", string: "string", number: "number",
   enumMember: "constant", macro: "preproc", comment: "comment", operator: "operator", namespace: "type",
+  // declaration modifiers: bold yellow for named declarations (function.declaration / method.declaration)
+  "function.declaration": "function", "method.declaration": "function",
   // decorator: TS's LSP never emits decorator tokens (TextMate paints them yellow there); Python's
-  // Pylance does -> magenta. Each language stays internally consistent.
+  // Pylance does -> builtin slot. Each language stays internally consistent.
   decorator: "builtin", annotation: "builtin",
   selfParameter: "builtin", clsParameter: "builtin",
   "variable.readonly": "constant", "property.readonly": "constant",

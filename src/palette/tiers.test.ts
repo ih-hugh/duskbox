@@ -78,6 +78,13 @@ describe("v2 tier palettes", () => {
       expect(dE(p.builtin, p.accents.orange), v.name).toBeGreaterThanOrEqual(0.025);
     }
   });
+  it("builtin clears contrast floors on every variant (4/7)", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 7 : 4;
+      expect(contrastRatio(p.builtin, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
+    }
+  });
 });
 
 describe("authored-vs-effective drift guard", () => {

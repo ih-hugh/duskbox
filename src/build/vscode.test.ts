@@ -119,10 +119,10 @@ describe("detail pass — vscode", () => {
     expect(ruleFor(theme, "keyword.operator.expression")!.settings.foreground).toBe(p.accents.red);
     expect(ruleFor(theme, "keyword.operator")!.settings.foreground).toBe(p.fgPunct);
   });
-  it("semantic: parameter italic; decorator rides the signature slot; readonly is constant-purple", () => {
+  it("semantic: parameter italic; decorator rides the builtin slot; readonly is constant-purple", () => {
     const p = buildPalette(cs);
     expect(themeCS.semanticTokenColors["parameter"]!.italic).toBe(true);
-    expect(themeCS.semanticTokenColors["decorator"]!.foreground).toBe(p.accents.magenta); // = signature
+    expect(themeCS.semanticTokenColors["decorator"]!.foreground).toBe(p.builtin); // v2: builtin slot (warm, not magenta)
     expect(themeCS.semanticTokenColors["variable.readonly"]!.foreground).toBe(p.accents.purple);
     expect(themeCS.semanticTokenColors["interface"]!.italic).toBe(true);
   });
@@ -133,6 +133,24 @@ describe("detail pass — vscode", () => {
     const selectors = theme.tokenColors.flatMap((r) => r.scope);
     expect(selectors).toContain("heading.2.markdown punctuation.definition.heading");
     expect(selectors).toContain("support.type.property-name punctuation");
+  });
+});
+
+describe("v2 — vscode", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const t = buildVscode(dusk, { bold: true });
+  const pd = buildPalette(dusk);
+  const ruleOf = (sel: string) => t.tokenColors.find((r) => r.scope.includes(sel))!;
+  it("function calls unbolded, declarations bold", () => {
+    expect(ruleOf("meta.function-call").settings.fontStyle ?? "").not.toContain("bold");
+    expect(ruleOf("entity.name.function").settings.fontStyle).toContain("bold");
+  });
+  it("this on builtin warm; semantic parameter/variable on their tiers; decl split present", () => {
+    expect(ruleOf("variable.language").settings.foreground).toBe(pd.builtin);
+    expect(t.semanticTokenColors["parameter"]!.foreground).toBe(pd.fgParam);
+    expect(t.semanticTokenColors["variable"]!.foreground).toBe(pd.fgVar);
+    expect(t.semanticTokenColors["function.declaration"]!.foreground).toBe(pd.accents.yellow);
+    expect(t.semanticTokenColors["decorator"]!.foreground).toBe(pd.builtin);
   });
 });
 

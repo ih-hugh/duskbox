@@ -107,18 +107,18 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@punctuation.special"] = { fg: p.accents.cyan };        // ${} interpolation, special marks
   hl["@punctuation.special.markdown"] = { fg: p.fgPunct };    // table pipes, ---, > stay calm like VS Code
   hl["@label.yaml"] = { fg: p.accents.purple };               // anchors & aliases
-  hl["@lsp.type.parameter"] = { fg: p.fg0, italic: true };
-  hl["@lsp.type.decorator"] = { fg: p.accents.magenta };      // builtin slot — matches VS Code decorator→builtin (magenta)
-  hl["@lsp.type.selfParameter"] = { fg: p.accents.magenta };
-  hl["@lsp.type.clsParameter"] = { fg: p.accents.magenta };
+  hl["@lsp.type.parameter"] = { fg: p.fgParam, italic: true };
+  hl["@lsp.type.decorator"] = { fg: p.builtin };              // builtin slot — matches VS Code decorator→builtin
+  hl["@lsp.type.selfParameter"] = { fg: p.builtin };
+  hl["@lsp.type.clsParameter"] = { fg: p.builtin };
   hl["@lsp.type.interface"] = { fg: p.accents.orange, italic: true };
   hl["@lsp.type.typeParameter"] = { fg: p.accents.orange, italic: true };
   hl["@lsp.typemod.variable.readonly"] = { fg: p.accents.purple };
   hl["@lsp.typemod.property.readonly"] = { fg: p.accents.purple };
-  hl["@lsp.typemod.function.defaultLibrary"] = { fg: p.accents.magenta };
-  hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.accents.magenta };
-  hl["@lsp.typemod.method.defaultLibrary"] = { fg: p.accents.magenta };
-  hl["@lsp.typemod.class.defaultLibrary"] = { fg: p.accents.magenta };
+  hl["@lsp.typemod.function.defaultLibrary"] = { fg: p.builtin };
+  hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.builtin };
+  hl["@lsp.typemod.method.defaultLibrary"] = { fg: p.builtin };
+  hl["@lsp.typemod.class.defaultLibrary"] = { fg: p.builtin };
 
   // Soul pass: codetag badges — tinted pills (render bold+italic — comment italics merge in) so intent
   // pops out of comment-gray. (VS Code's stock grammars don't scope codetags; documented nvim-only delight.)

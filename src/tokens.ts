@@ -1,6 +1,6 @@
 import type { AccentName, Palette } from "./palette/types";
 
-export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct";
+export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var";
 export interface TokenStyle {
   color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean;
   underline?: boolean; strikethrough?: boolean;
@@ -16,6 +16,9 @@ export function slot(p: Palette, c: ColorSlot): string {
   if (c === "fg1") return p.fg1;
   if (c === "fg2") return p.fg2;
   if (c === "punct") return p.fgPunct;
+  if (c === "builtin") return p.builtin;
+  if (c === "param") return p.fgParam;
+  if (c === "var") return p.fgVar;
   if (c in HEADING_SLOT) return p.headings[HEADING_SLOT[c as keyof typeof HEADING_SLOT]];
   return p.accents[c as AccentName];
 }
@@ -31,25 +34,27 @@ export const TOKENS = {
   exception:    { color: "red" as ColorSlot, bold: true },
   keywordReturn:{ color: "red" as ColorSlot, bold: true },
   function:     { color: "yellow" as ColorSlot, bold: true },
+  functionCall: { color: "yellow" as ColorSlot },
   method:       { color: "yellow" as ColorSlot, bold: true },
-  ctor:         { color: "magenta" as ColorSlot, bold: true },
+  methodCall:   { color: "yellow" as ColorSlot },
+  ctor:         { color: "builtin" as ColorSlot, bold: true },
   type:         { color: "orange" as ColorSlot, bold: true },
   typeBuiltin:  { color: "orange" as ColorSlot, bold: true },
-  parameter:    { color: "fg0" as ColorSlot, italic: true },
-  builtin:      { color: "magenta" as ColorSlot },
-  preproc:      { color: "magenta" as ColorSlot },
+  parameter:    { color: "param" as ColorSlot, italic: true },
+  builtin:      { color: "builtin" as ColorSlot, italic: true },
+  preproc:      { color: "red" as ColorSlot, bold: true },
   string:       { color: "green" as ColorSlot },
   escape:       { color: "cyan" as ColorSlot },
   number:       { color: "blue" as ColorSlot },
   constant:     { color: "purple" as ColorSlot },
   boolean:      { color: "purple" as ColorSlot },
   property:     { color: "teal" as ColorSlot },
-  variable:     { color: "fg0" as ColorSlot },
+  variable:     { color: "var" as ColorSlot },
   operator:     { color: "punct" as ColorSlot },
   punctuation:  { color: "punct" as ColorSlot },
   comment:      { color: "fg2" as ColorSlot, italic: true },
-  tagNative:    { color: "red" as ColorSlot, bold: true },
-  tagComponent: { color: "orange" as ColorSlot, bold: true },
+  tagNative:    { color: "red" as ColorSlot },
+  tagComponent: { color: "orange" as ColorSlot },
   tagAttr:      { color: "teal" as ColorSlot, mute: true },
   tagDelim:     { color: "fg1" as ColorSlot },
   error:        { color: "red" as ColorSlot },
