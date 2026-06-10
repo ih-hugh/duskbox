@@ -172,6 +172,7 @@ return {
   ["IblScope"] = { fg = "#82c5fe" },
   ["@markup.raw"] = { fg = "#3ae5ff", bg = "#1b1b21" },
   ["@markup.raw.block"] = { fg = "#e2e8f1" },
+  ["@character.special"] = { fg = "#feb16f" },
   ["@punctuation.special"] = { fg = "#18f5f6" },
   ["@punctuation.special.markdown"] = { fg = "#cbd1da" },
   ["@label.yaml"] = { fg = "#b1b7fd" },

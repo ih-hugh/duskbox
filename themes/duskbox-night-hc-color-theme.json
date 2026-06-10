@@ -568,7 +568,8 @@
     },
     {
       "scope": [
-        "meta.separator.markdown"
+        "meta.separator.markdown",
+        "entity.other.document.begin.yaml"
       ],
       "settings": {
         "foreground": "#cbd1dc"

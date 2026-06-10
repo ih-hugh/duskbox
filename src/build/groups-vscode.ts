@@ -45,7 +45,7 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   ],
   mdQuote: ["markup.quote"],
   mdListMarker: ["punctuation.definition.list.begin.markdown", "markup.list.numbered.bullet"],
-  mdSeparator: ["meta.separator.markdown"],
+  mdSeparator: ["meta.separator.markdown", "entity.other.document.begin.yaml"],
   mdStrike: ["markup.strikethrough"],
   // --- detail pass: per-language ---
   propertyKey: [

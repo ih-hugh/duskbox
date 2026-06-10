@@ -68,6 +68,13 @@ describe("fgPunct", () => {
       expect(contrastRatio(p.fgPunct, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
     }
   });
+  it("ladder hexes clear the variant's accent floor on every variant (4:1 normal, 7:1 HC)", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 7 : 4;
+      for (const h of p.headings) expect(contrastRatio(h, p.bg0), `${v.name} ${h}`).toBeGreaterThanOrEqual(floor);
+    }
+  });
   it("raise loop lifts a low-contrast fg to the floor without passing fg0", () => {
     const synthetic: VariantConfig = {
       name: "synthetic-low", kind: "dark", uiContrast: "normal",

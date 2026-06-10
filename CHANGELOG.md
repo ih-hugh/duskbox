@@ -19,6 +19,7 @@ All notable changes to **duskbox** are documented here. Format follows
 - **Punctuation calm-down**: separators, delimiters and symbolic operators recede to a dedicated
   punctuation tone (WCAG-floored: ≥3:1, ≥4.5:1 on high-contrast variants). Wordy operators
   (`typeof`, `instanceof`, `new`) stay keywords; string quotes stay string-colored.
+- Parameters: muted yellow → plain foreground with italic (the italic is the new identity).
 
 [1.3.0]: https://github.com/ih-hugh/duskbox/releases/tag/v1.3.0
 

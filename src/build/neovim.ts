@@ -89,7 +89,8 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   // Detail-pass extras that need more than a TokenStyle: chips (bg), yaml anchors, @lsp mirrors
   // of the semantic depth (parameter/decorator/readonly/interface/defaultLibrary).
   hl["@markup.raw"] = { fg: p.accents.teal, bg: p.bg2 };
-  hl["@markup.raw.block"] = { fg: p.fg0 };
+  hl["@markup.raw.block"] = { fg: p.fg0 };                    // deliberately NO chip: bg over whole fenced blocks fights language injections
+  hl["@character.special"] = { fg: p.accents.orange };        // special chars (wildcards etc.) — matches regex-class orange
   hl["@punctuation.special"] = { fg: p.accents.cyan };        // ${} interpolation, special marks
   hl["@punctuation.special.markdown"] = { fg: p.fgPunct };    // table pipes, ---, > stay calm like VS Code
   hl["@label.yaml"] = { fg: p.accents.purple };               // anchors & aliases
