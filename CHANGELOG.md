@@ -3,6 +3,29 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [1.4.0] — 2026-06-10
+
+### Added
+- **Atmosphere**: every variant's background ramp now carries a mood — chroma-doubled and
+  hue-leaned toward the variant's identity (signature variants tint toward their signature:
+  azure → deep sea, salmon → ember; dusk leans indigo, dawn warms to cream). Same lightness,
+  so contrast is unchanged.
+- **Comment badges** (Neovim): `TODO`/`FIXME`/`HACK`/`NOTE` render as tinted pills via
+  treesitter comment captures. Requires the treesitter `comment` parser (`:TSInstall comment`;
+  many distros bundle it). VS Code's stock grammars don't scope codetags — see README note.
+- **Designed diagnostics**: inline virtual text sits on severity-tinted chips (Neovim);
+  squiggled ranges get a faint severity wash (VS Code).
+- **Cursor identity**: the cursor block takes the variant accent in both editors (GUI/VS Code;
+  terminal Neovim cursors are terminal-controlled).
+
+### Changed
+- Diff & merge backgrounds re-tuned to softer palette washes (word-level emphasis stronger);
+  merge markers now teal/blue (green/blue on the cyber family, whose neon teal/blue sit too
+  close). High-contrast variants use half-strength washes throughout.
+- Light variants' badge/chip foregrounds darkened slightly for legibility (≥4:1).
+
+[1.4.0]: https://github.com/ih-hugh/duskbox/releases/tag/v1.4.0
+
 ## [1.3.0] — 2026-06-10
 
 ### Added

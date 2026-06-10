@@ -14,13 +14,13 @@ gui:
     optionsTextColor:
       - "#a9cefd"
     selectedLineBgColor:
-      - "#22242a"
+      - "#1f2430"
     cherryPickedCommitBgColor:
-      - "#282e37"
+      - "#212f40"
     cherryPickedCommitFgColor:
       - "#ffaaec"
     markedBaseCommitBgColor:
-      - "#282e37"
+      - "#212f40"
     markedBaseCommitFgColor:
       - "#f7c243"
     unstagedChangesColor:

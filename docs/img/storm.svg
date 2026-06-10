@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="220" viewBox="0 0 640 220" role="img" aria-label="duskbox storm">
-  <rect width="640" height="220" rx="12" fill="#2c2d36"/>
+  <rect width="640" height="220" rx="12" fill="#262e3e"/>
   <text x="24" y="36" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#757d90">duskbox-storm</text>
   <text x="24" y="72" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#757d90" font-style="italic">// fetch the account balance</text>
   <text x="24" y="98" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#f0a8a5" font-weight="700">export </text><text x="87" y="98" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#f0a8a5" font-weight="700">function </text><text x="168" y="98" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#d7ba7d" >load</text><text x="204" y="98" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#98a2b5" >(id) {</text>
