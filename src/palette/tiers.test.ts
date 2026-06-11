@@ -112,4 +112,21 @@ describe("authored-vs-effective drift guard", () => {
       }
     }
   });
+
+  it("GALLERY-APPROVED v2 fixtures: bg0 + tier-1 red pinned for all 16", () => {
+    const PINNED: [string, string, string][] = [
+      ["dawn", "#faf2e9", "#be2327"], ["day", "#f9fafc", "#be2327"], ["day-hc", "#ffffff", "#9e0213"],
+      ["storm", "#262e3b", "#fe736a"], ["dusk", "#1f202e", "#f4514c"], ["midnight", "#0c101c", "#f4514c"],
+      ["night-hc", "#171a25", "#fe7f76"], ["cyber", "#13131c", "#fe7f78"],
+      ["dusk-azure", "#19222e", "#f4514c"], ["cyber-azure", "#0d131c", "#fe7f78"],
+      ["dusk-neon-purple", "#20202d", "#f4514c"], ["cyber-neon-purple", "#13111c", "#fe7f78"],
+      ["dusk-magenta", "#231f2c", "#f4514c"], ["cyber-magenta", "#15101b", "#fe7f78"],
+      ["dusk-salmon", "#291d27", "#f4514c"], ["cyber-salmon", "#190f16", "#fe7f78"],
+    ];
+    for (const [name, bg0, red] of PINNED) {
+      const p = buildPalette(VARIANTS.find((v) => v.name === name)!);
+      expect(p.bg0, name + " bg0").toBe(bg0);
+      expect(p.accents.red, name + " red").toBe(red);
+    }
+  });
 });
