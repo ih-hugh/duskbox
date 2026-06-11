@@ -132,7 +132,14 @@ export function buildPalette(v: VariantConfig): Palette {
   const impAnchor = impSig ?? 255;
   const impK = impSig === 235 ? 0.92 : 0.70;
   const redO = hexToOklch(accents.red);
-  const moduleKw = oklchToHex(redO.L, Math.max(redO.C, 0.14), halfLeanK(redO.H, impAnchor, impK));
+  // v2.1 salmon boundary (gallery-locked, screen 22 B): when the walk can't leave keyword red
+  // (near-red signatures — the salmon family), jump to a fixed vivid-salmon band instead.
+  // #ff8a6f clears the pink gate outright (effective C 0.148 ≥ 0.13) — no gate carve-out.
+  const walkedH = halfLeanK(redO.H, impAnchor, impK);
+  const walkEscaped = Math.abs(((walkedH - redO.H + 540) % 360) - 180) >= 12;
+  const moduleKw = walkEscaped
+    ? oklchToHex(redO.L, Math.max(redO.C, 0.14), walkedH)
+    : oklchToHex(0.755, 0.16, 34);
 
   // Chrome-only signature: resolved from the signature hue at the archetype's magenta L/C band.
   const signature = v.signature !== undefined
