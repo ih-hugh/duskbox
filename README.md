@@ -114,16 +114,34 @@ duskbox ships a matching [lazygit](https://github.com/jesseduffield/lazygit) the
 
 duskbox ships Ghostty-compatible terminal themes for every variant under [`extras/ghostty/`](./extras/ghostty). cmux uses Ghostty's theme system, so the same files work there too.
 
+### Install
+
+**Option 1 — cmux theme picker (recommended):**
+
+```sh
+brew tap ih-hugh/tap
+brew install cmux-theme-picker
+# Then run:
+cmux-theme-picker
+```
+
+The picker shows live previews and lets you toggle between light/dark slots with Tab. Duskbox themes are marked with ★. See [cmux-theme-picker](https://github.com/ih-hugh/cmux-theme-picker) for details.
+
+**Option 2 — Manual install:**
+
 ```sh
 # Ghostty
 mkdir -p ~/.config/ghostty/themes
-ln -sf "$PWD"/extras/ghostty/duskbox-* ~/.config/ghostty/themes/
+cp extras/ghostty/duskbox-* ~/.config/ghostty/themes/
 
-# cmux theme picker/list (copy actual files; current cmux does not list symlinked user themes)
+# cmux (current cmux does not list symlinked user themes, so copy real files)
 mkdir -p "$HOME/Library/Application Support/com.cmuxterm.app/themes"
 cp extras/ghostty/duskbox-* "$HOME/Library/Application Support/com.cmuxterm.app/themes/"
+```
 
-# Pick variants directly from cmux's theme command:
+**Set a variant directly:**
+
+```sh
 cmux themes set --light duskbox-day --dark duskbox-dusk
 cmux reload-config
 ```
