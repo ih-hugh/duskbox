@@ -133,7 +133,7 @@ export function buildPalette(v: VariantConfig): Palette {
   const impK = impSig === 235 ? 0.92 : 0.70;
   const redO = hexToOklch(accents.red);
   // v2.1 salmon boundary (gallery-locked, screen 22 B): when the walk can't leave keyword red
-  // (near-red signatures — the salmon family), jump to a fixed vivid-salmon band instead.
+  // (walks landing less than 12° from red — the salmon family), jump to a fixed vivid-salmon band instead.
   // #ff8a6f clears the pink gate outright (effective C 0.148 ≥ 0.13) — no gate carve-out.
   const walkedH = halfLeanK(redO.H, impAnchor, impK);
   const walkEscaped = Math.abs(((walkedH - redO.H + 540) % 360) - 180) >= 12;

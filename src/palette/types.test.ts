@@ -165,8 +165,10 @@ describe("v2 stages & ladder", () => {
     expect(get("dusk-azure").moduleKw).toBe("#0797f4");
     expect(get("dusk-salmon").moduleKw).toBe("#ff8a6f"); // v2.1 vivid-salmon band (screen 22 B)
     expect(get("cyber").moduleKw).toBe("#b197fe");
+    expect(get("dusk-magenta").moduleKw).toBe(get("dusk").moduleKw); // sig>=300 falls back to the 255 anchor — same walk as base
+    expect(get("cyber-magenta").moduleKw).toBe(get("cyber").moduleKw); // sig>=300 falls back to the 255 anchor — same walk as base
   });
-  it("salmon boundary: moduleKw escapes to the vivid-salmon band when the walk can't leave red", () => {
+  it("salmon boundary: moduleKw jumps to the vivid-salmon band when the walk can't leave red", () => {
     // screen 22 option B (locked): walks landing within 12° of red jump to oklch(0.755, 0.16, 34).
     expect(get("dusk-salmon").moduleKw).toBe("#ff8a6f");
     expect(get("cyber-salmon").moduleKw).toBe("#ff8a6f");
