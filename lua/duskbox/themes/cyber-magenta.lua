@@ -8,7 +8,7 @@ return {
   ["Cursor"] = { fg = "#15101b", bg = "#f096fe" },
   ["lCursor"] = { fg = "#15101b", bg = "#f096fe" },
   ["TermCursor"] = { fg = "#15101b", bg = "#f096fe" },
-  ["CursorLine"] = { bg = "#1e1925", sp = "#f096fe", underdashed = true },
+  ["CursorLine"] = { bg = "#1e1925" },
   ["CursorColumn"] = { bg = "#1e1925" },
   ["CursorLineNr"] = { fg = "#f096fe", bold = true },
   ["LineNr"] = { fg = "#b2b8c1" },

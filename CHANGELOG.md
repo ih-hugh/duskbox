@@ -10,9 +10,9 @@ All notable changes to **duskbox** are documented here. Format follows
   that deadened the neon, selections now tint in each variant's identity hue (cyber deep teal,
   azure sea-blue, neon-purple violet, magenta orchid, salmon ember; night-hc teal, day-hc sky).
   All other variants are byte-identical — their selection was already right.
-- **Cyber current line gets a neon wireframe**: a real dashed underline in Neovim
-  (`underdashed` + the variant's neon), and a whisper-alpha solid border in VS Code (its editor
-  border style is fixed solid — engine limit).
+- **Cyber current line gets a neon wireframe in VS Code**: a whisper-alpha border boxing the
+  whole line. Terminal Neovim can only draw a bottom underline (no box-capable attribute exists
+  in a character grid) — tried and dropped; nvim keeps the plain fill.
 - Selection-tinted chrome (terminal/Ghostty selection, whitespace dots, menu borders) follows
   the new neon selection on those variants by design.
 

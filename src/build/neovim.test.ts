@@ -300,20 +300,17 @@ describe("v2.1.1 — const-variable whisper tier (nvim)", () => {
   });
 });
 
-describe("v2.2 — dashed cyber current line (nvim)", () => {
-  it("cyber family: CursorLine carries underdashed in the identity neon; others fill-only", () => {
-    const cyber = buildNeovim(VARIANTS.find((v) => v.name === "cyber")!, { bold: true });
-    const pc = buildPalette(VARIANTS.find((v) => v.name === "cyber")!);
-    expect(cyber.CursorLine).toEqual({ bg: pc.bg2, underdashed: true, sp: pc.neonLine });
-    expect(cyber.CursorColumn).toEqual({ bg: pc.bg2 }); // column unaffected
-    const dusk = buildNeovim(VARIANTS.find((v) => v.name === "dusk")!, { bold: true });
-    const pd = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
-    expect(dusk.CursorLine).toEqual({ bg: pd.bg2 });
-    const hc = buildNeovim(VARIANTS.find((v) => v.name === "night-hc")!, { bold: true });
-    expect(hc.CursorLine).toEqual({ bg: buildPalette(VARIANTS.find((v) => v.name === "night-hc")!).bg2 }); // HC: no dash
+describe("v2.2 — cyber current line (nvim)", () => {
+  it("CursorLine is fill-only on EVERY variant — the nvim bottom-dash was tried live and rejected; the neon wireframe is VS Code-only (the one engine that can box the line)", () => {
+    for (const n of ["cyber", "cyber-azure", "dusk", "night-hc"]) {
+      const v = VARIANTS.find((x) => x.name === n)!;
+      const hl = buildNeovim(v, { bold: true });
+      expect(hl.CursorLine, n).toEqual({ bg: buildPalette(v).bg2 });
+      expect(hl.CursorColumn, n).toEqual({ bg: buildPalette(v).bg2 });
+    }
   });
-  it("toLua serializes underdashed (the artifact must carry it, not just the object)", () => {
-    const lua = toLua({ CursorLine: { bg: "#1b1b21", underdashed: true, sp: "#18f5f6" } });
+  it("toLua can serialize underdashed (general Attrs support kept for future use)", () => {
+    const lua = toLua({ X: { bg: "#1b1b21", underdashed: true, sp: "#18f5f6" } });
     expect(lua).toContain("underdashed = true");
     expect(lua).toContain('sp = "#18f5f6"');
   });

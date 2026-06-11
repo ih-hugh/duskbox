@@ -30,10 +30,10 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
     Cursor: { fg: p.bg0, bg: uiBlue },      // the most-seen pixel carries the variant identity
     lCursor: { fg: p.bg0, bg: uiBlue },
     TermCursor: { fg: p.bg0, bg: uiBlue },
-    // v2.2: cyber family gets a dashed neon underline on the current line (real underdashed —
-    // the VS Code side approximates with a solid alpha'd border; documented engine divergence).
-    CursorLine: p.neonLine ? { bg: p.bg2, underdashed: true, sp: p.neonLine } : { bg: p.bg2 },
-    CursorColumn: { bg: p.bg2 },
+    // v2.2: the cyber neon wireframe on the current line is VS CODE-ONLY (lineHighlightBorder
+    // boxes the whole line). nvim's grid can only draw a bottom underline — tried live (v2.2 dev),
+    // rejected by the user as not-the-box. CursorLine stays a plain fill everywhere here.
+    CursorLine: { bg: p.bg2 }, CursorColumn: { bg: p.bg2 },
     CursorLineNr: { fg: uiYellow, bold: true },
     LineNr: { fg: p.fg2 }, SignColumn: { bg: bgEditor },
     Visual: { bg: p.bg3 }, VisualNOS: { bg: p.bg3 },
