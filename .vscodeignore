@@ -1,6 +1,7 @@
 src/**
 lua/**
 colors/**
+after/**
 scripts/**
 docs/**
 .github/**

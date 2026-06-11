@@ -50,4 +50,8 @@ export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   diffMeta: ["@diff.delta", "@attribute.diff", "diffLine", "diffSubname"],
   typeKeyword: ["@keyword.type"],
   moduleKw: ["@keyword.import"],
+  // v2.1 modifier class. Stock captures can't fully express the split (const/let/var/static are
+  // plain @keyword upstream) — the shipped after/queries re-capture them; @keyword.coroutine
+  // bundles async+await, so nvim renders `await` purple where VS Code cannot (accepted divergence).
+  keywordModifier: ["@keyword.modifier", "@keyword.coroutine"],
 };

@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, it, expect } from "vitest";
 import { buildNeovim, toLua } from "./neovim";
 import { VARIANTS } from "../palette/variants";
@@ -236,5 +238,33 @@ describe("soul pass — neovim", () => {
     const hc = VARIANTS.find((v) => v.name === "night-hc")!;
     const ph = buildPalette(hc);
     expect(buildNeovim(hc, { bold: true }).DiffAdd!.bg).toBe(blend(ph.bg0, ph.accents.green, 0.07));
+  });
+});
+
+describe("v2.1 — keyword stratification (nvim)", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const hl = buildNeovim(dusk, { bold: true });
+  const p = buildPalette(dusk);
+
+  it("@keyword.modifier and @keyword.coroutine are purple italic, not bold", () => {
+    for (const g of ["@keyword.modifier", "@keyword.coroutine"]) {
+      expect(hl[g], g).toEqual({ fg: p.accents.purple, italic: true });
+    }
+  });
+  it("command captures stay ember bold; @keyword.type stays orange italic (the `type` keyword)", () => {
+    expect(hl["@keyword"]).toMatchObject({ fg: p.accents.red, bold: true });
+    expect(hl["@keyword.type"]).toMatchObject({ fg: p.accents.orange, italic: true });
+  });
+  it("ships after/queries that re-partition stock captures (parity with the VS Code grammar)", () => {
+    const root = resolve(import.meta.dirname, "../..");
+    const ecma = readFileSync(resolve(root, "after/queries/ecma/highlights.scm"), "utf8");
+    const ts = readFileSync(resolve(root, "after/queries/typescript/highlights.scm"), "utf8");
+    const py = readFileSync(resolve(root, "after/queries/python/highlights.scm"), "utf8");
+    for (const q of [ecma, ts, py]) expect(q.startsWith(";; extends")).toBe(true);
+    expect(ecma).toContain('"const"');
+    expect(ecma).toContain('"class" @keyword');
+    expect(ts).toContain('"interface"');
+    expect(ts).toContain("type_alias_declaration");
+    expect(py).toContain('"global"');
   });
 });
