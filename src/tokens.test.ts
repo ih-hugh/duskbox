@@ -63,16 +63,6 @@ describe("detail-pass roles", () => {
   });
 });
 
-describe("v2.1 roles", () => {
-  it("keywordModifier (v2.1): purple tier, italic, NOT bold — the Tokyo split", () => {
-    expect(TOKENS.keywordModifier).toEqual({ color: "purple", italic: true });
-    // command class unchanged: ember bold
-    for (const r of ["keyword", "conditional", "repeat", "exception", "keywordReturn"] as const) {
-      expect(TOKENS[r]).toEqual({ color: "red", bold: true });
-    }
-  });
-});
-
 describe("v2 roles", () => {
   it("B1 bold budget: declarations/keywords/types bold; calls and tags plain", () => {
     expect(TOKENS.function.bold).toBe(true);
@@ -90,5 +80,15 @@ describe("v2 roles", () => {
   it("variables and parameters have their slots", () => {
     expect(TOKENS.variable.color).toBe("var");
     expect(TOKENS.parameter).toEqual({ color: "param", italic: true });
+  });
+});
+
+describe("v2.1 roles", () => {
+  it("keywordModifier (v2.1): purple tier, italic, NOT bold — the Tokyo split", () => {
+    expect(TOKENS.keywordModifier).toEqual({ color: "purple", italic: true });
+    // command class unchanged: red bold ("ember" in design docs)
+    for (const r of ["keyword", "conditional", "repeat", "exception", "keywordReturn"] as const) {
+      expect(TOKENS[r]).toEqual({ color: "red", bold: true });
+    }
   });
 });
