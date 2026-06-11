@@ -247,6 +247,13 @@ describe("v2.1 — keyword stratification (vscode)", () => {
     const attr = rule("storage.modifier.attribute")!;
     expect(attr.settings.foreground).toBe(p.builtin); // Swift @attribute — decorator home, warm
     expect(attr.settings.fontStyle).toBe(""); // EXPLICIT none — unset would clone the modifier italic
-    expect(rule("meta.class.identifier storage.modifier")!.settings.foreground).toBe(p.accents.red); // Java `class`
+    // Java `class/interface/enum` (meta.class.identifier) and `record` (nested separately under
+    // meta.record.identifier — see repository/record in java.tmLanguage.json)
+    for (const sel of ["meta.class.identifier storage.modifier", "meta.record.identifier storage.modifier"]) {
+      const r = rule(sel);
+      expect(r, sel).toBeDefined();
+      expect(r!.settings.foreground).toBe(p.accents.red);
+      expect(r!.settings.fontStyle).toBe("bold");
+    }
   });
 });

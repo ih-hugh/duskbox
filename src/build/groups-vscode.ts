@@ -3,12 +3,14 @@ import type { Role } from "../tokens";
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   // storage.modifier.import/.package: Java/Groovy scope the ENTIRE dotted import/package path —
   // a path is not a modifier; keep the exact v2.0 rendering (keyword red bold). The descendant
-  // guard re-reddens Java/Groovy `class/interface/enum/record` (grammar quirk: scoped
-  // storage.modifier.java, the SAME scope as real modifiers — only the meta.class.identifier
-  // parent separates them; lab-verified against the shipped Java grammar).
+  // guards re-redden Java/Groovy `class/interface/enum` and Java `record` (grammar quirk: all are
+  // scoped storage.modifier.java, the SAME scope as real modifiers — only their parents separate
+  // them: meta.class.identifier, and meta.record.identifier for record, which the grammar nests
+  // in its own rule; lab-verified against the shipped Java grammar).
   keyword: [
     "keyword", "keyword.control", "storage.type",
-    "storage.modifier.import", "storage.modifier.package", "meta.class.identifier storage.modifier",
+    "storage.modifier.import", "storage.modifier.package",
+    "meta.class.identifier storage.modifier", "meta.record.identifier storage.modifier",
   ],
   operator: ["keyword.operator"],
   function: ["entity.name.function"],
