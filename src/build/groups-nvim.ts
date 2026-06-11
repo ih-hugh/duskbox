@@ -2,7 +2,7 @@ import type { Role } from "../tokens";
 
 // Each syntax role -> the Neovim highlight groups it paints (base + treesitter captures).
 export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
-  keyword: ["Keyword", "@keyword", "@keyword.function", "Statement"],
+  keyword: ["Keyword", "@keyword", "@keyword.function", "Statement", "@keyword.import", "@keyword.directive"],
   conditional: ["Conditional", "@keyword.conditional"],
   repeat: ["Repeat", "@keyword.repeat"],
   exception: ["Exception", "@keyword.exception"],
@@ -15,7 +15,8 @@ export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   ctor: ["@constructor"],
   type: ["Type", "@type", "Structure"],
   typeBuiltin: ["@type.builtin"],
-  builtin: ["@variable.builtin", "@module.builtin", "@constant.builtin", "Special"],
+  builtin: ["@variable.builtin", "@module.builtin", "@constant.builtin"],
+  decorator: ["@attribute", "@attribute.builtin"],
   parameter: ["@variable.parameter"],
   string: ["String", "@string", "Character", "@character"],
   escape: ["@string.escape", "@string.special"],
@@ -24,7 +25,7 @@ export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   constant: ["Constant", "@constant"],
   property: ["@property", "@variable.member", "@field"],
   variable: ["Identifier", "@variable"],
-  preproc: ["PreProc", "Include", "Define", "Macro", "@keyword.import", "@keyword.directive"],
+  preproc: ["PreProc", "Include", "Define", "Macro"], // legacy regex surface only — calm plain red (sh $var etc.)
   comment: ["Comment", "@comment"],
   punctuation: ["Delimiter", "@punctuation.bracket", "@punctuation.delimiter"],
   tagNative: ["@tag.builtin"],

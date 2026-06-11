@@ -177,7 +177,9 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     const st: TokenStyle = TOKENS[role];
     const base = slot(p, st.color);
     const foreground = st.mute ? muteHex(base, p.fg0) : base;
-    semanticTokenColors[sem] = { foreground, ...(st.bold && opts.bold ? { bold: true } : {}), ...(st.italic ? { italic: true } : {}) };
+    // bold is ALWAYS explicit (true or false): a foreground-only semantic rule makes VS Code fall
+    // back to the TextMate layer for the bold property, which re-bolds call sites (B1-split killer).
+    semanticTokenColors[sem] = { foreground, bold: !!(st.bold && opts.bold), ...(st.italic ? { italic: true } : {}) };
   }
 
   return { name: titleCase(v.name), type: v.kind, semanticHighlighting: true, colors, tokenColors, semanticTokenColors };

@@ -1,10 +1,12 @@
 import type { Role } from "../tokens";
 
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
-  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier"],
+  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier", "keyword.control.import", "keyword.control.export"],
   operator: ["keyword.operator"],
   function: ["entity.name.function"],
-  functionCall: ["meta.function-call", "support.function"],
+  // descendant selector wins at call sites: the identifier is entity.name.function NESTED INSIDE
+  // meta.function-call, so the deeper (bold) function rule would otherwise take the bold property.
+  functionCall: ["meta.function-call", "support.function", "meta.function-call entity.name.function"],
   ctor: ["entity.name.function.constructor", "entity.name.type.constructor"],
   type: ["entity.name.type", "support.type", "entity.name.class", "support.class"],
   builtin: ["variable.language", "support.type.builtin", "constant.language"],
@@ -16,7 +18,7 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   constant: ["variable.other.constant", "constant.other"],
   property: ["variable.other.property", "support.variable.property", "meta.object-literal.key"],
   variable: ["variable", "variable.other.readwrite"],
-  preproc: ["meta.preprocessor", "keyword.control.import", "keyword.control.export"],
+  preproc: ["meta.preprocessor"], // legacy-only; import/export moved to keyword (bold red, approved hybrid render)
   comment: ["comment", "punctuation.definition.comment"],
   punctuation: ["punctuation", "meta.brace"],
   tagNative: ["entity.name.tag"],
@@ -89,8 +91,8 @@ export const SEMANTIC_ROLE: Record<string, Role> = {
   // declaration modifiers: bold yellow for named declarations (function.declaration / method.declaration)
   "function.declaration": "function", "method.declaration": "function",
   // decorator: TS's LSP never emits decorator tokens (TextMate paints them yellow there); Python's
-  // Pylance does -> builtin slot. Each language stays internally consistent.
-  decorator: "builtin", annotation: "builtin",
+  // Pylance does -> decorator role (plain builtin warm — explicit syntax, no italic).
+  decorator: "decorator", annotation: "decorator",
   selfParameter: "builtin", clsParameter: "builtin",
   "variable.readonly": "constant", "property.readonly": "constant",
   "function.defaultLibrary": "builtin", "method.defaultLibrary": "builtin",

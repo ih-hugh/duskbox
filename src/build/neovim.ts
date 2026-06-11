@@ -107,10 +107,17 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@punctuation.special"] = { fg: p.accents.cyan };        // ${} interpolation, special marks
   hl["@punctuation.special.markdown"] = { fg: p.fgPunct };    // table pipes, ---, > stay calm like VS Code
   hl["@label.yaml"] = { fg: p.accents.purple };               // anchors & aliases
+  hl.Special = { fg: p.builtin };                             // legacy catch-all: warm, not italic (italic is reserved for implicit context like this/self)
+  // B1 split must survive LSP semantic tokens: @lsp.type.function/method default-link to @function
+  // (bold, priority 125) and would re-bold every call site — pin calls plain, declarations bold.
+  hl["@lsp.type.function"] = { fg: p.accents.yellow };
+  hl["@lsp.type.method"] = { fg: p.accents.yellow };
+  hl["@lsp.typemod.function.declaration"] = { fg: p.accents.yellow, bold: true };
+  hl["@lsp.typemod.method.declaration"] = { fg: p.accents.yellow, bold: true };
   hl["@lsp.type.parameter"] = { fg: p.fgParam, italic: true };
-  hl["@lsp.type.decorator"] = { fg: p.builtin };              // builtin slot — matches VS Code decorator→builtin
-  hl["@lsp.type.selfParameter"] = { fg: p.builtin };
-  hl["@lsp.type.clsParameter"] = { fg: p.builtin };
+  hl["@lsp.type.decorator"] = { fg: slot(p, TOKENS.decorator.color) }; // decorator role: explicit syntax — warm, NO italic
+  hl["@lsp.type.selfParameter"] = { fg: p.builtin, italic: true }; // builtin role parity with VS Code (implicit context is italic)
+  hl["@lsp.type.clsParameter"] = { fg: p.builtin, italic: true };
   hl["@lsp.type.interface"] = { fg: p.accents.orange, italic: true };
   hl["@lsp.type.typeParameter"] = { fg: p.accents.orange, italic: true };
   hl["@lsp.typemod.variable.readonly"] = { fg: p.accents.purple };

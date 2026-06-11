@@ -167,6 +167,23 @@ describe("v2 — nvim", () => {
     expect(hl["@variable.parameter"]).toMatchObject({ fg: p.fgParam, italic: true });
     expect(hl["@lsp.type.parameter"]).toMatchObject({ fg: p.fgParam, italic: true });
     expect(hl["@lsp.type.decorator"]!.fg).toBe(p.builtin);
+    expect(hl["@lsp.type.decorator"]!.italic).toBeUndefined(); // decorator role: explicit syntax, no italic
+  });
+  it("B1 split survives LSP semantic tokens: @lsp function/method plain, .declaration bold", () => {
+    expect(hl["@lsp.type.function"]).toMatchObject({ fg: p.accents.yellow });
+    expect(hl["@lsp.type.function"]!.bold).toBeUndefined();
+    expect(hl["@lsp.type.method"]!.bold).toBeUndefined();
+    expect(hl["@lsp.typemod.function.declaration"]).toMatchObject({ fg: p.accents.yellow, bold: true });
+    expect(hl["@lsp.typemod.method.declaration"]).toMatchObject({ fg: p.accents.yellow, bold: true });
+  });
+  it("treesitter decorators (@attribute) ride the decorator role, not red Macro", () => {
+    expect(hl["@attribute"]!.fg).toBe(p.builtin);
+    expect(hl["@attribute"]!.italic).toBeUndefined();
+    expect(hl["@attribute.builtin"]!.fg).toBe(p.builtin);
+  });
+  it("Special is warm but NOT italic (legacy catch-all split off the builtin role)", () => {
+    expect(hl.Special!.fg).toBe(p.builtin);
+    expect(hl.Special!.italic).toBeUndefined();
   });
 });
 

@@ -42,7 +42,8 @@ export const TOKENS = {
   typeBuiltin:  { color: "orange" as ColorSlot, bold: true },
   parameter:    { color: "param" as ColorSlot, italic: true },
   builtin:      { color: "builtin" as ColorSlot, italic: true },
-  preproc:      { color: "red" as ColorSlot, bold: true },
+  decorator:    { color: "builtin" as ColorSlot },              // explicit syntax, not implicit context — no italic
+  preproc:      { color: "red" as ColorSlot },                  // legacy-only surface (PreProc/Macro); modern import/export ride keyword (bold red)
   string:       { color: "green" as ColorSlot },
   escape:       { color: "cyan" as ColorSlot },
   number:       { color: "blue" as ColorSlot },

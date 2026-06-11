@@ -140,10 +140,24 @@ describe("v2 — vscode", () => {
   const dusk = VARIANTS.find((v) => v.name === "dusk")!;
   const t = buildVscode(dusk, { bold: true });
   const pd = buildPalette(dusk);
-  const ruleOf = (sel: string) => t.tokenColors.find((r) => r.scope.includes(sel))!;
+  const ruleOf = (sel: string) => {
+    const rule = t.tokenColors.find((r) => r.scope.includes(sel));
+    expect(rule, `no tokenColors rule carries scope "${sel}"`).toBeDefined();
+    return rule!;
+  };
   it("function calls unbolded, declarations bold", () => {
     expect(ruleOf("meta.function-call").settings.fontStyle ?? "").not.toContain("bold");
     expect(ruleOf("entity.name.function").settings.fontStyle).toContain("bold");
+  });
+  it("call-site descendant guard present (nested entity.name.function would otherwise win bold)", () => {
+    const selectors = t.tokenColors.flatMap((r) => r.scope);
+    expect(selectors).toContain("meta.function-call entity.name.function");
+    expect(ruleOf("meta.function-call entity.name.function").settings.fontStyle ?? "").not.toContain("bold");
+  });
+  it("semantic function/method carry explicit bold:false (no TextMate bold fall-through)", () => {
+    expect(t.semanticTokenColors["function"]!.bold).toBe(false);
+    expect(t.semanticTokenColors["method"]!.bold).toBe(false);
+    expect(t.semanticTokenColors["function.declaration"]!.bold).toBe(true);
   });
   it("this on builtin warm; semantic parameter/variable on their tiers; decl split present", () => {
     expect(ruleOf("variable.language").settings.foreground).toBe(pd.builtin);
@@ -151,6 +165,7 @@ describe("v2 — vscode", () => {
     expect(t.semanticTokenColors["variable"]!.foreground).toBe(pd.fgVar);
     expect(t.semanticTokenColors["function.declaration"]!.foreground).toBe(pd.accents.yellow);
     expect(t.semanticTokenColors["decorator"]!.foreground).toBe(pd.builtin);
+    expect(t.semanticTokenColors["decorator"]!.italic).toBeUndefined(); // decorator role: explicit syntax, no italic
   });
 });
 
