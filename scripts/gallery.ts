@@ -58,7 +58,8 @@ function diagram(): string {
     ["escape", a.cyan, false, false],
     ["number", a.blue, false, false],
     ["constant", a.purple, false, false],
-    ["this / import / constructor", a.magenta, false, false],
+    ["this / self / constructor", p.builtin, false, true],
+    ["import / export", p.moduleKw, true, false],
     ["comment", p.fg2, false, true],
   ];
   const lx0 = 440;

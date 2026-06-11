@@ -8,7 +8,7 @@ A calm theme family with **tiered attention** for **Neovim** and **VS Code** (an
 
 ![duskbox OKLCH palette](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/palette.png)
 
-Designed in **OKLCH**: the nine accents share one lightness band (**equiluminant**) and get their variety from *hue, not brightness*, so nothing vibrates. In the **signature** variants, `this`/`import`/`constructor` and the UI accent take a single signature color.
+Designed in **OKLCH** around **tiered attention**: deep ember keywords command, the warm + cool work spine carries meaning, and structure recedes into each variant's own background material. In the **signature** variants, the chrome — cursor, borders, selection, markdown headings, statusline — takes the signature color while the syntax stays consistent across the family.
 
 ## Variants
 
@@ -23,7 +23,7 @@ Designed in **OKLCH**: the nine accents share one lightness band (**equiluminant
 | `duskbox-night-hc` | high-contrast dark |
 | `duskbox-cyber` | neon-on-black (high contrast) |
 
-**Signature variants:** `dusk` and `cyber` also come in four signature flavors — the standout tokens (`this`/`import`/`constructor`) and the UI accent take a signature color: `duskbox-{dusk,cyber}-{azure,neon-purple,magenta,salmon}`.
+**Signature variants:** `dusk` and `cyber` also come in four signature flavors — the chrome (cursor, borders, selection, headings, statusline) and the background's mood take the signature color while syntax stays consistent: `duskbox-{dusk,cyber}-{azure,neon-purple,magenta,salmon}`.
 
 ## Gallery
 
