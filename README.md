@@ -1,6 +1,6 @@
 # duskbox
 
-A calm theme family with **tiered attention** for **Neovim** and **VS Code** (and forks: Cursor, VSCodium, Windsurf…). Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so the two editors never drift. Richly detailed (graded Markdown headings, per-language tokens, calm punctuation, deep LSP semantics), and each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it.)
+A calm theme family with **tiered attention** for **Neovim**, **VS Code** (and forks: Cursor, VSCodium, Windsurf…), **Ghostty/cmux**, and **lazygit**. Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so editors and terminals never drift. Richly detailed (graded Markdown headings, per-language tokens, calm punctuation, deep LSP semantics), and each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it.)
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
@@ -110,11 +110,53 @@ duskbox ships a matching [lazygit](https://github.com/jesseduffield/lazygit) the
     >> "$(lazygit --print-config-dir)/config.yml"
   ```
 
+## Ghostty / cmux
+
+duskbox ships Ghostty-compatible terminal themes for every variant under [`extras/ghostty/`](./extras/ghostty). cmux uses Ghostty's theme system, so the same files work there too.
+
+### Install
+
+**Option 1 — cmux theme picker (recommended):**
+
+```sh
+brew tap ih-hugh/tap
+brew install cmux-theme-picker
+# Then run:
+cmux-theme-picker
+```
+
+The picker shows live previews and lets you toggle between light/dark slots with Tab. Duskbox themes are marked with ★. See [cmux-theme-picker](https://github.com/ih-hugh/cmux-theme-picker) for details.
+
+**Option 2 — Manual install:**
+
+```sh
+# Ghostty
+mkdir -p ~/.config/ghostty/themes
+cp extras/ghostty/duskbox-* ~/.config/ghostty/themes/
+
+# cmux (current cmux does not list symlinked user themes, so copy real files)
+mkdir -p "$HOME/Library/Application Support/com.cmuxterm.app/themes"
+cp extras/ghostty/duskbox-* "$HOME/Library/Application Support/com.cmuxterm.app/themes/"
+```
+
+**Set a variant directly:**
+
+```sh
+cmux themes set --light duskbox-day --dark duskbox-dusk
+cmux reload-config
+```
+
+Or edit your Ghostty config and reload:
+
+```conf
+theme = duskbox-dusk
+```
+
 ## Build from source
 
 ```sh
 pnpm install
-pnpm build      # regenerate colors/*.lua, lua/duskbox/themes/*.lua, themes/*.json
+pnpm build      # regenerate colors/*.lua, lua/duskbox/themes/*.lua, themes/*.json, extras/*
 pnpm test       # vitest: OKLCH math, contrast gates, emitters, determinism
 pnpm gallery    # regenerate docs/img/*.svg
 ```

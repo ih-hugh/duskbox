@@ -5,6 +5,7 @@ import { buildNeovim, toLua } from "./neovim";
 import { buildVscode, uiThemeFor } from "./vscode";
 import { buildLazygit } from "./lazygit";
 import { buildLualine } from "./lualine";
+import { buildGhostty } from "./ghostty";
 
 const BOLD = true; // default-on; nvim runtime can toggle at load time
 
@@ -13,6 +14,7 @@ export function runBuild(root: string): void {
   mkdirSync(resolve(root, "lua/duskbox/themes"), { recursive: true });
   mkdirSync(resolve(root, "themes"), { recursive: true });
   mkdirSync(resolve(root, "extras/lazygit"), { recursive: true });
+  mkdirSync(resolve(root, "extras/ghostty"), { recursive: true });
   mkdirSync(resolve(root, "lua/lualine/themes"), { recursive: true });
 
   const themesContrib: { label: string; uiTheme: string; path: string }[] = [];
@@ -29,6 +31,7 @@ export function runBuild(root: string): void {
     themesContrib.push({ label: theme.name, uiTheme: uiThemeFor(v), path: `./${file}` });
 
     writeFileSync(resolve(root, `extras/lazygit/duskbox-${v.name}.yml`), buildLazygit(v));
+    writeFileSync(resolve(root, `extras/ghostty/duskbox-${v.name}`), buildGhostty(v));
     writeFileSync(resolve(root, `lua/lualine/themes/duskbox-${v.name}.lua`), buildLualine(v));
   }
 

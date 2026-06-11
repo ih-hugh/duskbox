@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 const root = resolve(__dirname, "../..");
 describe("build orchestrator", () => {
   beforeAll(() => runBuild(root));
-  it("writes all 16 nvim colorschemes + theme tables + 16 vscode themes", () => {
+  it("writes all 16 nvim colorschemes + theme tables + 16 vscode themes + terminal themes", () => {
     const names = [
       "dawn", "day", "day-hc", "storm", "dusk", "midnight", "night-hc", "cyber",
       "dusk-azure", "cyber-azure", "dusk-neon-purple", "cyber-neon-purple",
@@ -16,6 +16,7 @@ describe("build orchestrator", () => {
       expect(existsSync(resolve(root, `colors/duskbox-${v}.lua`))).toBe(true);
       expect(existsSync(resolve(root, `lua/duskbox/themes/${v}.lua`))).toBe(true);
       expect(existsSync(resolve(root, `themes/duskbox-${v}-color-theme.json`))).toBe(true);
+      expect(existsSync(resolve(root, `extras/ghostty/duskbox-${v}`))).toBe(true);
       expect(existsSync(resolve(root, `lua/lualine/themes/duskbox-${v}.lua`))).toBe(true);
     }
   });
