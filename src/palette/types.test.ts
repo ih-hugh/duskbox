@@ -197,3 +197,35 @@ describe("v2.1.1 — const-variable whisper tier", () => {
     }
   });
 });
+
+describe("v2.2 — neon selection (cyber + HC)", () => {
+  const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
+  it("S1 pins: the 7 affected variants select in their identity hue", () => {
+    expect(get("cyber").bg3).toBe("#0f3434");
+    expect(get("cyber-azure").bg3).toBe("#173140");
+    expect(get("cyber-neon-purple").bg3).toBe("#312940");
+    expect(get("cyber-magenta").bg3).toBe("#38273a");
+    expect(get("cyber-salmon").bg3).toBe("#402620");
+    expect(get("night-hc").bg3).toBe("#1a3c44");
+    expect(get("day-hc").bg3).toBe("#bce1e9");
+  });
+  it("everyone else is byte-identical (selection confirmed fine outside cyber/HC)", () => {
+    expect(get("dusk").bg3).toBe("#253a55");
+    expect(get("dusk-azure").bg3).toBe("#193e51");
+    expect(get("storm").bg3).toBe("#31445c");
+  });
+  it("fg0 stays readable on the new selections (4.5:1, 7:1 HC)", () => {
+    for (const n of ["cyber", "cyber-azure", "cyber-neon-purple", "cyber-magenta", "cyber-salmon", "night-hc", "day-hc"]) {
+      const v = VARIANTS.find((x) => x.name === n)!;
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 7 : 4.5;
+      expect(contrastRatio(p.fg0, p.bg3), n).toBeGreaterThanOrEqual(floor);
+    }
+  });
+  it("neonLine: set exactly on the cyber family (= signature ?? cyber cyan), absent elsewhere", () => {
+    expect(get("cyber").neonLine).toBe(get("cyber").accents.cyan);
+    expect(get("cyber-azure").neonLine).toBe(get("cyber-azure").signature);
+    expect(get("night-hc").neonLine).toBeUndefined();
+    expect(get("dusk").neonLine).toBeUndefined();
+  });
+});

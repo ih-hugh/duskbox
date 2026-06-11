@@ -40,6 +40,8 @@ export interface Palette {
   builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2); consumed by the v2 role retarget (Task 4)
   moduleKw: string;            // module boundary (gallery-locked): import/export walk from red toward the variant anchor
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
+  neonLine?: string;           // cyber family only: the identity neon (signature ?? cyan) that the
+                               // current-line treatment keys off (nvim underdashed sp / vscode border)
 }
 
 /** Circular midpoint between two hues, going the short way around the wheel. */
@@ -70,8 +72,14 @@ export function buildPalette(v: VariantConfig): Palette {
   const bg1 = oklchToHex(clamp01(bgL - 0.025), moodC, moodH);        // panel always recedes (darker)
   const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), moodC, moodH);   // cursorline: lighter(dark)/darker(light)
   // Signature bg3 floors its chroma so the tint stays perceptible (ΔE ≥ ~0.012) even on quiet stages.
+  // v2.2 S1 "neon selection" (screens 25–26, locked): the cyber family (v.hues — the existing
+  // wheel-override marker) and HC variants select in their IDENTITY hue at a stronger step —
+  // the flat slate block deadened the neon. Everyone else keeps the prior derivation byte-exact.
+  const s1Sel = v.hues !== undefined || v.uiContrast === "high";
   const bg3C = v.signature !== undefined ? Math.max(moodC * 1.5, 0.030) : moodC * 1.5;
-  const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bg3C, v.signature ?? 255); // selection (chrome: cool or signature-tinted)
+  const bg3 = s1Sel
+    ? oklchToHex(clamp01(bgL + dir * 0.115), v.kind === "dark" ? 0.042 : 0.04, v.signature ?? v.hues?.cyan ?? 213)
+    : oklchToHex(clamp01(bgL + dir * 0.08), bg3C, v.signature ?? 255); // selection (chrome: cool or signature-tinted)
   // High-contrast variants keep secondary text much closer to the main fg so
   // comments / dim text stay legible against the near-black (or near-white) bg.
   const dimDrop = v.uiContrast === "high" ? 0.07 : 0.12;
@@ -150,11 +158,14 @@ export function buildPalette(v: VariantConfig): Palette {
     ? oklchToHex(SLOT_LC[arch].magenta[0], SLOT_LC[arch].magenta[1], v.signature)
     : undefined;
 
+  // Identity neon for the cyber family's current-line treatment (dashed in nvim, border in vscode).
+  const neonLine = v.hues !== undefined ? (signature ?? accents.cyan) : undefined;
+
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
     bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam, fgConst,
     accents, headings, fgPunct,
     builtin, moduleKw,
-    signature,
+    signature, neonLine,
   };
 }
