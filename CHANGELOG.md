@@ -3,6 +3,29 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [2.1.0] — 2026-06-11
+
+### Changed — keyword stratification
+- **Keywords split into two classes** (the Tokyo split): control flow & declarators (`if`,
+  `while`, `return`, `throw`, `function`, `class`, `enum`, `interface`) stay **ember bold** —
+  the verbs; modifiers (`async`, `await`, `const`, `let`, `var`, `static`, `readonly`,
+  `private`/`protected`/`public`, `abstract`, `declare`, `override`, `extends`, `implements`,
+  Python `global`/`nonlocal`) become **plum italic** — the adjectives. `async function main`
+  finally reads as three colors.
+- **Salmon variants get a true-salmon module boundary**: `import`/`export` ride a vivid salmon
+  (`#ff8a6f`) on `*-salmon` instead of a red walk that melted into the keywords.
+- **Cross-editor keyword parity fixes**: `class`/`enum`/`interface`/`namespace` rendered orange
+  italic in Neovim but red bold in VS Code (and the `type` keyword the reverse) — both now match
+  everywhere, including inline type-only specifiers (`import { type F }`). duskbox ships
+  treesitter `after/queries` (ecma/typescript/python) to express the partition.
+- Cross-language guards keep non-modifiers out of the new class: Java/Groovy import & package
+  paths and `class`/`record` keywords stay red; C/C++ pointer `*`, reference `&` and `[]`
+  declarators ride the cyan operator voice; Swift attributes ride the decorator slot.
+- Known engine limit: VS Code's grammar cannot separate `await` from `return`, so `await` stays
+  red there while Neovim renders it plum (same for Python's `async for`/`async with`).
+
+[2.1.0]: https://github.com/ih-hugh/duskbox/releases/tag/v2.1.0
+
 ## [2.0.0] — 2026-06-10
 
 ### Changed — visual overhaul: tiered attention

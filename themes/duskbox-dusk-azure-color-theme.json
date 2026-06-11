@@ -244,7 +244,10 @@
         "keyword",
         "keyword.control",
         "storage.type",
-        "storage.modifier"
+        "storage.modifier.import",
+        "storage.modifier.package",
+        "meta.class.identifier storage.modifier",
+        "meta.record.identifier storage.modifier"
       ],
       "settings": {
         "foreground": "#f4514c",
@@ -754,6 +757,39 @@
       "settings": {
         "foreground": "#0797f4",
         "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": [
+        "storage.modifier.attribute"
+      ],
+      "settings": {
+        "foreground": "#f99a4e",
+        "fontStyle": ""
+      }
+    },
+    {
+      "scope": [
+        "storage.modifier.pointer",
+        "storage.modifier.reference",
+        "storage.modifier.array.bracket.square"
+      ],
+      "settings": {
+        "foreground": "#44d6f1",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": [
+        "storage.modifier",
+        "storage.type.ts",
+        "storage.type.tsx",
+        "storage.type.js",
+        "storage.type.function.async"
+      ],
+      "settings": {
+        "foreground": "#b19ee3",
+        "fontStyle": "italic"
       }
     }
   ],

@@ -128,6 +128,8 @@ return {
   ["diffSubname"] = { fg = "#0c5092" },
   ["@keyword.type"] = { fg = "#7a3d04", italic = true },
   ["@keyword.import"] = { fg = "#5d32a9", bold = true },
+  ["@keyword.modifier"] = { fg = "#574084", italic = true },
+  ["@keyword.coroutine"] = { fg = "#574084", italic = true },
   ["DiagnosticError"] = { fg = "#9e0213" },
   ["DiagnosticVirtualTextError"] = { fg = "#810413", bg = "#f9eff0" },
   ["DiagnosticUnderlineError"] = { sp = "#9e0213", undercurl = true },

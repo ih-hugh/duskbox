@@ -26,7 +26,7 @@ function svg(name: string): string {
   <rect width="${W}" height="${H}" rx="12" fill="${p.bg0}"/>
   <text x="24" y="36" font-family="${MONO}" font-size="13" fill="${p.fg2}">duskbox-${name}</text>
   ${line(72, [["// fetch the account balance", p.fg2, false, true]])}
-  ${line(98, [["export ", a.red, true], ["function ", a.red, true], ["load", a.yellow], ["(id) {", p.fg1]])}
+  ${line(98, [["export ", p.moduleKw, true], ["async ", a.purple, false, true], ["function ", a.red, true], ["load", a.yellow], ["(id) {", p.fg1]])}
   ${line(124, [["  return ", a.red, true], ["fetch", a.yellow], ["(", p.fg1], ['"/api"', a.cyan], [") ", p.fg1], ["* ", a.blue], ["100", a.blue]])}
   ${sw}
 </svg>`;
@@ -37,7 +37,7 @@ function svg(name: string): string {
 function diagram(): string {
   const p = buildPalette(VARIANTS.find((x) => x.name === "dusk")!);
   const a = p.accents;
-  const W = 820, H = 400, cx = 200, cy = 212, R = 122;
+  const W = 820, H = 440, cx = 200, cy = 224, R = 122; // 12 legend rows + footnote need the extra height
   const rad = (d: number) => (d * Math.PI) / 180;
   let wheel = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${p.fg2}" stroke-opacity="0.22"/>`;
   for (const acc of ACCENTS) {
@@ -51,6 +51,7 @@ function diagram(): string {
   wheel += `<text x="${cx}" y="${cy + 16}" font-family="${MONO}" font-size="10" fill="${p.fg2}" text-anchor="middle">hierarchy from L×C</text>`;
   const rows: [string, string, boolean, boolean][] = [
     ["keyword", a.red, true, false],
+    ["async / const / static", a.purple, false, true],
     ["function", a.yellow, true, false],
     ["type", a.orange, true, false],
     ["property", a.teal, false, false],
