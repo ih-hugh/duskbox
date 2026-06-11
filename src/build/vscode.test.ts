@@ -274,3 +274,15 @@ describe("v2.1.1 — const-variable whisper tier (vscode)", () => {
     expect(t.semanticTokenColors["enumMember"]!.foreground).toBe(p.accents.purple);
   });
 });
+
+describe("v2.2 — cyber line-highlight border (vscode)", () => {
+  it("cyber family themes carry an alpha'd neon lineHighlightBorder; others none", () => {
+    const cyber = buildVscode(VARIANTS.find((v) => v.name === "cyber")!, { bold: true });
+    const pc = buildPalette(VARIANTS.find((v) => v.name === "cyber")!);
+    expect(cyber.colors["editor.lineHighlightBorder"]).toBe(pc.neonLine + "59"); // 35% alpha — monaco renders this border solid; nvim carries the real dash
+    const dusk2 = buildVscode(VARIANTS.find((v) => v.name === "dusk")!, { bold: true });
+    expect(dusk2.colors["editor.lineHighlightBorder"]).toBeUndefined();
+    const hc = buildVscode(VARIANTS.find((v) => v.name === "night-hc")!, { bold: true });
+    expect(hc.colors["editor.lineHighlightBorder"]).toBeUndefined(); // HC: selection only, no border
+  });
+});
