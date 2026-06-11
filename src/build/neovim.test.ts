@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { describe, it, expect } from "vitest";
 import { buildNeovim, toLua } from "./neovim";
@@ -260,11 +261,29 @@ describe("v2.1 — keyword stratification (nvim)", () => {
     const ecma = readFileSync(resolve(root, "after/queries/ecma/highlights.scm"), "utf8");
     const ts = readFileSync(resolve(root, "after/queries/typescript/highlights.scm"), "utf8");
     const py = readFileSync(resolve(root, "after/queries/python/highlights.scm"), "utf8");
-    for (const q of [ecma, ts, py]) expect(q.startsWith(";; extends")).toBe(true);
+    // EXACT first line: nvim's modeline matcher is anchored (^;+%s*extends%s*$) — trailing text
+    // would silently turn these into FULL OVERRIDES that wipe stock highlights for the language.
+    for (const q of [ecma, ts, py]) expect(q.split("\n")[0].trim()).toBe(";; extends");
     expect(ecma).toContain('"const"');
     expect(ecma).toContain('"class" @keyword');
     expect(ts).toContain('"interface"');
     expect(ts).toContain("type_alias_declaration");
+    expect(ts).toContain("import_specifier"); // inline `import { type F }` parity (TM: keyword.control.type)
     expect(py).toContain('"global"');
+  });
+  it("after/queries parse with real parsers (skipped when nvim unavailable)", () => {
+    const probe = spawnSync("nvim", ["--version"], { encoding: "utf8" });
+    if (probe.error || probe.status !== 0) return; // no nvim in this environment — content checks above still apply
+    const lua = [
+      `for _, l in ipairs({{"typescript","after/queries/typescript/highlights.scm"},`,
+      `{"python","after/queries/python/highlights.scm"},{"javascript","after/queries/ecma/highlights.scm"}}) do`,
+      ` local has = pcall(vim.treesitter.language.inspect, l[1])`,
+      ` if has then local f = io.open(l[2]); local s = f:read("*a"); f:close(); vim.treesitter.query.parse(l[1], s) end`,
+      `end print("PARSE_OK")`,
+    ].join(" ");
+    const r = spawnSync("nvim", ["--headless", "-c", "lua " + lua, "-c", "qa!"], {
+      cwd: resolve(import.meta.dirname, "../.."), encoding: "utf8", timeout: 30_000,
+    });
+    expect(r.stdout + r.stderr).toContain("PARSE_OK");
   });
 });

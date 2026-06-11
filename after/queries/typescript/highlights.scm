@@ -22,3 +22,11 @@
 
 (export_statement
   "type" @keyword.type)
+
+; inline type-only specifiers — `import { type F }` / `export { type C }` — parity with
+; the TM grammar, which scopes these keyword.control.type (import-export-clause captures)
+(import_specifier
+  "type" @keyword.type)
+
+(export_specifier
+  "type" @keyword.type)
