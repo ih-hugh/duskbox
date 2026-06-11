@@ -3,6 +3,35 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [2.0.0] — 2026-06-10
+
+### Changed — visual overhaul: tiered attention
+- **The equiluminant band is gone; the pinks are gone.** Hierarchy now comes from lightness ×
+  chroma, identity from hue: deep **ember keywords** command attention; the work sits in the warm
+  (gold functions, orange types) + cool (green strings, teal properties, blue numbers) spine;
+  punctuation and comments recede. A regression gate keeps washed-pink and fuchsia out of syntax
+  permanently.
+- **`this` / `self` / constructors leave magenta** for a warm builtin orange (italic for implicit
+  context). Decorators ride the same warm slot, non-italic.
+- **Bold budget rebalanced — and render-proven.** Declarations, keywords and types stay bold;
+  function calls and JSX tags are plain, verified through VS Code's actual tokenizer and under
+  Neovim's LSP semantic tokens (≈half the bold of v1.x on dense JSX).
+- **Variables ride a bright-lavender tier**; parameters are moonlit-cyan italics; body text keeps
+  its lavender cast. The lavender identity is now structural, not incidental.
+- **Module boundary speaks the variant**: `import`/`export` walk from ember toward each variant's
+  accent — violet on dusk, true azure on azure, near-ember on salmon. The `type` keyword rides the
+  type hue (orange italic), distinct from `import`.
+- **Operators get a voice**: symbolic operators (`&& || >= ?? =>`) are cyan circuitry; wordy
+  operators (`typeof`, `instanceof`) stay keywords.
+- **Punctuation is carved from the stage**: brackets/commas/semicolons derive from each variant's
+  background material (mood hue, lifted lightness) — structure recedes into the room it lives in.
+- **Signatures are chrome**: signature variants share their base's syntax palette; the signature
+  colors the cursor, borders, selection, markdown headings and statusline. Backgrounds keep the
+  v1.4 atmosphere (dusk is still `#232336`).
+- Cyber family is nearly unchanged — the new rules reproduce its palette; it was the prototype.
+
+[2.0.0]: https://github.com/ih-hugh/duskbox/releases/tag/v2.0.0
+
 ## [1.4.0] — 2026-06-10
 
 ### Added

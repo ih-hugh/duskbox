@@ -32,7 +32,7 @@ function svg(name: string): string {
 </svg>`;
 }
 
-// palette.svg — the "color diagram": an OKLCH hue wheel (9 equiluminant accents placed by
+// palette.svg — the "color diagram": an OKLCH hue wheel (9 tiered accents placed by
 // hue angle) beside a syntax legend (role -> color). Uses the default `dusk` palette.
 function diagram(): string {
   const p = buildPalette(VARIANTS.find((x) => x.name === "dusk")!);
@@ -47,8 +47,8 @@ function diagram(): string {
     wheel += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="11" fill="${a[acc]}" stroke="${p.bg0}" stroke-width="2"/>`;
     wheel += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" font-family="${MONO}" font-size="11" fill="${p.fg2}" text-anchor="${anchor}">${acc}</text>`;
   }
-  wheel += `<text x="${cx}" y="${cy - 1}" font-family="${MONO}" font-size="12" fill="${p.fg1}" text-anchor="middle">equiluminant</text>`;
-  wheel += `<text x="${cx}" y="${cy + 16}" font-family="${MONO}" font-size="10" fill="${p.fg2}" text-anchor="middle">variety from hue</text>`;
+  wheel += `<text x="${cx}" y="${cy - 1}" font-family="${MONO}" font-size="12" fill="${p.fg1}" text-anchor="middle">tiered attention</text>`;
+  wheel += `<text x="${cx}" y="${cy + 16}" font-family="${MONO}" font-size="10" fill="${p.fg2}" text-anchor="middle">hierarchy from L×C</text>`;
   const rows: [string, string, boolean, boolean][] = [
     ["keyword", a.red, true, false],
     ["function", a.yellow, true, false],
@@ -70,7 +70,7 @@ function diagram(): string {
     legend += `<text x="${lx0 + 28}" y="${y + 1}" font-family="${MONO}" font-size="13" fill="${p.fg0}" ${st}>${esc(role)}</text>`;
     y += 28;
   }
-  legend += `<text x="${lx0}" y="${y + 4}" font-family="${MONO}" font-size="10" fill="${p.fg2}">signature variants recolor this row + the UI accent</text>`;
+  legend += `<text x="${lx0}" y="${y + 4}" font-family="${MONO}" font-size="10" fill="${p.fg2}">signature variants recolor the chrome (cursor/headings/borders)</text>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="duskbox OKLCH palette diagram">
   <rect width="${W}" height="${H}" rx="14" fill="${p.bg0}"/>
   <text x="32" y="40" font-family="${MONO}" font-size="14" fill="${p.fg1}">duskbox — OKLCH palette</text>

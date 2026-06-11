@@ -1,6 +1,6 @@
 # duskbox
 
-A calm, **equiluminant** theme family for **Neovim** and **VS Code** (and forks: Cursor, VSCodium, Windsurf…). Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so the two editors never drift. Richly detailed where it counts: graded Markdown headings that follow your variant, per-language token treatment (JSON · YAML · CSS · regex · doc-tags), calm punctuation, and deep LSP semantic styling. Each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it; VS Code grammars don't expose codetag scopes to themes.)
+A calm theme family with **tiered attention** for **Neovim** and **VS Code** (and forks: Cursor, VSCodium, Windsurf…). Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so the two editors never drift. Richly detailed where it counts: graded Markdown headings that follow your variant, per-language token treatment (JSON · YAML · CSS · regex · doc-tags), calm punctuation, and deep LSP semantic styling. Each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it; VS Code grammars don't expose codetag scopes to themes.)
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
@@ -75,7 +75,7 @@ Switch variants anytime with `:colorscheme duskbox-<variant>` (e.g. `:colorschem
 
 ## Design
 
-duskbox is designed in **OKLCH** (a perceptually-uniform color space): accents share a narrow lightness band (equiluminant) at moderate chroma, so nothing "vibrates," and variety comes from hue rather than brightness. High-contrast variants widen the foreground/background gap and raise chroma; `cyber` reuses a neon palette. Every accent is gated on WCAG contrast in the test suite.
+duskbox is designed in **OKLCH** (a perceptually-uniform color space) around **tiered attention**: hierarchy comes from lightness × chroma, identity from hue. Deep ember keywords command; the work sits in a warm (gold/orange) + cool (green/teal/blue) spine with bright-lavender variables; punctuation is carved from each variant's own background material and recedes. High-contrast variants get their hierarchy from chroma alone (≥7:1 floors). Every accent is gated on WCAG contrast in the test suite — and a pink-regression gate keeps washed-pink and fuchsia out of syntax permanently.
 
 ## License
 
