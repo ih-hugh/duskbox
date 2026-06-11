@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { buildPalette, BASE_HUES } from "./types";
 import type { VariantConfig } from "./types";
 import { VARIANTS } from "./variants";
-import { contrastRatio, hexToOklch, oklchToHex } from "../oklch";
+import { contrastRatio, hexToOklch, isPinkish, oklchToHex } from "../oklch";
 import { blend } from "../build/blend";
 
 // Synthetic config for generic invariants — NOT the shipped dusk variant (see VARIANTS for that).
@@ -141,14 +141,23 @@ describe("v2 stages & ladder", () => {
     const p = get("dusk");
     expect(p.fgParam).toBe(blend(p.fg0, p.accents.cyan, 0.30));
   });
-  it("fgPunct (bg-material) hue tracks the mood hue of its variant (blue/indigo for base; salmon/magenta for those signatures)", () => {
-    // bg-material: fgPunct derives from moodC/moodH. Verify the floor contract, not a specific hue:
-    // the only hard invariant is that floors hold (already tested globally) and hue is a valid hex.
+  it("fgPunct (bg-material) hue tracks the variant's mood hue (±20° of moodH) on dark variants", () => {
+    // bg-material: fgPunct derives from moodC/moodH (mood = halfLean(bgH, bgLean ?? signature)).
+    // The gamut clamp on the enriched-chroma step can nudge H, but it must stay near the stage's
+    // mood — observed deltas are ≤ ~1°; ±20° leaves room without letting a hue swap sneak in.
+    // (Light variants are excluded: day-hc's zero-chroma gray has no meaningful hue.)
+    const moodHueOf = (bgH: number, lean: number | undefined) => {
+      if (lean === undefined) return bgH;
+      const d = ((lean - bgH + 540) % 360) - 180;
+      return ((bgH + d / 2) % 360 + 360) % 360;
+    };
+    const circDelta = (a: number, b: number) => Math.abs(((a - b + 540) % 360) - 180);
     for (const v of VARIANTS.filter((v) => v.kind === "dark")) {
       const p = buildPalette(v);
       const floor = v.uiContrast === "high" ? 4.5 : 3.0;
       expect(contrastRatio(p.fgPunct, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
-      expect(p.fgPunct, v.name).toMatch(/^#[0-9a-f]{6}$/);
+      const moodH = moodHueOf(v.bg[2], v.bgLean ?? v.signature);
+      expect(circDelta(hexToOklch(p.fgPunct).H, moodH), v.name + " fgPunct hue drift").toBeLessThanOrEqual(20);
     }
   });
   it("moduleKw gallery-locked pins: dusk / dusk-azure / dusk-salmon / cyber", () => {
@@ -160,10 +169,7 @@ describe("v2 stages & ladder", () => {
   it("moduleKw pink gate: no variant moduleKw is pinkish", () => {
     for (const v of VARIANTS) {
       const { moduleKw } = buildPalette(v);
-      const { L, C, H } = hexToOklch(moduleKw);
-      const fuchsia = (H >= 320 || H < 12) && C > 0.06 && L > 0.72;
-      const washedRed = H >= 12 && H < 45 && L > 0.72 && C < 0.13;
-      expect(fuchsia || washedRed, v.name + " moduleKw pinkish").toBe(false);
+      expect(isPinkish(moduleKw), v.name + " moduleKw pinkish").toBe(false);
     }
   });
 });

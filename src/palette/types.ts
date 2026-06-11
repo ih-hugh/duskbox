@@ -29,11 +29,11 @@ export interface Palette {
   uiContrast: "normal" | "high";
   bg0: string; bg1: string; bg2: string; bg3: string; // editor, panel/darker, cursorline, selection
   fg0: string; fg1: string; fg2: string;              // text, dim, muted/comment
-  fgVar: string;               // bright-variable tier: locals pop above body text without a hue shift
+  fgVar: string;               // bright-LAVENDER variable tier (H288): locals pop and carry the lavender identity
   fgParam: string;             // moonlit-parameter tier: moonlit cyan blend for parameter slots
   accents: Record<AccentName, string>;
   headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
-  fgPunct: string;                            // punctuation tone between fg0 and fg2 (HC-floored)
+  fgPunct: string;                            // bg-material punctuation: carved from the stage (mood hue, lifted L), floor-looped
   builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2); consumed by the v2 role retarget (Task 4)
   moduleKw: string;            // module boundary (gallery-locked): import/export walk from red toward the variant anchor
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)

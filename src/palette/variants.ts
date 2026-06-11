@@ -3,7 +3,7 @@ import type { VariantConfig } from "./types";
 // Authored in OKLCH. Dark variants: low bg L, high fg L. Light: high bg L, low fg L (accents darkened).
 // HC variants widen the fg/bg gap and raise accent chroma. Cyber pins bg to the exact portfolio
 // near-black (#13131c) and overrides hues/L,C to the neon wheel.
-// v2: stages are near-neutral; tier tuning happens at the v2 gallery checkpoint.
+// v2 (gallery-relocked): stages carry the v1.4 atmosphere — bg leans to `bgLean ?? signature` at chroma ×2.0.
 export const VARIANTS: VariantConfig[] = [
   // --- light ---
   { name: "dawn", kind: "light", uiContrast: "normal",

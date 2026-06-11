@@ -49,10 +49,14 @@ describe("v2 tier palettes", () => {
     expect(sig.signature).not.toBe(sig.accents.magenta);
   });
   it("PINK GATE: no v2-retained syntax slot is pinkish (magenta leaves syntax in the role retarget)", () => {
+    // fgPunct is atmosphere-material (mood hue at glue chroma): on the salmon/magenta signatures
+    // its hue sits in the rose band but chroma stays under the fuchsia gate (dusk-salmon #cba5c1
+    // C≈0.058 < 0.06), so it sweeps plainly today. If a future atmosphere tweak trips it here,
+    // that is the stage's own hue showing through glue — not a pink accent leaking into syntax.
     for (const v of VARIANTS) {
       const p = buildPalette(v);
       const syntax = [p.accents.red, p.accents.orange, p.accents.yellow, p.accents.green,
-        p.accents.teal, p.accents.cyan, p.accents.blue, p.accents.purple, p.builtin, p.fgParam, p.fgVar, p.moduleKw];
+        p.accents.teal, p.accents.cyan, p.accents.blue, p.accents.purple, p.builtin, p.fgParam, p.fgVar, p.moduleKw, p.fgPunct];
       for (const hex of syntax) expect(isPinkish(hex), `${v.name} ${hex}`).toBe(false);
     }
   });
@@ -61,6 +65,13 @@ describe("v2 tier palettes", () => {
       const p = buildPalette(v);
       const floor = v.uiContrast === "high" ? 7 : 4;
       expect(contrastRatio(p.accents.red, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
+    }
+  });
+  it("moduleKw clears contrast floors on every variant (4:1 normal / 7:1 HC)", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 7 : 4;
+      expect(contrastRatio(p.moduleKw, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
     }
   });
   it("builtin is perceptibly distinct from orange on every variant (ΔE ≥ 0.025)", () => {
