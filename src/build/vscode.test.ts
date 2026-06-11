@@ -209,3 +209,28 @@ describe("soul pass — vscode", () => {
     expect(soulCS.colors["merge.incomingContentBackground"]).toBe(pcs.accents.blue + "0a");
   });
 });
+
+describe("v2.1 — keyword stratification (vscode)", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const t = buildVscode(dusk, { bold: true });
+  const p = buildPalette(dusk);
+  const rule = (sel: string) => t.tokenColors.find((r) => r.scope.includes(sel));
+
+  it("modifier scopes paint purple italic, not bold", () => {
+    for (const sel of ["storage.modifier", "storage.type.ts", "storage.type.tsx", "storage.type.js", "storage.type.function.async"]) {
+      const r = rule(sel);
+      expect(r, sel).toBeDefined();
+      expect(r!.settings.foreground).toBe(p.accents.purple);
+      expect(r!.settings.fontStyle).toBe("italic"); // SET value — no trie inheritance hazard
+    }
+  });
+  it("keyword family no longer claims storage.modifier; bare storage.type stays command red", () => {
+    const kw = rule("storage.type")!;
+    expect(kw.settings.foreground).toBe(p.accents.red);
+    expect(kw.scope).not.toContain("storage.modifier");
+  });
+  it("type keyword and moduleKw scopes are untouched", () => {
+    expect(rule("storage.type.type")!.settings.foreground).toBe(p.accents.orange);
+    expect(rule("keyword.control.import")!.settings.foreground).toBe(p.moduleKw);
+  });
+});

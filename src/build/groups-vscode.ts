@@ -1,7 +1,7 @@
 import type { Role } from "../tokens";
 
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
-  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier"],
+  keyword: ["keyword", "keyword.control", "storage.type"],
   operator: ["keyword.operator"],
   function: ["entity.name.function"],
   // descendant selector wins at call sites: the identifier is entity.name.function NESTED INSIDE
@@ -82,6 +82,13 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   ],
   typeKeyword: ["keyword.control.type", "storage.type.type"],
   moduleKw: ["keyword.control.import", "keyword.control.export", "keyword.control.from", "keyword.control.as"],
+  // v2.1 modifier class — verified against the real TS/Python grammars (see spec addendum):
+  // bare storage.type.{ts,tsx,js} = const/let/var; storage.modifier = static/readonly/abstract/
+  // declare/override/extends/implements/async; storage.type.function.async = Python `async def`.
+  // Deeper grammar scopes (storage.type.function.ts, .class, .enum, .type) never match these
+  // suffixed selectors, so function/class/enum/type keep their classes by construction.
+  // (`await` shares keyword.control.flow with `return` — not separable here; stays command red.)
+  keywordModifier: ["storage.modifier", "storage.type.ts", "storage.type.tsx", "storage.type.js", "storage.type.function.async"],
 };
 
 // VS Code semantic token type -> role
