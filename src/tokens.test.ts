@@ -3,7 +3,7 @@ import { TOKENS, slot, type TokenStyle } from "./tokens";
 import { BASE_HUES, buildPalette } from "./palette/types";
 import { VARIANTS } from "./palette/variants";
 
-const VALID = new Set([...Object.keys(BASE_HUES), "fg0", "fg1", "fg2", "h1", "h2", "h3", "h4", "punct", "builtin", "param", "var", "moduleKw"]);
+const VALID = new Set([...Object.keys(BASE_HUES), "fg0", "fg1", "fg2", "h1", "h2", "h3", "h4", "punct", "builtin", "param", "var", "constVar", "moduleKw"]);
 
 describe("tokens", () => {
   it("every role maps to a valid color slot", () => {
@@ -90,5 +90,14 @@ describe("v2.1 roles", () => {
     for (const r of ["keyword", "conditional", "repeat", "exception", "keywordReturn"] as const) {
       expect(TOKENS[r]).toEqual({ color: "red", bold: true });
     }
+  });
+});
+
+describe("v2.1.1 roles", () => {
+  it("constVar (screen 24 A): const-declared names ride the whisper tier, plain", () => {
+    expect(TOKENS.constVar).toEqual({ color: "constVar" });
+    // true/false/null + enum members keep full plum
+    expect(TOKENS.constant).toEqual({ color: "purple" });
+    expect(TOKENS.boolean).toEqual({ color: "purple" });
   });
 });

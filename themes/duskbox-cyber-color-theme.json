@@ -361,11 +361,18 @@
     },
     {
       "scope": [
-        "variable.other.constant",
         "constant.other"
       ],
       "settings": {
         "foreground": "#b0b7ff"
+      }
+    },
+    {
+      "scope": [
+        "variable.other.constant"
+      ],
+      "settings": {
+        "foreground": "#d8dafe"
       }
     },
     {
@@ -902,7 +909,7 @@
       "italic": true
     },
     "variable.readonly": {
-      "foreground": "#b0b7ff",
+      "foreground": "#d8dafe",
       "bold": false
     },
     "property.readonly": {

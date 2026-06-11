@@ -119,11 +119,11 @@ describe("detail pass — vscode", () => {
     expect(ruleFor(theme, "keyword.operator.expression")!.settings.foreground).toBe(p.accents.red);
     expect(ruleFor(theme, "keyword.operator")!.settings.foreground).toBe(p.accents.cyan);
   });
-  it("semantic: parameter italic; decorator rides the builtin slot; readonly is constant-purple", () => {
+  it("semantic: parameter italic; decorator rides the builtin slot; readonly var is the whisper tier", () => {
     const p = buildPalette(cs);
     expect(themeCS.semanticTokenColors["parameter"]!.italic).toBe(true);
     expect(themeCS.semanticTokenColors["decorator"]!.foreground).toBe(p.builtin); // v2: builtin slot (warm, not magenta)
-    expect(themeCS.semanticTokenColors["variable.readonly"]!.foreground).toBe(p.accents.purple);
+    expect(themeCS.semanticTokenColors["variable.readonly"]!.foreground).toBe(p.fgConst); // v2.1.1: const-declared names leave plum
     expect(themeCS.semanticTokenColors["interface"]!.italic).toBe(true);
   });
   it("markdown link underlines via fontStyle", () => {
@@ -255,5 +255,22 @@ describe("v2.1 — keyword stratification (vscode)", () => {
       expect(r!.settings.foreground).toBe(p.accents.red);
       expect(r!.settings.fontStyle).toBe("bold");
     }
+  });
+});
+
+describe("v2.1.1 — const-variable whisper tier (vscode)", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const t = buildVscode(dusk, { bold: true });
+  const p = buildPalette(dusk);
+  const rule = (sel: string) => t.tokenColors.find((r) => r.scope.includes(sel));
+
+  it("variable.other.constant leaves plum for fgConst; constant.other stays plum", () => {
+    expect(rule("variable.other.constant")!.settings.foreground).toBe(p.fgConst);
+    expect(rule("constant.other")!.settings.foreground).toBe(p.accents.purple);
+  });
+  it("semantic variable.readonly rides fgConst; property.readonly and enumMember stay plum", () => {
+    expect(t.semanticTokenColors["variable.readonly"]!.foreground).toBe(p.fgConst);
+    expect(t.semanticTokenColors["property.readonly"]!.foreground).toBe(p.accents.purple);
+    expect(t.semanticTokenColors["enumMember"]!.foreground).toBe(p.accents.purple);
   });
 });

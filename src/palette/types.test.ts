@@ -180,3 +180,20 @@ describe("v2 stages & ladder", () => {
     }
   });
 });
+
+describe("v2.1.1 — const-variable whisper tier", () => {
+  const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
+  it("fgConst is the 35% fgVar→purple blend (screen 24 A); dusk pin holds", () => {
+    const p = get("dusk");
+    expect(p.fgConst).toBe(blend(p.fgVar, p.accents.purple, 0.35));
+    expect(p.fgConst).toBe("#cfc7f5");
+  });
+  it("fgConst clears the variable floor and the pink gate on every variant", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 7 : 4.5;
+      expect(contrastRatio(p.fgConst, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
+      expect(isPinkish(p.fgConst), v.name + " fgConst pinkish").toBe(false);
+    }
+  });
+});

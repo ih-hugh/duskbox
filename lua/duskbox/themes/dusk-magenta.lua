@@ -193,7 +193,7 @@ return {
   ["@lsp.type.clsParameter"] = { fg = "#f99a4e", italic = true },
   ["@lsp.type.interface"] = { fg = "#f68c36", italic = true },
   ["@lsp.type.typeParameter"] = { fg = "#f68c36", italic = true },
-  ["@lsp.typemod.variable.readonly"] = { fg = "#b19ee3" },
+  ["@lsp.typemod.variable.readonly"] = { fg = "#cfc7f5" },
   ["@lsp.typemod.property.readonly"] = { fg = "#b19ee3" },
   ["@lsp.typemod.function.defaultLibrary"] = { fg = "#f99a4e", italic = true },
   ["@lsp.typemod.variable.defaultLibrary"] = { fg = "#f99a4e", italic = true },

@@ -1,6 +1,6 @@
 import type { AccentName, Palette } from "./palette/types";
 
-export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var" | "moduleKw";
+export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var" | "constVar" | "moduleKw";
 export interface TokenStyle {
   color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean;
   underline?: boolean; strikethrough?: boolean;
@@ -23,6 +23,7 @@ export function slot(p: Palette, c: ColorSlot): string {
   if (c === "builtin") return p.builtin;
   if (c === "param") return p.fgParam;
   if (c === "var") return p.fgVar;
+  if (c === "constVar") return p.fgConst;
   if (c === "moduleKw") return p.moduleKw;
   if (c in HEADING_SLOT) return p.headings[HEADING_SLOT[c as keyof typeof HEADING_SLOT]];
   return p.accents[c as AccentName];
@@ -109,6 +110,7 @@ export const TOKENS = {
   moduleKw:     { color: "moduleKw" as ColorSlot, bold: true }, // import/export/from/as — walk from red toward the variant anchor
   // --- v2.1: keyword stratification ---
   keywordModifier: { color: "purple" as ColorSlot, italic: true }, // async/await/const/let/static/… — adjectives, not verbs (screen 21 A)
+  constVar:       { color: "constVar" as ColorSlot }, // const-declared NAMES: whisper tier, plain — the plum-italic keyword carries const-ness (screen 24 A)
   // C-family declarator glyphs (* & [] scoped storage.modifier.* by the grammars) — operator-voice
   // cyan. bold+plain ⇒ an EXPLICIT fontStyle in both build modes: vscode-textmate sorts theme rules
   // by scope at trie insert, so an unset fontStyle on a storage.modifier.* rule clones the italic.

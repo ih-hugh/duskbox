@@ -25,7 +25,9 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   escape: ["constant.character.escape"],
   number: ["constant.numeric"],
   boolean: ["constant.language.boolean"],
-  constant: ["variable.other.constant", "constant.other"],
+  // const-declared NAMES (whisper tier) split from true constants: literal/other constants stay plum.
+  constant: ["constant.other"],
+  constVar: ["variable.other.constant"],
   property: ["variable.other.property", "support.variable.property", "meta.object-literal.key"],
   variable: ["variable", "variable.other.readwrite"],
   preproc: ["meta.preprocessor"], // legacy-only; import/export moved to keyword (bold red, approved hybrid render)
@@ -122,7 +124,7 @@ export const SEMANTIC_ROLE: Record<string, Role> = {
   // Pylance does -> decorator role (plain builtin warm — explicit syntax, no italic).
   decorator: "decorator", annotation: "decorator",
   selfParameter: "builtin", clsParameter: "builtin",
-  "variable.readonly": "constant", "property.readonly": "constant",
+  "variable.readonly": "constVar", "property.readonly": "constant",
   "function.defaultLibrary": "builtin", "method.defaultLibrary": "builtin",
   "class.defaultLibrary": "builtin", "variable.defaultLibrary": "builtin",
   regexp: "string", event: "property",

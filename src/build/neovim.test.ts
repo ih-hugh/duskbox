@@ -140,10 +140,10 @@ describe("detail pass — neovim", () => {
     expect(hl["@operator"]!.fg).toBe(p.accents.cyan);
     expect(hl["@keyword.operator"]!.fg).toBe(p.accents.red);
   });
-  it("@lsp mirrors: parameter italic fgParam, decorator/defaultLibrary builtin, readonly purple, interface italic", () => {
+  it("@lsp mirrors: parameter italic fgParam, decorator/defaultLibrary builtin, readonly var whisper, interface italic", () => {
     expect(hl["@lsp.type.parameter"]).toMatchObject({ fg: p.fgParam, italic: true });
     expect(hl["@lsp.type.decorator"]!.fg).toBe(p.builtin);
-    expect(hl["@lsp.typemod.variable.readonly"]!.fg).toBe(p.accents.purple);
+    expect(hl["@lsp.typemod.variable.readonly"]!.fg).toBe(p.fgConst); // v2.1.1: const-declared names leave plum
     expect(hl["@lsp.type.interface"]).toMatchObject({ fg: p.accents.orange, italic: true });
     // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> builtin role, italic)
     for (const g of ["function", "variable", "method", "class"])
@@ -285,5 +285,17 @@ describe("v2.1 — keyword stratification (nvim)", () => {
       cwd: resolve(import.meta.dirname, "../.."), encoding: "utf8", timeout: 30_000,
     });
     expect(r.stdout + r.stderr).toContain("PARSE_OK");
+  });
+});
+
+describe("v2.1.1 — const-variable whisper tier (nvim)", () => {
+  const dusk = VARIANTS.find((v) => v.name === "dusk")!;
+  const hl = buildNeovim(dusk, { bold: true });
+  const p = buildPalette(dusk);
+
+  it("@lsp.typemod.variable.readonly rides fgConst; @constant and property.readonly stay plum", () => {
+    expect(hl["@lsp.typemod.variable.readonly"]).toEqual({ fg: p.fgConst });
+    expect(hl["@lsp.typemod.property.readonly"]).toEqual({ fg: p.accents.purple });
+    expect(hl["@constant"]).toMatchObject({ fg: p.accents.purple });
   });
 });

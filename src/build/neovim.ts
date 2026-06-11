@@ -120,7 +120,7 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@lsp.type.clsParameter"] = { fg: p.builtin, italic: true };
   hl["@lsp.type.interface"] = { fg: p.accents.orange, italic: true };
   hl["@lsp.type.typeParameter"] = { fg: p.accents.orange, italic: true };
-  hl["@lsp.typemod.variable.readonly"] = { fg: p.accents.purple };
+  hl["@lsp.typemod.variable.readonly"] = { fg: p.fgConst }; // const-declared names: whisper tier (v2.1.1, screen 24 A)
   hl["@lsp.typemod.property.readonly"] = { fg: p.accents.purple };
   hl["@lsp.typemod.function.defaultLibrary"] = { fg: p.builtin, italic: true }; // builtin role parity with VS Code (italic)
   hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.builtin, italic: true };

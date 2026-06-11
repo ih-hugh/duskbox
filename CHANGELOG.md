@@ -3,6 +3,18 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [2.1.1] — 2026-06-11
+
+### Fixed
+- **const-declared variables no longer impersonate the `const` keyword.** Both engines mark
+  const-declared names as constants (TextMate `variable.other.constant`, LSP
+  `variable.readonly`) — full plum, which collided with v2.1.0's plum-italic `const`. They now
+  ride a **whisper tier**: the lavender variable color pulled 35% toward plum (`#cfc7f5` on
+  dusk) — white-with-a-const-cast, distinct from the keyword AND from `let`-variables.
+  `true/false/null`, enum members and readonly properties keep full plum.
+
+[2.1.1]: https://github.com/ih-hugh/duskbox/releases/tag/v2.1.1
+
 ## [2.1.0] — 2026-06-11
 
 ### Changed — keyword stratification

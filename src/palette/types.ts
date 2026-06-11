@@ -31,6 +31,9 @@ export interface Palette {
   fg0: string; fg1: string; fg2: string;              // text, dim, muted/comment
   fgVar: string;               // bright-LAVENDER variable tier (H288): locals pop and carry the lavender identity
   fgParam: string;             // moonlit-parameter tier: moonlit cyan blend for parameter slots
+  fgConst: string;             // const-variable whisper tier (v2.1.1): lavender pulled 35% toward plum —
+                               // const-declared NAMES read as white-with-a-const-cast, distinct from the
+                               // plum-italic `const` keyword AND from plain lavender let-variables
   accents: Record<AccentName, string>;
   headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
   fgPunct: string;                            // bg-material punctuation: carved from the stage (mood hue, lifted L), floor-looped
@@ -105,6 +108,7 @@ export function buildPalette(v: VariantConfig): Palette {
   const builtin = oklchToHex(bL, bC, (v.hues?.orange ?? TIER_HUES.orange) + 2);
 
   const fgParam = blend(fg0, accents.cyan, 0.30); // moonlit parameters
+  const fgConst = blend(fgVar, accents.purple, 0.35); // const-variable whisper (v2.1.1, screen 24 A)
 
   // Heading ladder: -25° OKLCH hue walk from the variant's anchor (signature ?? blue), at the
   // variant's equiluminant accent band — harmonious on every variant by construction.
@@ -148,7 +152,7 @@ export function buildPalette(v: VariantConfig): Palette {
 
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
-    bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam,
+    bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam, fgConst,
     accents, headings, fgPunct,
     builtin, moduleKw,
     signature,
