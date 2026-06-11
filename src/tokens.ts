@@ -105,6 +105,7 @@ export const TOKENS = {
   typeInterface:{ color: "orange" as ColorSlot, italic: true }, // interface/typeParameter vs class(bold)
   typeKeyword:  { color: "orange" as ColorSlot, italic: true }, // `type` in import type / type X = (deeper than storage.type)
   moduleKw:     { color: "moduleKw" as ColorSlot, bold: true }, // import/export/from/as — walk from red toward the variant anchor
+  keywordModifier: { color: "purple" as ColorSlot, italic: true }, // async/await/const/let/static/… — adjectives, not verbs (screen 21 A)
 } satisfies Record<string, TokenStyle>;
 
 export type Role = keyof typeof TOKENS;
