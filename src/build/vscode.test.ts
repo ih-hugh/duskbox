@@ -233,4 +233,20 @@ describe("v2.1 — keyword stratification (vscode)", () => {
     expect(rule("storage.type.type")!.settings.foreground).toBe(p.accents.orange);
     expect(rule("keyword.control.import")!.settings.foreground).toBe(p.moduleKw);
   });
+  it("cross-language guards: non-modifier storage.modifier.* scopes stay out of the modifier class", () => {
+    // vscode-textmate sorts rules by scope at trie insert, so storage.modifier (italic) is ALWAYS
+    // the parent these deeper rules clone from — every guard must carry a SET fontStyle.
+    const imp = rule("storage.modifier.import")!;
+    expect(imp.settings.foreground).toBe(p.accents.red); // Java/Groovy dotted paths — exact v2.0 render
+    expect(imp.settings.fontStyle).toBe("bold");
+    const glyph = rule("storage.modifier.pointer")!;
+    expect(glyph.scope).toContain("storage.modifier.reference");
+    expect(glyph.scope).toContain("storage.modifier.array.bracket.square");
+    expect(glyph.settings.foreground).toBe(p.accents.cyan); // declarator glyphs ride the operator voice
+    expect(glyph.settings.fontStyle).toBe("bold"); // matches keyword.operator's rendered weight; never italic
+    const attr = rule("storage.modifier.attribute")!;
+    expect(attr.settings.foreground).toBe(p.builtin); // Swift @attribute — decorator home, warm
+    expect(attr.settings.fontStyle).toBe(""); // EXPLICIT none — unset would clone the modifier italic
+    expect(rule("meta.class.identifier storage.modifier")!.settings.foreground).toBe(p.accents.red); // Java `class`
+  });
 });

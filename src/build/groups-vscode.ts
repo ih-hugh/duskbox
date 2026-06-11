@@ -1,7 +1,15 @@
 import type { Role } from "../tokens";
 
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
-  keyword: ["keyword", "keyword.control", "storage.type"],
+  // storage.modifier.import/.package: Java/Groovy scope the ENTIRE dotted import/package path —
+  // a path is not a modifier; keep the exact v2.0 rendering (keyword red bold). The descendant
+  // guard re-reddens Java/Groovy `class/interface/enum/record` (grammar quirk: scoped
+  // storage.modifier.java, the SAME scope as real modifiers — only the meta.class.identifier
+  // parent separates them; lab-verified against the shipped Java grammar).
+  keyword: [
+    "keyword", "keyword.control", "storage.type",
+    "storage.modifier.import", "storage.modifier.package", "meta.class.identifier storage.modifier",
+  ],
   operator: ["keyword.operator"],
   function: ["entity.name.function"],
   // descendant selector wins at call sites: the identifier is entity.name.function NESTED INSIDE
@@ -82,12 +90,21 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
   ],
   typeKeyword: ["keyword.control.type", "storage.type.type"],
   moduleKw: ["keyword.control.import", "keyword.control.export", "keyword.control.from", "keyword.control.as"],
+  // Swift @attributes are scoped storage.modifier.attribute.swift — duskbox's decorator role is
+  // the designed home for attribute syntax (warm builtin slot, non-italic via plain).
+  decorator: ["storage.modifier.attribute"],
+  // C-family declarator glyphs (* & [] in declarations) — operator-voice cyan, explicit fontStyle.
+  declGlyph: ["storage.modifier.pointer", "storage.modifier.reference", "storage.modifier.array.bracket.square"],
   // v2.1 modifier class — verified against the real TS/Python grammars (see spec addendum):
-  // bare storage.type.{ts,tsx,js} = const/let/var; storage.modifier = static/readonly/abstract/
+  // bare storage.type.{ts,tsx,js} covers const/let/var (and TS 5.2 using); storage.modifier = static/readonly/abstract/
   // declare/override/extends/implements/async; storage.type.function.async = Python `async def`.
   // Deeper grammar scopes (storage.type.function.ts, .class, .enum, .type) never match these
   // suffixed selectors, so function/class/enum/type keep their classes by construction.
   // (`await` shares keyword.control.flow with `return` — not separable here; stays command red.)
+  // Deeper guards keep non-modifiers out: import/package paths + Java class-keywords stay keyword-
+  // red, pointer/ref/[] glyphs ride declGlyph cyan, Swift attributes ride decorator. Every guard
+  // carries a SET fontStyle: vscode-textmate sorts rules by scope at trie insert, so this rule is
+  // ALWAYS the parent a fontStyle-less storage.modifier.* rule would clone its italic from.
   keywordModifier: ["storage.modifier", "storage.type.ts", "storage.type.tsx", "storage.type.js", "storage.type.function.async"],
 };
 

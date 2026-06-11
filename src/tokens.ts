@@ -48,7 +48,9 @@ export const TOKENS = {
   typeBuiltin:  { color: "orange" as ColorSlot, bold: true },
   parameter:    { color: "param" as ColorSlot, italic: true },
   builtin:      { color: "builtin" as ColorSlot, italic: true },
-  decorator:    { color: "builtin" as ColorSlot },              // explicit syntax, not implicit context — no italic
+  // explicit syntax, not implicit context — no italic. plain ⇒ vscode emits fontStyle "" so the
+  // storage.modifier.attribute rule can't clone keywordModifier's italic at sorted trie insert.
+  decorator:    { color: "builtin" as ColorSlot, plain: true },
   preproc:      { color: "red" as ColorSlot },                  // legacy-only surface (PreProc/Macro); modern import/export ride keyword (bold red)
   string:       { color: "green" as ColorSlot },
   escape:       { color: "cyan" as ColorSlot },
@@ -107,6 +109,10 @@ export const TOKENS = {
   moduleKw:     { color: "moduleKw" as ColorSlot, bold: true }, // import/export/from/as — walk from red toward the variant anchor
   // --- v2.1: keyword stratification ---
   keywordModifier: { color: "purple" as ColorSlot, italic: true }, // async/await/const/let/static/… — adjectives, not verbs (screen 21 A)
+  // C-family declarator glyphs (* & [] scoped storage.modifier.* by the grammars) — operator-voice
+  // cyan. bold+plain ⇒ an EXPLICIT fontStyle in both build modes: vscode-textmate sorts theme rules
+  // by scope at trie insert, so an unset fontStyle on a storage.modifier.* rule clones the italic.
+  declGlyph:    { color: "cyan" as ColorSlot, bold: true, plain: true },
 } satisfies Record<string, TokenStyle>;
 
 export type Role = keyof typeof TOKENS;
