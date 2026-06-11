@@ -3,6 +3,21 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [2.2.0] — 2026-06-11
+
+### Changed — cyber & high-contrast selection, dashed cyber current line
+- **Selection comes alive on the cyber family and HC variants**: instead of a flat slate block
+  that deadened the neon, selections now tint in each variant's identity hue (cyber deep teal,
+  azure sea-blue, neon-purple violet, magenta orchid, salmon ember; night-hc teal, day-hc sky).
+  All other variants are byte-identical — their selection was already right.
+- **Cyber current line gets a neon wireframe**: a real dashed underline in Neovim
+  (`underdashed` + the variant's neon), and a whisper-alpha solid border in VS Code (its editor
+  border style is fixed solid — engine limit).
+- Selection-tinted chrome (terminal/Ghostty selection, whitespace dots, menu borders) follows
+  the new neon selection on those variants by design.
+
+[2.2.0]: https://github.com/ih-hugh/duskbox/releases/tag/v2.2.0
+
 ## [2.1.1] — 2026-06-11
 
 ### Fixed
