@@ -91,13 +91,21 @@ describe("fgPunct", () => {
 
 describe("v2 stages & ladder", () => {
   const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
-  it("dusk stage is the locked near-neutral", () => {
-    expect(get("dusk").bg0).toBe(oklchToHex(0.250, 0.014, 270));
+  it("gallery-approved A2 stages: moody fixtures hold (chroma ×1.8, half-lean)", () => {
+    expect(get("dusk").bg0).toBe("#1f202e");      // indigo lean 290
+    expect(get("storm").bg0).toBe("#262e3b");     // slate lean 250
+    expect(get("midnight").bg0).toBe("#0c101c");  // deep lean 265
+    expect(get("dawn").bg0).toBe("#faf2e9");      // warm cream lean 60
+    expect(get("dusk-azure").bg0).toBe("#19222e");   // lean = signature 235
+    expect(get("dusk-salmon").bg0).toBe("#291d27");  // lean = signature 32
+    expect(get("cyber-salmon").bg0).toBe("#190f16"); // signature lean, bgHex ignored
   });
-  it("signature children share their base's stage exactly", () => {
-    expect(get("dusk-azure").bg0).toBe(get("dusk").bg0);
-    expect(get("cyber-salmon").bg0).toBe(get("cyber").bg0);
-    expect(get("cyber").bg0).toBe("#13131c");
+  it("signature children LEAN toward their signature (stages differ from base); non-leaned stay pinned", () => {
+    expect(get("dusk-azure").bg0).not.toBe(get("dusk").bg0);
+    expect(get("cyber-salmon").bg0).not.toBe(get("cyber").bg0);
+    expect(get("cyber").bg0).toBe("#13131c");  // pinned hex, no lean
+    expect(get("day").bg0).toBe("#f9fafc");    // neutral, no lean
+    expect(get("day-hc").bg0).toBe("#ffffff");
   });
   it("bg3 signature tint is perceptible (ΔE-ish gate, not just byte-inequality)", () => {
     const dusk = get("dusk");

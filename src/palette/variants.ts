@@ -7,23 +7,23 @@ import type { VariantConfig } from "./types";
 export const VARIANTS: VariantConfig[] = [
   // --- light ---
   { name: "dawn", kind: "light", uiContrast: "normal",
-    bg: [0.965, 0.008, 85], fg: [0.32, 0.02, 265], accentL: 0.52, accentC: 0.13 },
+    bg: [0.965, 0.008, 85], fg: [0.32, 0.02, 265], accentL: 0.52, accentC: 0.13, bgLean: 60 },
   { name: "day", kind: "light", uiContrast: "normal",
     bg: [0.985, 0.003, 250], fg: [0.30, 0.02, 265], accentL: 0.52, accentC: 0.14 },
   { name: "day-hc", kind: "light", uiContrast: "high",
     bg: [1.0, 0.0, 0], fg: [0.16, 0.01, 265], accentL: 0.44, accentC: 0.18 },
   // --- dark ---
   { name: "storm", kind: "dark", uiContrast: "normal",
-    bg: [0.30, 0.014, 270], fg: [0.85, 0.028, 265], accentL: 0.80, accentC: 0.085,
+    bg: [0.30, 0.014, 270], fg: [0.85, 0.028, 265], accentL: 0.80, accentC: 0.085, bgLean: 250,
     accentLC: { red: [0.72, 0.20] } }, // raised from archetype 0.66: storm's lighter bg (L=0.30) needs it for the 4:1
     // floor + pill contrast; authored [0.72,0.20] → effective [0.721,0.172]; margin over orange C 0.012 (tier-1 holds)
   { name: "dusk", kind: "dark", uiContrast: "normal",
-    bg: [0.250, 0.014, 270], fg: [0.88, 0.030, 265], accentL: 0.78, accentC: 0.12 },
+    bg: [0.250, 0.014, 270], fg: [0.88, 0.030, 265], accentL: 0.78, accentC: 0.12, bgLean: 290 },
   { name: "midnight", kind: "dark", uiContrast: "normal",
-    bg: [0.175, 0.014, 270], fg: [0.82, 0.028, 265], accentL: 0.76, accentC: 0.105 },
+    bg: [0.175, 0.014, 270], fg: [0.82, 0.028, 265], accentL: 0.76, accentC: 0.105, bgLean: 265 },
   // --- high-contrast dark (bg lifted off pure-black; bright text + accents floored >=7:1) ---
   { name: "night-hc", kind: "dark", uiContrast: "high",
-    bg: [0.22, 0.012, 275], fg: [0.93, 0.016, 262], accentL: 0.84, accentC: 0.15,
+    bg: [0.22, 0.012, 275], fg: [0.93, 0.016, 262], accentL: 0.84, accentC: 0.15, bgLean: 265,
     accentLC: { green: [0.84, 0.15] } }, // capped from archetype 0.18: hc-dark red clamps to effective C 0.156,
     // so green at 0.15 keeps red most-chromatic (tier-1); red at [0.70,0.19] would land 5.98:1 — under the 7:1 floor
   // --- signature neon (portfolio), high-contrast ---
@@ -48,8 +48,9 @@ const SIGNATURES: { slug: string; hue: number }[] = [
 const _duskBase = VARIANTS.find((v) => v.name === "dusk")!;
 const _cyberBase = VARIANTS.find((v) => v.name === "cyber")!;
 for (const s of SIGNATURES) {
-  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue });
-  VARIANTS.push({ ..._cyberBase, name: `cyber-${s.slug}`, signature: s.hue });
+  // bgLean reset: children derive their mood from the SIGNATURE, not the base's lean.
+  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue, bgLean: undefined });
+  VARIANTS.push({ ..._cyberBase, name: `cyber-${s.slug}`, signature: s.hue, bgLean: undefined });
 }
 
 export const VARIANT_NAMES = VARIANTS.map((v) => v.name);

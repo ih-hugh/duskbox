@@ -20,6 +20,7 @@ export interface VariantConfig {
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
   accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides (cyber continuity)
   signature?: number;          // signature hue°: chrome-only hex for cursor/UI accent/bg3 tint; syntax palette is identical to base
+  bgLean?: number;             // mood hue° for the bg ramp (A2 atmosphere: chroma ×1.8, half-lean); falls back to `signature`
 }
 
 export interface Palette {
@@ -37,18 +38,30 @@ export interface Palette {
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
+/** Circular midpoint between two hues, going the short way around the wheel. */
+function halfLean(from: number, to: number): number {
+  const d = ((to - from + 540) % 360) - 180;
+  return ((from + d / 2) % 360 + 360) % 360;
+}
+
 export function buildPalette(v: VariantConfig): Palette {
   const dir = v.kind === "dark" ? 1 : -1; // dark: surfaces step lighter; light: step darker
   const [bgL, bgC, bgH] = v.bg;
   const [fgL, fgC, fgH] = v.fg;
   const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
-  // v2 near-neutral stages: backgrounds are authored directly from the variant's bg tuple.
-  // bgHex provides an exact override (e.g. cyber's #13131c); signature children inherit it.
-  const bg0 = v.bgHex ?? oklchToHex(clamp01(bgL), bgC, bgH);
-  const bg1 = oklchToHex(clamp01(bgL - 0.025), bgC, bgH);        // panel always recedes (darker)
-  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), bgC, bgH);   // cursorline: lighter(dark)/darker(light)
-  // Signature bg3 floors its chroma so the tint stays perceptible (ΔE ≥ ~0.012) on near-neutral stages.
-  const bg3C = v.signature !== undefined ? Math.max(bgC * 1.5, 0.030) : bgC * 1.5;
+  // v2 atmosphere (gallery-tuned "A2"): the bg ramp leans toward `bgLean ?? signature` at chroma
+  // ×1.8, hue at the circular midpoint — strong enough to differentiate the family at a glance,
+  // calm enough not to fight the warm ember tier-1 (floors re-gated below in the test suite).
+  // A leaned variant ignores bgHex (cyber's children compute their mood; plain cyber keeps its
+  // pinned near-black identity). Same lightness, so fg contrast is essentially preserved.
+  const lean = v.bgLean ?? v.signature;
+  const moodC = lean !== undefined ? bgC * 1.8 : bgC;
+  const moodH = lean !== undefined ? halfLean(bgH, lean) : bgH;
+  const bg0 = lean === undefined && v.bgHex ? v.bgHex : oklchToHex(clamp01(bgL), moodC, moodH);
+  const bg1 = oklchToHex(clamp01(bgL - 0.025), moodC, moodH);        // panel always recedes (darker)
+  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), moodC, moodH);   // cursorline: lighter(dark)/darker(light)
+  // Signature bg3 floors its chroma so the tint stays perceptible (ΔE ≥ ~0.012) even on quiet stages.
+  const bg3C = v.signature !== undefined ? Math.max(moodC * 1.5, 0.030) : moodC * 1.5;
   const bg3 = oklchToHex(clamp01(bgL + dir * 0.08), bg3C, v.signature ?? 255); // selection (chrome: cool or signature-tinted)
   // High-contrast variants keep secondary text much closer to the main fg so
   // comments / dim text stay legible against the near-black (or near-white) bg.
