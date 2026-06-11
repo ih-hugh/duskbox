@@ -1,7 +1,7 @@
 import type { Role } from "../tokens";
 
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
-  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier", "keyword.control.import", "keyword.control.export"],
+  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier"], // bare keyword.control prefix already covers .import/.export
   operator: ["keyword.operator"],
   function: ["entity.name.function"],
   // descendant selector wins at call sites: the identifier is entity.name.function NESTED INSIDE

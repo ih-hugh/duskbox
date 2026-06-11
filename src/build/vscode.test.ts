@@ -149,10 +149,10 @@ describe("v2 — vscode", () => {
     expect(ruleOf("meta.function-call").settings.fontStyle ?? "").not.toContain("bold");
     expect(ruleOf("entity.name.function").settings.fontStyle).toContain("bold");
   });
-  it("call-site descendant guard present (nested entity.name.function would otherwise win bold)", () => {
+  it("call-site descendant guard carries an EXPLICIT empty fontStyle (absence inherits bold at trie insert)", () => {
     const selectors = t.tokenColors.flatMap((r) => r.scope);
     expect(selectors).toContain("meta.function-call entity.name.function");
-    expect(ruleOf("meta.function-call entity.name.function").settings.fontStyle ?? "").not.toContain("bold");
+    expect(ruleOf("meta.function-call entity.name.function").settings.fontStyle).toBe("");
   });
   it("semantic function/method carry explicit bold:false (no TextMate bold fall-through)", () => {
     expect(t.semanticTokenColors["function"]!.bold).toBe(false);

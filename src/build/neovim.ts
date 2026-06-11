@@ -122,10 +122,10 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   hl["@lsp.type.typeParameter"] = { fg: p.accents.orange, italic: true };
   hl["@lsp.typemod.variable.readonly"] = { fg: p.accents.purple };
   hl["@lsp.typemod.property.readonly"] = { fg: p.accents.purple };
-  hl["@lsp.typemod.function.defaultLibrary"] = { fg: p.builtin };
-  hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.builtin };
-  hl["@lsp.typemod.method.defaultLibrary"] = { fg: p.builtin };
-  hl["@lsp.typemod.class.defaultLibrary"] = { fg: p.builtin };
+  hl["@lsp.typemod.function.defaultLibrary"] = { fg: p.builtin, italic: true }; // builtin role parity with VS Code (italic)
+  hl["@lsp.typemod.variable.defaultLibrary"] = { fg: p.builtin, italic: true };
+  hl["@lsp.typemod.method.defaultLibrary"] = { fg: p.builtin, italic: true };
+  hl["@lsp.typemod.class.defaultLibrary"] = { fg: p.builtin, italic: true };
 
   // Soul pass: codetag badges — tinted pills (render bold+italic — comment italics merge in) so intent
   // pops out of comment-gray. (VS Code's stock grammars don't scope codetags; documented nvim-only delight.)

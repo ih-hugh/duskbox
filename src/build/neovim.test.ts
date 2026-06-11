@@ -142,9 +142,9 @@ describe("detail pass — neovim", () => {
     expect(hl["@lsp.type.decorator"]!.fg).toBe(p.builtin);
     expect(hl["@lsp.typemod.variable.readonly"]!.fg).toBe(p.accents.purple);
     expect(hl["@lsp.type.interface"]).toMatchObject({ fg: p.accents.orange, italic: true });
-    // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> builtin slot)
-    expect(hl["@lsp.typemod.method.defaultLibrary"]!.fg).toBe(p.builtin);
-    expect(hl["@lsp.typemod.class.defaultLibrary"]!.fg).toBe(p.builtin);
+    // all FOUR defaultLibrary combos mirror VS Code (function/variable/method/class -> builtin role, italic)
+    for (const g of ["function", "variable", "method", "class"])
+      expect(hl[`@lsp.typemod.${g}.defaultLibrary`], g).toMatchObject({ fg: p.builtin, italic: true });
   });
 });
 

@@ -169,7 +169,11 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
       st.italic ? "italic" : "", st.bold && opts.bold ? "bold" : "",
       st.underline ? "underline" : "", st.strikethrough ? "strikethrough" : "",
     ].filter(Boolean).join(" ");
-    tokenColors.push({ scope: scopes, settings: { foreground, ...(fontStyle ? { fontStyle } : {}) } });
+    // plain roles emit fontStyle:"" explicitly — an UNSET fontStyle on a parent-scoped rule inherits
+    // the main rule's style at theme-trie insert time (vscode-textmate _doInsertHere), re-bolding
+    // call sites. Do NOT blanket-emit "" elsewhere: explicit-none resets style nesting (it would
+    // un-bold inline code inside bold markdown).
+    tokenColors.push({ scope: scopes, settings: { foreground, ...(fontStyle ? { fontStyle } : st.plain ? { fontStyle: "" } : {}) } });
   });
 
   const semanticTokenColors: VsTheme["semanticTokenColors"] = {};

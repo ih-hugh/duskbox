@@ -4,6 +4,10 @@ export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" 
 export interface TokenStyle {
   color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean;
   underline?: boolean; strikethrough?: boolean;
+  /** Emit an explicit empty fontStyle — resets inherited styling in vscode's theme trie
+   *  (a parent-scoped rule with UNSET fontStyle inherits the main rule's at insert time).
+   *  Use ONLY where a deeper default would otherwise bleed in; no-op for nvim (attrs are absolute). */
+  plain?: boolean;
 }
 
 // Literal lookup (not arithmetic on the slot name) so adding an h5 slot without a 5th
@@ -34,9 +38,10 @@ export const TOKENS = {
   exception:    { color: "red" as ColorSlot, bold: true },
   keywordReturn:{ color: "red" as ColorSlot, bold: true },
   function:     { color: "yellow" as ColorSlot, bold: true },
-  functionCall: { color: "yellow" as ColorSlot },
+  functionCall: { color: "yellow" as ColorSlot, plain: true },
   method:       { color: "yellow" as ColorSlot, bold: true },
-  methodCall:   { color: "yellow" as ColorSlot },
+  methodCall:   { color: "yellow" as ColorSlot, plain: true },
+  // ctor: modern TS TextMate emits ctor calls as function-calls; semantic `class` covers trusted-path ctors.
   ctor:         { color: "builtin" as ColorSlot, bold: true },
   type:         { color: "orange" as ColorSlot, bold: true },
   typeBuiltin:  { color: "orange" as ColorSlot, bold: true },
