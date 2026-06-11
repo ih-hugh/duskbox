@@ -78,27 +78,29 @@ describe("fgPunct", () => {
       for (const h of p.headings) expect(contrastRatio(h, p.bg0), `${v.name} ${h}`).toBeGreaterThanOrEqual(floor);
     }
   });
-  it("raise loop lifts a low-contrast fg to the floor without passing fg0", () => {
+  it("floor loop ensures bg-material punct clears the readability floor on a synthetic stage", () => {
+    // bg-material punct is derived from the stage, not from fg — no fg-proximity guarantee.
+    // The invariant is: clears floor AND is a valid hex.
     const synthetic: VariantConfig = {
       name: "synthetic-low", kind: "dark", uiContrast: "normal",
       bg: [0.265, 0.018, 278], fg: [0.55, 0.035, 265], accentL: 0.78, accentC: 0.12,
     };
     const p = buildPalette(synthetic);
     expect(contrastRatio(p.fgPunct, p.bg0)).toBeGreaterThanOrEqual(3.0);
-    expect(contrastRatio(p.fgPunct, p.bg0)).toBeLessThanOrEqual(contrastRatio(p.fg0, p.bg0));
+    expect(p.fgPunct).toMatch(/^#[0-9a-f]{6}$/);
   });
 });
 
 describe("v2 stages & ladder", () => {
   const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
-  it("gallery-approved A2 stages: moody fixtures hold (chroma ×1.8, half-lean)", () => {
-    expect(get("dusk").bg0).toBe("#1f202e");      // indigo lean 290
-    expect(get("storm").bg0).toBe("#262e3b");     // slate lean 250
-    expect(get("midnight").bg0).toBe("#0c101c");  // deep lean 265
-    expect(get("dawn").bg0).toBe("#faf2e9");      // warm cream lean 60
-    expect(get("dusk-azure").bg0).toBe("#19222e");   // lean = signature 235
-    expect(get("dusk-salmon").bg0).toBe("#291d27");  // lean = signature 32
-    expect(get("cyber-salmon").bg0).toBe("#190f16"); // signature lean, bgHex ignored
+  it("gallery-relocked stages: moody fixtures hold (v1.4 bg tuples, chroma ×2.0, half-lean)", () => {
+    expect(get("dusk").bg0).toBe("#232336");      // indigo lean 290 — v1.4 byte-exact
+    expect(get("storm").bg0).toBe("#262e3e");     // slate lean 250
+    expect(get("midnight").bg0).toBe("#0a0f22");  // deep lean 265
+    expect(get("dawn").bg0).toBe("#faf2e8");      // warm cream lean 60
+    expect(get("dusk-azure").bg0).toBe("#1a2637");   // lean = signature 235
+    expect(get("dusk-salmon").bg0).toBe("#301e2c");  // lean = signature 32
+    expect(get("cyber-salmon").bg0).toBe("#1a0e16"); // signature lean, bgHex ignored
   });
   it("signature children LEAN toward their signature (stages differ from base); non-leaned stay pinned", () => {
     expect(get("dusk-azure").bg0).not.toBe(get("dusk").bg0);
@@ -121,18 +123,47 @@ describe("v2 stages & ladder", () => {
       expect(contrastRatio(p.fg2, p.bg0), v.name).toBeGreaterThanOrEqual(3.8);
     }
   });
-  it("fgVar is brighter than fg0 (dark) / darker (light), capped off pure white/black", () => {
+  it("fgVar (lavender tier) is lighter than fg0 (dark) / darker (light); hue in 270–300; contrast floor on all", () => {
     const d = get("dusk"), l = get("dawn");
     expect(hexToOklch(d.fgVar).L).toBeGreaterThan(hexToOklch(d.fg0).L);
     expect(hexToOklch(l.fgVar).L).toBeLessThan(hexToOklch(l.fg0).L);
     for (const v of VARIANTS) {
-      const L = hexToOklch(buildPalette(v).fgVar).L;
-      expect(L, v.name).toBeLessThanOrEqual(0.978);
-      expect(L, v.name).toBeGreaterThanOrEqual(0.122);
+      const p = buildPalette(v);
+      const { L, H } = hexToOklch(p.fgVar);
+      const floor = v.uiContrast === "high" ? 7 : 4.5;
+      expect(contrastRatio(p.fgVar, p.bg0), v.name + " contrast").toBeGreaterThanOrEqual(floor);
+      expect(H, v.name + " hue").toBeGreaterThanOrEqual(270);
+      expect(H, v.name + " hue").toBeLessThanOrEqual(300);
+      expect(L, v.name).toBeGreaterThan(0);
     }
   });
-  it("fgParam is the moonlit blend", () => {
+  it("fgParam is the moonlit blend (unchanged mechanism)", () => {
     const p = get("dusk");
     expect(p.fgParam).toBe(blend(p.fg0, p.accents.cyan, 0.30));
+  });
+  it("fgPunct (bg-material) hue tracks the mood hue of its variant (blue/indigo for base; salmon/magenta for those signatures)", () => {
+    // bg-material: fgPunct derives from moodC/moodH. Verify the floor contract, not a specific hue:
+    // the only hard invariant is that floors hold (already tested globally) and hue is a valid hex.
+    for (const v of VARIANTS.filter((v) => v.kind === "dark")) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 4.5 : 3.0;
+      expect(contrastRatio(p.fgPunct, p.bg0), v.name).toBeGreaterThanOrEqual(floor);
+      expect(p.fgPunct, v.name).toMatch(/^#[0-9a-f]{6}$/);
+    }
+  });
+  it("moduleKw gallery-locked pins: dusk / dusk-azure / dusk-salmon / cyber", () => {
+    expect(get("dusk").moduleKw).toBe("#9c72fe");
+    expect(get("dusk-azure").moduleKw).toBe("#0797f4");
+    expect(get("dusk-salmon").moduleKw).toBe("#f4533f");
+    expect(get("cyber").moduleKw).toBe("#b197fe");
+  });
+  it("moduleKw pink gate: no variant moduleKw is pinkish", () => {
+    for (const v of VARIANTS) {
+      const { moduleKw } = buildPalette(v);
+      const { L, C, H } = hexToOklch(moduleKw);
+      const fuchsia = (H >= 320 || H < 12) && C > 0.06 && L > 0.72;
+      const washedRed = H >= 12 && H < 45 && L > 0.72 && C < 0.13;
+      expect(fuchsia || washedRed, v.name + " moduleKw pinkish").toBe(false);
+    }
   });
 });

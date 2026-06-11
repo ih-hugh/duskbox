@@ -2,7 +2,7 @@ import type { Role } from "../tokens";
 
 // Each syntax role -> the Neovim highlight groups it paints (base + treesitter captures).
 export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
-  keyword: ["Keyword", "@keyword", "@keyword.function", "Statement", "@keyword.import", "@keyword.directive"],
+  keyword: ["Keyword", "@keyword", "@keyword.function", "Statement", "@keyword.directive"],
   conditional: ["Conditional", "@keyword.conditional"],
   repeat: ["Repeat", "@keyword.repeat"],
   exception: ["Exception", "@keyword.exception"],
@@ -48,4 +48,6 @@ export const ROLE_GROUPS: Partial<Record<Role, string[]>> = {
   // not just the @param-style tag like VS Code's jsdoc scopes — the default link is sensible)
   wordOperator: ["@keyword.operator"],
   diffMeta: ["@diff.delta", "@attribute.diff", "diffLine", "diffSubname"],
+  typeKeyword: ["@keyword.type"],
+  moduleKw: ["@keyword.import"],
 };

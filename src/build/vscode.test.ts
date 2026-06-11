@@ -114,10 +114,10 @@ describe("detail pass — vscode", () => {
     expect(ruleFor(theme, "punctuation.definition.string")!.settings.foreground).toBe(p.accents.green);
     expect(ruleFor(theme, "punctuation")!.settings.foreground).toBe(p.fgPunct);
   });
-  it("wordy operators stay keyword red while symbolic ops dim", () => {
+  it("wordy operators stay keyword red while symbolic operators are cyan", () => {
     const p = buildPalette(dusk);
     expect(ruleFor(theme, "keyword.operator.expression")!.settings.foreground).toBe(p.accents.red);
-    expect(ruleFor(theme, "keyword.operator")!.settings.foreground).toBe(p.fgPunct);
+    expect(ruleFor(theme, "keyword.operator")!.settings.foreground).toBe(p.accents.cyan);
   });
   it("semantic: parameter italic; decorator rides the builtin slot; readonly is constant-purple", () => {
     const p = buildPalette(cs);
@@ -166,6 +166,13 @@ describe("v2 — vscode", () => {
     expect(t.semanticTokenColors["function.declaration"]!.foreground).toBe(pd.accents.yellow);
     expect(t.semanticTokenColors["decorator"]!.foreground).toBe(pd.builtin);
     expect(t.semanticTokenColors["decorator"]!.italic).toBeUndefined(); // decorator role: explicit syntax, no italic
+  });
+  it("gallery-locked: keyword.control.import is moduleKw+bold, keyword.control.type is orange+italic, keyword.operator is cyan", () => {
+    expect(ruleOf("keyword.control.import").settings.foreground).toBe(pd.moduleKw);
+    expect(ruleOf("keyword.control.import").settings.fontStyle).toContain("bold");
+    expect(ruleOf("keyword.control.type").settings.foreground).toBe(pd.accents.orange);
+    expect(ruleOf("keyword.control.type").settings.fontStyle).toContain("italic");
+    expect(ruleOf("keyword.operator").settings.foreground).toBe(pd.accents.cyan);
   });
 });
 

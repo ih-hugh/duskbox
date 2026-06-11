@@ -1,6 +1,6 @@
 import type { AccentName, Palette } from "./palette/types";
 
-export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var";
+export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var" | "moduleKw";
 export interface TokenStyle {
   color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean;
   underline?: boolean; strikethrough?: boolean;
@@ -23,6 +23,7 @@ export function slot(p: Palette, c: ColorSlot): string {
   if (c === "builtin") return p.builtin;
   if (c === "param") return p.fgParam;
   if (c === "var") return p.fgVar;
+  if (c === "moduleKw") return p.moduleKw;
   if (c in HEADING_SLOT) return p.headings[HEADING_SLOT[c as keyof typeof HEADING_SLOT]];
   return p.accents[c as AccentName];
 }
@@ -56,7 +57,7 @@ export const TOKENS = {
   boolean:      { color: "purple" as ColorSlot },
   property:     { color: "teal" as ColorSlot },
   variable:     { color: "var" as ColorSlot },
-  operator:     { color: "punct" as ColorSlot },
+  operator:     { color: "cyan" as ColorSlot },
   punctuation:  { color: "punct" as ColorSlot },
   comment:      { color: "fg2" as ColorSlot, italic: true },
   tagNative:    { color: "red" as ColorSlot },
@@ -102,6 +103,8 @@ export const TOKENS = {
   stringQuote:  { color: "green" as ColorSlot },                // keep quotes string-colored despite punct dim
   wordOperator: { color: "red" as ColorSlot, bold: true },      // typeof/instanceof/new stay keywords
   typeInterface:{ color: "orange" as ColorSlot, italic: true }, // interface/typeParameter vs class(bold)
+  typeKeyword:  { color: "orange" as ColorSlot, italic: true }, // `type` in import type / type X = (deeper than storage.type)
+  moduleKw:     { color: "moduleKw" as ColorSlot, bold: true }, // import/export/from/as — walk from red toward the variant anchor
 } satisfies Record<string, TokenStyle>;
 
 export type Role = keyof typeof TOKENS;

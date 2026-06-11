@@ -132,9 +132,9 @@ describe("detail pass — neovim", () => {
   it("@markup.raw is a teal chip on bg2 (not plain string green)", () => {
     expect(hl["@markup.raw"]).toMatchObject({ fg: p.accents.teal, bg: p.bg2 });
   });
-  it("punctuation dims to fgPunct; wordy operators stay keyword red", () => {
+  it("punctuation dims to fgPunct; operators are cyan; wordy operators stay keyword red", () => {
     expect(hl["@punctuation.delimiter"]!.fg).toBe(p.fgPunct);
-    expect(hl["@operator"]!.fg).toBe(p.fgPunct);
+    expect(hl["@operator"]!.fg).toBe(p.accents.cyan);
     expect(hl["@keyword.operator"]!.fg).toBe(p.accents.red);
   });
   it("@lsp mirrors: parameter italic fgParam, decorator/defaultLibrary builtin, readonly purple, interface italic", () => {
@@ -184,6 +184,14 @@ describe("v2 — nvim", () => {
   it("Special is warm but NOT italic (legacy catch-all split off the builtin role)", () => {
     expect(hl.Special!.fg).toBe(p.builtin);
     expect(hl.Special!.italic).toBeUndefined();
+  });
+  it("gallery-locked: @keyword.import is moduleKw (bold); @keyword.type is orange italic; @operator is cyan", () => {
+    expect(hl["@keyword.import"]!.fg).toBe(p.moduleKw);
+    expect(hl["@keyword.import"]!.bold).toBe(true);
+    expect(hl["@keyword.type"]!.fg).toBe(p.accents.orange);
+    expect(hl["@keyword.type"]!.italic).toBe(true);
+    expect(hl["@operator"]!.fg).toBe(p.accents.cyan);
+    expect(hl["@operator"]!.bold).toBeUndefined();
   });
 });
 

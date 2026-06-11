@@ -52,7 +52,7 @@ describe("v2 tier palettes", () => {
     for (const v of VARIANTS) {
       const p = buildPalette(v);
       const syntax = [p.accents.red, p.accents.orange, p.accents.yellow, p.accents.green,
-        p.accents.teal, p.accents.cyan, p.accents.blue, p.accents.purple, p.builtin, p.fgParam, p.fgVar];
+        p.accents.teal, p.accents.cyan, p.accents.blue, p.accents.purple, p.builtin, p.fgParam, p.fgVar, p.moduleKw];
       for (const hex of syntax) expect(isPinkish(hex), `${v.name} ${hex}`).toBe(false);
     }
   });
@@ -113,15 +113,15 @@ describe("authored-vs-effective drift guard", () => {
     }
   });
 
-  it("GALLERY-APPROVED v2 fixtures: bg0 + tier-1 red pinned for all 16", () => {
+  it("GALLERY-APPROVED v2 fixtures: bg0 + tier-1 red pinned for all 16 (gallery-relocked: stages v1.4, ×2.0 atmosphere)", () => {
     const PINNED: [string, string, string][] = [
-      ["dawn", "#faf2e9", "#be2327"], ["day", "#f9fafc", "#be2327"], ["day-hc", "#ffffff", "#9e0213"],
-      ["storm", "#262e3b", "#fe736a"], ["dusk", "#1f202e", "#f4514c"], ["midnight", "#0c101c", "#f4514c"],
-      ["night-hc", "#171a25", "#fe7f76"], ["cyber", "#13131c", "#fe7f78"],
-      ["dusk-azure", "#19222e", "#f4514c"], ["cyber-azure", "#0d131c", "#fe7f78"],
-      ["dusk-neon-purple", "#20202d", "#f4514c"], ["cyber-neon-purple", "#13111c", "#fe7f78"],
-      ["dusk-magenta", "#231f2c", "#f4514c"], ["cyber-magenta", "#15101b", "#fe7f78"],
-      ["dusk-salmon", "#291d27", "#f4514c"], ["cyber-salmon", "#190f16", "#fe7f78"],
+      ["dawn", "#faf2e8", "#be2327"], ["day", "#f9fafc", "#be2327"], ["day-hc", "#ffffff", "#9e0213"],
+      ["storm", "#262e3e", "#fe736a"], ["dusk", "#232336", "#f4514c"], ["midnight", "#0a0f22", "#f4514c"],
+      ["night-hc", "#161a26", "#fe7f76"], ["cyber", "#13131c", "#fe7f78"],
+      ["dusk-azure", "#1a2637", "#f4514c"], ["cyber-azure", "#0c131d", "#fe7f78"],
+      ["dusk-neon-purple", "#252236", "#f4514c"], ["cyber-neon-purple", "#13111c", "#fe7f78"],
+      ["dusk-magenta", "#282134", "#f4514c"], ["cyber-magenta", "#15101b", "#fe7f78"],
+      ["dusk-salmon", "#301e2c", "#f4514c"], ["cyber-salmon", "#1a0e16", "#fe7f78"],
     ];
     for (const [name, bg0, red] of PINNED) {
       const p = buildPalette(VARIANTS.find((v) => v.name === name)!);

@@ -3,7 +3,7 @@ import { TOKENS, slot, type TokenStyle } from "./tokens";
 import { BASE_HUES, buildPalette } from "./palette/types";
 import { VARIANTS } from "./palette/variants";
 
-const VALID = new Set([...Object.keys(BASE_HUES), "fg0", "fg1", "fg2", "h1", "h2", "h3", "h4", "punct", "builtin", "param", "var"]);
+const VALID = new Set([...Object.keys(BASE_HUES), "fg0", "fg1", "fg2", "h1", "h2", "h3", "h4", "punct", "builtin", "param", "var", "moduleKw"]);
 
 describe("tokens", () => {
   it("every role maps to a valid color slot", () => {
@@ -42,8 +42,8 @@ describe("detail-pass roles", () => {
   it("punct slot resolves to fgPunct", () => {
     expect(slot(p, "punct")).toBe(p.fgPunct);
   });
-  it("identity changes: operator/punctuation are punct; parameter is italic param slot", () => {
-    expect(TOKENS.operator.color).toBe("punct");
+  it("identity changes: operator is cyan; punctuation is punct; parameter is italic param slot", () => {
+    expect(TOKENS.operator.color).toBe("cyan");
     expect(TOKENS.punctuation.color).toBe("punct");
     expect(TOKENS.parameter).toEqual({ color: "param", italic: true });
   });
@@ -53,6 +53,13 @@ describe("detail-pass roles", () => {
   });
   it("interface is distinct from class (italic vs bold orange)", () => {
     expect(TOKENS.typeInterface).toEqual({ color: "orange", italic: true });
+  });
+  it("typeKeyword role exists: orange italic (type keyword split)", () => {
+    expect(TOKENS.typeKeyword).toEqual({ color: "orange", italic: true });
+  });
+  it("moduleKw role exists: moduleKw slot, bold (gallery-locked module boundary)", () => {
+    expect(TOKENS.moduleKw).toEqual({ color: "moduleKw", bold: true });
+    expect(slot(p, "moduleKw")).toBe(p.moduleKw);
   });
 });
 

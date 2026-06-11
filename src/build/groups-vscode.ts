@@ -1,7 +1,7 @@
 import type { Role } from "../tokens";
 
 export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
-  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier"], // bare keyword.control prefix already covers .import/.export
+  keyword: ["keyword", "keyword.control", "storage.type", "storage.modifier"],
   operator: ["keyword.operator"],
   function: ["entity.name.function"],
   // descendant selector wins at call sites: the identifier is entity.name.function NESTED INSIDE
@@ -80,6 +80,8 @@ export const ROLE_SCOPES: Partial<Record<Role, string[]>> = {
     "keyword.operator.expression", "keyword.operator.new",
     "keyword.operator.delete", "keyword.operator.logical.python",
   ],
+  typeKeyword: ["keyword.control.type", "storage.type.type"],
+  moduleKw: ["keyword.control.import", "keyword.control.export", "keyword.control.from", "keyword.control.as"],
 };
 
 // VS Code semantic token type -> role

@@ -1,4 +1,4 @@
-import { oklchToHex, contrastRatio } from "../oklch";
+import { oklchToHex, hexToOklch, contrastRatio } from "../oklch";
 import { blend } from "../build/blend";
 import { TIER_HUES, SLOT_LC, BUILTIN_LC, archetypeOf } from "./tiers";
 
@@ -20,7 +20,7 @@ export interface VariantConfig {
   hues?: Partial<Record<AccentName, number>>;        // hue overrides (cyber neon)
   accentLC?: Partial<Record<AccentName, [number, number]>>; // per-accent [L,C] overrides (cyber continuity)
   signature?: number;          // signature hue°: chrome-only hex for cursor/UI accent/bg3 tint; syntax palette is identical to base
-  bgLean?: number;             // mood hue° for the bg ramp (A2 atmosphere: chroma ×1.8, half-lean); falls back to `signature`
+  bgLean?: number;             // mood hue° for the bg ramp (A1.5-strength, gallery-relocked: chroma ×2.0, half-lean); falls back to `signature`
 }
 
 export interface Palette {
@@ -35,13 +35,19 @@ export interface Palette {
   headings: [string, string, string, string]; // markdown h1..h4 — hue walk from signature ?? blue
   fgPunct: string;                            // punctuation tone between fg0 and fg2 (HC-floored)
   builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2); consumed by the v2 role retarget (Task 4)
+  moduleKw: string;            // module boundary (gallery-locked): import/export walk from red toward the variant anchor
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
 }
 
 /** Circular midpoint between two hues, going the short way around the wheel. */
 function halfLean(from: number, to: number): number {
+  return halfLeanK(from, to, 0.5);
+}
+
+/** Generalized hue interpolation: walk k fraction of the short arc from `from` toward `to`. */
+function halfLeanK(from: number, to: number, k: number): number {
   const d = ((to - from + 540) % 360) - 180;
-  return ((from + d / 2) % 360 + 360) % 360;
+  return ((from + d * k) % 360 + 360) % 360;
 }
 
 export function buildPalette(v: VariantConfig): Palette {
@@ -49,13 +55,13 @@ export function buildPalette(v: VariantConfig): Palette {
   const [bgL, bgC, bgH] = v.bg;
   const [fgL, fgC, fgH] = v.fg;
   const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
-  // v2 atmosphere (gallery-tuned "A2"): the bg ramp leans toward `bgLean ?? signature` at chroma
-  // ×1.8, hue at the circular midpoint — strong enough to differentiate the family at a glance,
-  // calm enough not to fight the warm ember tier-1 (floors re-gated below in the test suite).
+  // v2 atmosphere (A1.5-strength, gallery-relocked): the bg ramp leans toward `bgLean ?? signature`
+  // at chroma ×2.0, hue at the circular midpoint — strong enough to differentiate the family at a
+  // glance, calm enough not to fight the warm ember tier-1 (floors re-gated below in the test suite).
   // A leaned variant ignores bgHex (cyber's children compute their mood; plain cyber keeps its
   // pinned near-black identity). Same lightness, so fg contrast is essentially preserved.
   const lean = v.bgLean ?? v.signature;
-  const moodC = lean !== undefined ? bgC * 1.8 : bgC;
+  const moodC = lean !== undefined ? bgC * 2.0 : bgC;
   const moodH = lean !== undefined ? halfLean(bgH, lean) : bgH;
   const bg0 = lean === undefined && v.bgHex ? v.bgHex : oklchToHex(clamp01(bgL), moodC, moodH);
   const bg1 = oklchToHex(clamp01(bgL - 0.025), moodC, moodH);        // panel always recedes (darker)
@@ -78,9 +84,15 @@ export function buildPalette(v: VariantConfig): Palette {
     fg2 = oklchToHex(clamp01(fgL - dir * fg2Drop), fgC, fgH);
   }
 
-  // Bright-variable tier: locals pop above body text without a hue shift; capped off pure white/black.
-  const varL = v.kind === "dark" ? Math.min(fgL + 0.10, 0.975) : Math.max(fgL - 0.10, 0.125);
-  const fgVar = oklchToHex(clamp01(varL), fgC, fgH);
+  // Bright-lavender variable tier (gallery-locked): locals pop AND carry the lavender identity.
+  let varL = v.kind === "light" ? 0.32 : v.uiContrast === "high" ? 0.95 : 0.91;
+  const varC = v.kind === "light" ? 0.06 : 0.05;
+  let fgVar = oklchToHex(clamp01(varL), varC, 288);
+  let varGuard = 0;
+  while (contrastRatio(fgVar, bg0) < (v.uiContrast === "high" ? 7 : 4.5) && varGuard++ < 40) {
+    varL = clamp01(varL + dir * 0.01);
+    fgVar = oklchToHex(clamp01(varL), varC, 288);
+  }
 
   const arch = archetypeOf(v.kind, v.uiContrast);
   const accents = {} as Record<AccentName, string>;
@@ -101,15 +113,26 @@ export function buildPalette(v: VariantConfig): Palette {
     oklchToHex(v.accentL, v.accentC, ((anchor - 25 * k) % 360 + 360) % 360)
   ) as [string, string, string, string];
 
-  // Punctuation tone: fg stepped 60% of the mute drop (HC variants start at the dim drop), then
-  // raised deterministically until it clears the readability floor (3:1 normal, 4.5:1 HC vs bg0).
+  // M2++ punctuation (gallery-locked): structure is carved from the stage itself — the mood hue at
+  // lifted lightness, enriched chroma, floor-looped. Glue inherits the atmosphere automatically.
   const punctFloor = v.uiContrast === "high" ? 4.5 : 3.0;
-  let punctDrop = v.uiContrast === "high" ? dimDrop : muteDrop * 0.6;
-  let fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
-  while (contrastRatio(fgPunct, bg0) < punctFloor && punctDrop > 0) {
-    punctDrop = Math.max(0, punctDrop - 0.01); // clamp so we never overshoot brighter than fg0 itself
-    fgPunct = oklchToHex(clamp01(fgL - dir * punctDrop), fgC, fgH);
+  let punctL = clamp01(bgL + dir * 0.50);
+  let fgPunct = oklchToHex(punctL, moodC * 1.6, moodH);
+  let pGuard = 0;
+  while (contrastRatio(fgPunct, bg0) < punctFloor && pGuard++ < 60) {
+    punctL = clamp01(punctL + dir * 0.01);
+    fgPunct = oklchToHex(punctL, moodC * 1.6, moodH);
   }
+
+  // Module boundary (gallery-locked): import/export walk from red toward the variant anchor.
+  // Azure's anchor is far from red — K70 strands periwinkle; it gets K92 to actually read blue.
+  // Neon-purple/magenta chrome anchors (hue ≥ 300°) sit in the fuchsia zone — use the neutral blue
+  // anchor (255°) so moduleKw stays in the purple-blue corridor and clears the pink gate.
+  const impSig = v.signature !== undefined && v.signature < 300 ? v.signature : undefined;
+  const impAnchor = impSig ?? 255;
+  const impK = impSig === 235 ? 0.92 : 0.70;
+  const redO = hexToOklch(accents.red);
+  const moduleKw = oklchToHex(redO.L, Math.max(redO.C, 0.14), halfLeanK(redO.H, impAnchor, impK));
 
   // Chrome-only signature: resolved from the signature hue at the archetype's magenta L/C band.
   const signature = v.signature !== undefined
@@ -120,7 +143,7 @@ export function buildPalette(v: VariantConfig): Palette {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
     bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam,
     accents, headings, fgPunct,
-    builtin,
+    builtin, moduleKw,
     signature,
   };
 }
