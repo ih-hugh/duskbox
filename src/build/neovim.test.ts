@@ -299,3 +299,22 @@ describe("v2.1.1 — const-variable whisper tier (nvim)", () => {
     expect(hl["@constant"]).toMatchObject({ fg: p.accents.purple });
   });
 });
+
+describe("v2.2 — dashed cyber current line (nvim)", () => {
+  it("cyber family: CursorLine carries underdashed in the identity neon; others fill-only", () => {
+    const cyber = buildNeovim(VARIANTS.find((v) => v.name === "cyber")!, { bold: true });
+    const pc = buildPalette(VARIANTS.find((v) => v.name === "cyber")!);
+    expect(cyber.CursorLine).toEqual({ bg: pc.bg2, underdashed: true, sp: pc.neonLine });
+    expect(cyber.CursorColumn).toEqual({ bg: pc.bg2 }); // column unaffected
+    const dusk = buildNeovim(VARIANTS.find((v) => v.name === "dusk")!, { bold: true });
+    const pd = buildPalette(VARIANTS.find((v) => v.name === "dusk")!);
+    expect(dusk.CursorLine).toEqual({ bg: pd.bg2 });
+    const hc = buildNeovim(VARIANTS.find((v) => v.name === "night-hc")!, { bold: true });
+    expect(hc.CursorLine).toEqual({ bg: buildPalette(VARIANTS.find((v) => v.name === "night-hc")!).bg2 }); // HC: no dash
+  });
+  it("toLua serializes underdashed (the artifact must carry it, not just the object)", () => {
+    const lua = toLua({ CursorLine: { bg: "#1b1b21", underdashed: true, sp: "#18f5f6" } });
+    expect(lua).toContain("underdashed = true");
+    expect(lua).toContain('sp = "#18f5f6"');
+  });
+});

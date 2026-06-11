@@ -4,7 +4,7 @@ import { ROLE_GROUPS } from "./groups-nvim";
 import { blend, muteHex } from "./blend";
 import { buildPluginGroups } from "./plugins-nvim";
 
-export interface Attrs { fg?: string; bg?: string; sp?: string; bold?: boolean; italic?: boolean; underline?: boolean; undercurl?: boolean; strikethrough?: boolean; }
+export interface Attrs { fg?: string; bg?: string; sp?: string; bold?: boolean; italic?: boolean; underline?: boolean; undercurl?: boolean; underdashed?: boolean; strikethrough?: boolean; }
 export interface NvimOpts { bold: boolean; transparent?: boolean; }
 
 export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, Attrs> {
@@ -30,7 +30,10 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
     Cursor: { fg: p.bg0, bg: uiBlue },      // the most-seen pixel carries the variant identity
     lCursor: { fg: p.bg0, bg: uiBlue },
     TermCursor: { fg: p.bg0, bg: uiBlue },
-    CursorLine: { bg: p.bg2 }, CursorColumn: { bg: p.bg2 },
+    // v2.2: cyber family gets a dashed neon underline on the current line (real underdashed —
+    // the VS Code side approximates with a solid alpha'd border; documented engine divergence).
+    CursorLine: p.neonLine ? { bg: p.bg2, underdashed: true, sp: p.neonLine } : { bg: p.bg2 },
+    CursorColumn: { bg: p.bg2 },
     CursorLineNr: { fg: uiYellow, bold: true },
     LineNr: { fg: p.fg2 }, SignColumn: { bg: bgEditor },
     Visual: { bg: p.bg3 }, VisualNOS: { bg: p.bg3 },
@@ -151,6 +154,7 @@ export function toLua(hl: Record<string, Attrs>): string {
     if (a.italic) parts.push("italic = true");
     if (a.underline) parts.push("underline = true");
     if (a.undercurl) parts.push("undercurl = true");
+    if (a.underdashed) parts.push("underdashed = true");
     if (a.strikethrough) parts.push("strikethrough = true");
     return `  ${esc(g)} = { ${parts.join(", ")} },`;
   }).join("\n");
