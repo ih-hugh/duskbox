@@ -1,7 +1,7 @@
 {
   "name": "duskbox",
   "displayName": "Duskbox",
-  "description": "A calm, richly detailed theme family with tiered attention (16 variants incl. high-contrast, neon & signature accents) for Neovim and VS Code.",
+  "description": "A calm, richly detailed theme family with tiered attention (16 variants incl. high-contrast, neon & signature accents) for editors and terminals.",
   "icon": "icon.png",
   "galleryBanner": {
     "color": "#232336",

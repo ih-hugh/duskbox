@@ -1,6 +1,6 @@
 # duskbox
 
-A calm theme family with **tiered attention** for **Neovim** and **VS Code** (and forks: Cursor, VSCodium, Windsurf…). Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so the two editors never drift. Richly detailed where it counts: graded Markdown headings that follow your variant, per-language token treatment (JSON · YAML · CSS · regex · doc-tags), calm punctuation, and deep LSP semantic styling. Each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it; VS Code grammars don't expose codetag scopes to themes.)
+A calm theme family with **tiered attention** for **Neovim**, **VS Code** (and forks: Cursor, VSCodium, Windsurf…), **Ghostty/cmux**, and **lazygit**. Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so editors and terminals never drift. Richly detailed where it counts: graded Markdown headings that follow your variant, per-language token treatment (JSON · YAML · CSS · regex · doc-tags), calm punctuation, and deep LSP semantic styling. Each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it; VS Code grammars don't expose codetag scopes to themes.)
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
@@ -72,6 +72,10 @@ Switch variants anytime with `:colorscheme duskbox-<variant>` (e.g. `:colorschem
 
 - **VS Code:** install **Duskbox** from the Marketplace, then *Preferences: Color Theme* and pick a Duskbox variant.
 - **Forks (Cursor, VSCodium, Windsurf…):** install **Duskbox** from [Open VSX](https://open-vsx.org/), or download the `.vsix` from [Releases](https://github.com/ih-hugh/duskbox/releases) and run `code --install-extension duskbox.vsix` (or your fork's equivalent CLI).
+
+## Terminal extras
+
+The repo also ships generated Ghostty/cmux themes under `extras/ghostty/` and lazygit themes under `extras/lazygit/` so your terminal chrome can use the same OKLCH palette as the editor themes. For cmux, copy the generated theme files into `~/Library/Application Support/com.cmuxterm.app/themes/`, then select them with `cmux themes set`.
 
 ## Design
 
