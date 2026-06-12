@@ -129,10 +129,10 @@ describe("authored-vs-effective drift guard", () => {
       ["dawn", "#faf2e8", "#be2327"], ["day", "#f9fafc", "#be2327"], ["day-hc", "#ffffff", "#9e0213"],
       ["storm", "#262e3e", "#fe736a"], ["dusk", "#232336", "#f4514c"], ["midnight", "#0a0f22", "#f4514c"],
       ["night-hc", "#161a26", "#fe7f76"], ["cyber", "#13131c", "#fe7f78"],
-      ["dusk-azure", "#1a2637", "#f4514c"], ["cyber-azure", "#0c131d", "#fe7f78"],
-      ["dusk-neon-purple", "#252236", "#f4514c"], ["cyber-neon-purple", "#13111c", "#fe7f78"],
-      ["dusk-magenta", "#282134", "#f4514c"], ["cyber-magenta", "#15101b", "#fe7f78"],
-      ["dusk-salmon", "#301e2c", "#f4514c"], ["cyber-salmon", "#1a0e16", "#fe7f78"],
+      ["dusk-azure", "#24263a", "#f4514c"], ["cyber-azure", "#0c131d", "#fe7f78"],
+      ["dusk-neon-purple", "#26263a", "#f4514c"], ["cyber-neon-purple", "#13111c", "#fe7f78"],
+      ["dusk-magenta", "#27253a", "#f4514c"], ["cyber-magenta", "#15101b", "#fe7f78"],
+      ["dusk-salmon", "#272538", "#f4514c"], ["cyber-salmon", "#1a0e16", "#fe7f78"],
     ];
     for (const [name, bg0, red] of PINNED) {
       const p = buildPalette(VARIANTS.find((v) => v.name === name)!);

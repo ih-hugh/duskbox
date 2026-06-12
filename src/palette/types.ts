@@ -57,6 +57,11 @@ function halfLeanK(from: number, to: number, k: number): number {
 
 export function buildPalette(v: VariantConfig): Palette {
   const dir = v.kind === "dark" ? 1 : -1; // dark: surfaces step lighter; light: step darker
+  const arch = archetypeOf(v.kind, v.uiContrast);
+  // Chrome-only signature (hoisted: the v2.3 T2 stage pigment needs it before the bg ramp).
+  const signature = v.signature !== undefined
+    ? oklchToHex(SLOT_LC[arch].magenta[0], SLOT_LC[arch].magenta[1], v.signature)
+    : undefined;
   const [bgL, bgC, bgH] = v.bg;
   const [fgL, fgC, fgH] = v.fg;
   const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
@@ -70,7 +75,14 @@ export function buildPalette(v: VariantConfig): Palette {
   const moodH = lean !== undefined ? halfLean(bgH, lean) : bgH;
   const bg0 = lean === undefined && v.bgHex ? v.bgHex : oklchToHex(clamp01(bgL), moodC, moodH);
   const bg1 = oklchToHex(clamp01(bgL - 0.025), moodC, moodH);        // panel always recedes (darker)
-  const bg2 = oklchToHex(clamp01(bgL + dir * 0.04), moodC, moodH);   // cursorline: lighter(dark)/darker(light)
+  let bg2 = oklchToHex(clamp01(bgL + dir * 0.04), moodC, moodH);   // cursorline: lighter(dark)/darker(light)
+  // v2.3 T2 (screens 28+31, locked): dusk-family signature children stand on the base slate plus
+  // a 2% SIGNATURE-PIGMENT blend — hue-leaning can only produce plum for salmon; pigment carries
+  // the true signature. Cyber children (v.hues) keep their leans untouched.
+  let bg0t = bg0, bg1t = bg1;
+  if (v.signature !== undefined && v.hues === undefined && signature !== undefined) {
+    bg0t = blend(bg0, signature, 0.02); bg1t = blend(bg1, signature, 0.02); bg2 = blend(bg2, signature, 0.02);
+  }
   // Signature bg3 floors its chroma so the tint stays perceptible (ΔE ≥ ~0.012) even on quiet stages.
   // v2.2 S1 "neon selection" (screens 25–26, locked): the cyber family (v.hues — the existing
   // wheel-override marker) and HC variants select in their IDENTITY hue at a stronger step —
@@ -105,7 +117,6 @@ export function buildPalette(v: VariantConfig): Palette {
     fgVar = oklchToHex(clamp01(varL), varC, 288);
   }
 
-  const arch = archetypeOf(v.kind, v.uiContrast);
   const accents = {} as Record<AccentName, string>;
   for (const name of Object.keys(TIER_HUES) as AccentName[]) {
     const hue = v.hues?.[name] ?? TIER_HUES[name];
@@ -153,17 +164,12 @@ export function buildPalette(v: VariantConfig): Palette {
     ? oklchToHex(redO.L, Math.max(redO.C, 0.14), walkedH)
     : oklchToHex(0.755, 0.16, 34);
 
-  // Chrome-only signature: resolved from the signature hue at the archetype's magenta L/C band.
-  const signature = v.signature !== undefined
-    ? oklchToHex(SLOT_LC[arch].magenta[0], SLOT_LC[arch].magenta[1], v.signature)
-    : undefined;
-
   // Identity neon for the cyber family's current-line treatment (dashed in nvim, border in vscode).
   const neonLine = v.hues !== undefined ? (signature ?? accents.cyan) : undefined;
 
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
-    bg0, bg1, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam, fgConst,
+    bg0: bg0t, bg1: bg1t, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam, fgConst,
     accents, headings, fgPunct,
     builtin, moduleKw,
     signature, neonLine,

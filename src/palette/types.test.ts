@@ -98,12 +98,17 @@ describe("v2 stages & ladder", () => {
     expect(get("storm").bg0).toBe("#262e3e");     // slate lean 250
     expect(get("midnight").bg0).toBe("#0a0f22");  // deep lean 265
     expect(get("dawn").bg0).toBe("#faf2e8");      // warm cream lean 60
-    expect(get("dusk-azure").bg0).toBe("#1a2637");   // lean = signature 235
-    expect(get("dusk-salmon").bg0).toBe("#301e2c");  // lean = signature 32
+    expect(get("dusk-azure").bg0).toBe("#24263a");   // v2.3 T2: dusk slate + 2% azure pigment
+    expect(get("dusk-salmon").bg0).toBe("#272538");  // v2.3 T2: dusk slate + 2% salmon pigment
     expect(get("cyber-salmon").bg0).toBe("#1a0e16"); // signature lean, bgHex ignored
   });
-  it("signature children LEAN toward their signature (stages differ from base); non-leaned stay pinned", () => {
-    expect(get("dusk-azure").bg0).not.toBe(get("dusk").bg0);
+  it("v2.3: dusk children = base slate + 2% signature pigment (formula identity); cyber children still lean", () => {
+    const d = get("dusk"), sm = get("dusk-salmon");
+    expect(sm.bg0).toBe(blend(d.bg0, sm.signature!, 0.02));
+    expect(sm.bg1).toBe(blend(d.bg1, sm.signature!, 0.02));
+    expect(sm.bg2).toBe(blend(d.bg2, sm.signature!, 0.02));
+    expect(get("dusk-magenta").bg0).toBe("#27253a");
+    expect(get("dusk-neon-purple").bg0).toBe("#26263a");
     expect(get("cyber-salmon").bg0).not.toBe(get("cyber").bg0);
     expect(get("cyber").bg0).toBe("#13131c");  // pinned hex, no lean
     expect(get("day").bg0).toBe("#f9fafc");    // neutral, no lean

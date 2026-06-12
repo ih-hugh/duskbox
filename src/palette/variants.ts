@@ -49,7 +49,7 @@ const _duskBase = VARIANTS.find((v) => v.name === "dusk")!;
 const _cyberBase = VARIANTS.find((v) => v.name === "cyber")!;
 for (const s of SIGNATURES) {
   // bgLean reset: children derive their mood from the SIGNATURE, not the base's lean.
-  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue, bgLean: undefined });
+  VARIANTS.push({ ..._duskBase, name: `dusk-${s.slug}`, signature: s.hue, bgLean: 290 }); // v2.3 T2: children stand on dusk's slate (+2% pigment in buildPalette)
   VARIANTS.push({ ..._cyberBase, name: `cyber-${s.slug}`, signature: s.hue, bgLean: undefined });
 }
 

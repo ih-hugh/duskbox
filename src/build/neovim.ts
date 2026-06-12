@@ -2,6 +2,7 @@ import { buildPalette, type VariantConfig } from "../palette/types";
 import { TOKENS, slot, type Role, type TokenStyle } from "../tokens";
 import { ROLE_GROUPS } from "./groups-nvim";
 import { blend, muteHex } from "./blend";
+import { contrastRatio } from "../oklch";
 import { buildPluginGroups } from "./plugins-nvim";
 
 export interface Attrs { fg?: string; bg?: string; sp?: string; bold?: boolean; italic?: boolean; underline?: boolean; undercurl?: boolean; underdashed?: boolean; strikethrough?: boolean; }
@@ -68,14 +69,25 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
   // Pill/chip fg: accents need a small hue-preserving nudge to clear 4:1 over their own washed bg.
   // Light variants darken toward fg0; dark variants lighten toward fgVar (tier-1 red lands at L≈0.66
   // so the raw accent alone falls short of 4:1 over the 18%-blend pill bg on near-neutral stages).
-  const pillFg = (acc: string) =>
-    v.kind === "light" ? blend(acc, p.fg0, 0.2) : blend(acc, p.fgVar, 0.15);
+  // v2.3: floor-looped — the T2 stage pigment shifts pill bgs per variant, so the nudge is
+  // raised deterministically until the fg clears 4:1 over the given pill bg.
+  const pillFg = (acc: string, pillBg: string) => {
+    let t = v.kind === "light" ? 0.2 : 0.15;
+    let fg = v.kind === "light" ? blend(acc, p.fg0, t) : blend(acc, p.fgVar, t);
+    let guard = 0;
+    while (contrastRatio(fg, pillBg) < 4 && t < 0.6 && guard++ < 12) {
+      t += 0.05;
+      fg = v.kind === "light" ? blend(acc, p.fg0, t) : blend(acc, p.fgVar, t);
+    }
+    return fg;
+  };
 
   const diag: [string, Role][] = [["Error","error"],["Warn","warning"],["Info","info"],["Hint","hint"],["Ok","ok"]];
   for (const [name, role] of diag) {
     const fg = slot(p, TOKENS[role].color);
     hl[`Diagnostic${name}`] = { fg };
-    hl[`DiagnosticVirtualText${name}`] = { fg: pillFg(fg), bg: blend(p.bg0, fg, washT(0.13)) };
+    const vtBg = blend(p.bg0, fg, washT(0.13));
+    hl[`DiagnosticVirtualText${name}`] = { fg: pillFg(fg, vtBg), bg: vtBg };
     hl[`DiagnosticUnderline${name}`] = { undercurl: true, sp: fg };
   }
   hl.SpellBad = { undercurl: true, sp: slot(p, TOKENS.error.color) };
@@ -132,7 +144,10 @@ export function buildNeovim(v: VariantConfig, opts: NvimOpts): Record<string, At
 
   // Soul pass: codetag badges — tinted pills (render bold+italic — comment italics merge in) so intent
   // pops out of comment-gray. (VS Code's stock grammars don't scope codetags; documented nvim-only delight.)
-  const pill = (acc: string) => ({ fg: pillFg(acc), bg: blend(p.bg0, acc, washT(0.18)), bold: true });
+  const pill = (acc: string) => {
+    const pb = blend(p.bg0, acc, washT(0.18));
+    return { fg: pillFg(acc, pb), bg: pb, bold: true };
+  };
   hl["@comment.todo"] = pill(p.accents.yellow);
   hl["@comment.error"] = pill(p.accents.red);
   hl["@comment.warning"] = pill(p.accents.orange);
