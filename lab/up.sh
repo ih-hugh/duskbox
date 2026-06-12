@@ -24,7 +24,10 @@ cat > "$LAB/.data/User/settings.json" << JSON
   "git.openRepositoryInParentFolders": "never",
   "update.mode": "none",
   "workbench.tips.enabled": false,
-  "chat.commandCenter.enabled": false
+  "chat.commandCenter.enabled": false,
+  "typescript.validate.enable": false,
+  "javascript.validate.enable": false,
+  "css.validate": false
 }
 JSON
 

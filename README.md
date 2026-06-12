@@ -36,6 +36,79 @@ syntax stays consistent across the family:
 | Magenta | `duskbox-dusk-magenta` | `duskbox-cyber-magenta` |
 | Salmon | `duskbox-dusk-salmon` | `duskbox-cyber-salmon` |
 
+## Screenshots
+
+Real VS Code renders (React/TSX) of every variant — produced by the [lab](#lab-agentic-screenshot-validation):
+
+### dawn
+
+![dawn](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/dawn.png)
+
+### day
+
+![day](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/day.png)
+
+### day-hc
+
+![day-hc](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/day-hc.png)
+
+### storm
+
+![storm](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/storm.png)
+
+### dusk
+
+![dusk](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/dusk.png)
+
+### midnight
+
+![midnight](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/midnight.png)
+
+### night-hc
+
+![night-hc](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/night-hc.png)
+
+### cyber
+
+![cyber](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/cyber.png)
+
+<details>
+<summary><b>Signature variants</b></summary>
+
+### dusk-azure
+
+![dusk-azure](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/dusk-azure.png)
+
+### dusk-neon-purple
+
+![dusk-neon-purple](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/dusk-neon-purple.png)
+
+### dusk-magenta
+
+![dusk-magenta](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/dusk-magenta.png)
+
+### dusk-salmon
+
+![dusk-salmon](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/dusk-salmon.png)
+
+### cyber-azure
+
+![cyber-azure](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/cyber-azure.png)
+
+### cyber-neon-purple
+
+![cyber-neon-purple](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/cyber-neon-purple.png)
+
+### cyber-magenta
+
+![cyber-magenta](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/cyber-magenta.png)
+
+### cyber-salmon
+
+![cyber-salmon](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/shots/cyber-salmon.png)
+
+</details>
+
 ## Gallery
 
 The eight core variants:

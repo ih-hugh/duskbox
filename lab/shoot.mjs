@@ -15,7 +15,7 @@ const ALL = [
 ];
 const want = process.argv.slice(2);
 const variants = want.length ? want : ALL;
-const FIXTURES = ["sample.ts", "sample.py"];
+const FIXTURES = (process.env.DUSKBOX_LAB_FIXTURES ?? "sample.ts,sample.py").split(",");
 
 const setTheme = (name) => {
   const s = JSON.parse(readFileSync(SETTINGS, "utf8"));
