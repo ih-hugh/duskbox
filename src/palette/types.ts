@@ -132,7 +132,7 @@ export function buildPalette(v: VariantConfig): Palette {
 
   const fgParam = blend(fg0, accents.cyan, 0.30); // moonlit parameters
   const fgMod = v.hues !== undefined ? accents.purple : oklchToHex(MOD_LC[arch][0], MOD_LC[arch][1], 255);
-  const fgString = v.hues !== undefined ? accents.green : oklchToHex(STR_LC[arch][0], STR_LC[arch][1], 155);
+  const fgString = v.hues !== undefined ? accents.green : oklchToHex(STR_LC[arch][0], STR_LC[arch][1], 149);
   const fgConst = blend(fgVar, fgMod, 0.35); // const-variable whisper follows the modifier lane (v2.3)
 
   // Heading ladder: -25° OKLCH hue walk from the variant's anchor (signature ?? blue), at the
