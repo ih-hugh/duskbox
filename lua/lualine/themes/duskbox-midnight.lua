@@ -4,6 +4,6 @@ return {
   insert = { a = { fg = "#0a0f22", bg = "#89cc7b", gui = "bold" }, b = { fg = "#949fb5", bg = "#13182c" }, c = { fg = "#707a90", bg = "#06091c" } },
   visual = { a = { fg = "#0a0f22", bg = "#b19ee3", gui = "bold" }, b = { fg = "#949fb5", bg = "#13182c" }, c = { fg = "#707a90", bg = "#06091c" } },
   replace = { a = { fg = "#0a0f22", bg = "#f4514c", gui = "bold" }, b = { fg = "#949fb5", bg = "#13182c" }, c = { fg = "#707a90", bg = "#06091c" } },
-  command = { a = { fg = "#0a0f22", bg = "#e7c454", gui = "bold" }, b = { fg = "#949fb5", bg = "#13182c" }, c = { fg = "#707a90", bg = "#06091c" } },
+  command = { a = { fg = "#0a0f22", bg = "#e7be62", gui = "bold" }, b = { fg = "#949fb5", bg = "#13182c" }, c = { fg = "#707a90", bg = "#06091c" } },
   inactive = { a = { fg = "#707a90", bg = "#06091c" }, b = { fg = "#707a90", bg = "#06091c" }, c = { fg = "#707a90", bg = "#06091c" } },
 }

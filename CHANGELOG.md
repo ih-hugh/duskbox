@@ -3,6 +3,24 @@
 All notable changes to **duskbox** are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is [SemVer](https://semver.org/).
 
+## [2.3.0] — 2026-06-11
+
+### Changed — slate restoration & body rebalance
+- **The slate stages are back.** Dusk's signature variants stand on dusk's indigo room again
+  (plus a 2% signature-pigment whisper) — azure/neon-purple/magenta/salmon stopped tinting the
+  whole background toward their accent. Identity lives where it belongs: import color, chrome,
+  selection. (Research-backed: Tokyo/Gruvbox/Monokai all keep stages near-slate.)
+- **`const`/`async` go electric blue** (italic) — the plum modifiers blended into constants and
+  the background. Cyber keeps its periwinkle. The const-name whisper follows the blue lane.
+- **Strings leave grass for a saturated soft green** (`#7fd899` on dusk) on a dedicated slot —
+  the green accent now belongs to git/diagnostics only. Cyber keeps neon-green strings.
+- **Gold softened to amber**; the import boundary brightened (dusk `#ae93fd`, azure `#4eaeff`;
+  salmon's vivid `#ff8a6f` and cyber unchanged).
+- Cyber's VS Code current-line border raised to 55% alpha (was reading invisible).
+- Rejected on the way (rendered + judged): fuchsia modifiers, gruvbox-lane yellow-green strings.
+
+[2.3.0]: https://github.com/ih-hugh/duskbox/releases/tag/v2.3.0
+
 ## [2.2.0] — 2026-06-11
 
 ### Changed — cyber & high-contrast selection, dashed cyber current line
