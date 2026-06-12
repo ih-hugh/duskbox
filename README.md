@@ -122,7 +122,8 @@ duskbox ships Ghostty-compatible terminal themes for every variant under [`extra
 brew tap ih-hugh/tap
 brew install cmux-theme-picker
 # Then run:
-cmux-theme-picker
+cmux-theme-picker            # pick a theme
+cmux-theme-picker --update   # refresh duskbox themes after a release
 ```
 
 The picker shows live previews and lets you toggle between light/dark slots with Tab. Duskbox themes are marked with ★. See [cmux-theme-picker](https://github.com/ih-hugh/cmux-theme-picker) for details.
