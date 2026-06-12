@@ -43,3 +43,14 @@ export const BUILTIN_LC: Record<Archetype, [number, number]> = {
   "normal-dark": [0.77, 0.145], "hc-dark": [0.78, 0.145],
   "normal-light": [0.55, 0.125], "hc-light": [0.40, 0.145],
 };
+
+/** v2.3 modifier lane (const/async — electric blue, screen 30 BL2) and string lane (seafoam,
+ *  screen 32 G3). Cyber family carve-outs resolve in buildPalette (purple / neon green). */
+export const MOD_LC: Record<Archetype, [number, number]> = {
+  "normal-dark": [0.72, 0.16], "hc-dark": [0.78, 0.17],
+  "normal-light": [0.48, 0.16], "hc-light": [0.42, 0.17],
+};
+export const STR_LC: Record<Archetype, [number, number]> = {
+  "normal-dark": [0.83, 0.095], "hc-dark": [0.87, 0.11],
+  "normal-light": [0.50, 0.10], "hc-light": [0.42, 0.11],
+};

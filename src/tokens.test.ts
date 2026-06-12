@@ -3,7 +3,7 @@ import { TOKENS, slot, type TokenStyle } from "./tokens";
 import { BASE_HUES, buildPalette } from "./palette/types";
 import { VARIANTS } from "./palette/variants";
 
-const VALID = new Set([...Object.keys(BASE_HUES), "fg0", "fg1", "fg2", "h1", "h2", "h3", "h4", "punct", "builtin", "param", "var", "constVar", "moduleKw"]);
+const VALID = new Set([...Object.keys(BASE_HUES), "fg0", "fg1", "fg2", "h1", "h2", "h3", "h4", "punct", "builtin", "param", "var", "constVar", "moduleKw", "fgMod", "fgString"]);
 
 describe("tokens", () => {
   it("every role maps to a valid color slot", () => {
@@ -16,12 +16,12 @@ describe("tokens", () => {
     expect(TOKENS.comment.italic).toBe(true);
     expect(TOKENS.comment.color).toBe("fg2");
   });
-  it("green is limited to string + diagnostics/git (no other syntax role is green)", () => {
-    const allowedGreen = new Set(["string", "ok", "gitAdd", "stringQuote"]);
+  it("green is diagnostics/git ONLY (v2.3: strings moved to the seafoam slot)", () => {
+    const allowedGreen = new Set(["ok", "gitAdd"]);
     for (const [role, s] of Object.entries(TOKENS)) {
       if (s.color === "green") expect(allowedGreen.has(role), `${role} unexpectedly green`).toBe(true);
     }
-    expect(TOKENS.string.color).toBe("green");
+    expect(TOKENS.string.color).toBe("fgString");
   });
   it("high-frequency roles are mutually distinct (slot+mute+italic combo)", () => {
     const hi = ["keyword","function","type","parameter","variable","string","number","constant","property"];
@@ -48,7 +48,7 @@ describe("detail-pass roles", () => {
     expect(TOKENS.parameter).toEqual({ color: "param", italic: true });
   });
   it("guard roles exist: quotes stay string-colored, wordy operators stay keywords", () => {
-    expect(TOKENS.stringQuote.color).toBe("green");
+    expect(TOKENS.stringQuote.color).toBe("fgString"); // v2.3 seafoam
     expect(TOKENS.wordOperator).toEqual({ color: "red", bold: true });
   });
   it("interface is distinct from class (italic vs bold orange)", () => {
@@ -85,7 +85,7 @@ describe("v2 roles", () => {
 
 describe("v2.1 roles", () => {
   it("keywordModifier (v2.1): purple tier, italic, NOT bold — the Tokyo split", () => {
-    expect(TOKENS.keywordModifier).toEqual({ color: "purple", italic: true });
+    expect(TOKENS.keywordModifier).toEqual({ color: "fgMod", italic: true }); // v2.3: electric blue
     // command class unchanged: red bold ("ember" in design docs)
     for (const r of ["keyword", "conditional", "repeat", "exception", "keywordReturn"] as const) {
       expect(TOKENS[r]).toEqual({ color: "red", bold: true });

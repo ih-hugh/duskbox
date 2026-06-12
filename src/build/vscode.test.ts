@@ -111,7 +111,7 @@ describe("detail pass — vscode", () => {
   });
   it("string quotes are protected from the punctuation dim", () => {
     const p = buildPalette(dusk);
-    expect(ruleFor(theme, "punctuation.definition.string")!.settings.foreground).toBe(p.accents.green);
+    expect(ruleFor(theme, "punctuation.definition.string")!.settings.foreground).toBe(p.fgString); // v2.3 seafoam
     expect(ruleFor(theme, "punctuation")!.settings.foreground).toBe(p.fgPunct);
   });
   it("wordy operators stay keyword red while symbolic operators are cyan", () => {
@@ -220,7 +220,7 @@ describe("v2.1 — keyword stratification (vscode)", () => {
     for (const sel of ["storage.modifier", "storage.type.ts", "storage.type.tsx", "storage.type.js", "storage.type.function.async"]) {
       const r = rule(sel);
       expect(r, sel).toBeDefined();
-      expect(r!.settings.foreground).toBe(p.accents.purple);
+      expect(r!.settings.foreground).toBe(p.fgMod); // v2.3: electric-blue modifier lane
       expect(r!.settings.fontStyle).toBe("italic"); // SET value — no trie inheritance hazard
     }
   });

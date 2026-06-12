@@ -190,8 +190,8 @@ describe("v2.1.1 — const-variable whisper tier", () => {
   const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
   it("fgConst is the 35% fgVar→purple blend (screen 24 A); dusk pin holds", () => {
     const p = get("dusk");
-    expect(p.fgConst).toBe(blend(p.fgVar, p.accents.purple, 0.35));
-    expect(p.fgConst).toBe("#cfc7f5");
+    expect(p.fgConst).toBe(blend(p.fgVar, p.fgMod, 0.35)); // v2.3: follows the modifier lane
+    expect(p.fgConst).toBe("#b3caff"); // blue-cast whisper (v2.3)
   });
   it("fgConst clears the variable floor and the pink gate on every variant", () => {
     for (const v of VARIANTS) {
@@ -232,5 +232,30 @@ describe("v2.2 — neon selection (cyber + HC)", () => {
     expect(get("cyber-azure").neonLine).toBe(get("cyber-azure").signature);
     expect(get("night-hc").neonLine).toBeUndefined();
     expect(get("dusk").neonLine).toBeUndefined();
+  });
+});
+
+describe("v2.3 — modifier + string lanes", () => {
+  const get = (name: string) => buildPalette(VARIANTS.find((v) => v.name === name)!);
+  it("fgMod: electric blue per archetype; cyber keeps periwinkle", () => {
+    expect(get("dusk").fgMod).toBe("#60a7ff");
+    expect(get("night-hc").fgMod).toBe("#87bafd");
+    expect(get("dawn").fgMod).toBe("#045cb2");
+    expect(get("day-hc").fgMod).toBe("#004b96");
+    expect(get("cyber").fgMod).toBe(get("cyber").accents.purple);
+  });
+  it("fgString: seafoam per archetype; green accent untouched; cyber keeps neon green", () => {
+    expect(get("dusk").fgString).toBe("#8bdbb7");
+    expect(get("night-hc").fgString).toBe("#8bebc1");
+    expect(get("cyber").fgString).toBe(get("cyber").accents.green);
+    expect(get("dusk").accents.green).toBe("#89cc7b");
+  });
+  it("lanes clear the readability floors on every variant", () => {
+    for (const v of VARIANTS) {
+      const p = buildPalette(v);
+      const floor = v.uiContrast === "high" ? 7 : 4.5;
+      expect(contrastRatio(p.fgMod, p.bg0), v.name + " fgMod").toBeGreaterThanOrEqual(floor);
+      expect(contrastRatio(p.fgString, p.bg0), v.name + " fgString").toBeGreaterThanOrEqual(floor);
+    }
   });
 });

@@ -1,6 +1,6 @@
 import { oklchToHex, hexToOklch, contrastRatio } from "../oklch";
 import { blend } from "../build/blend";
-import { TIER_HUES, SLOT_LC, BUILTIN_LC, archetypeOf } from "./tiers";
+import { TIER_HUES, SLOT_LC, BUILTIN_LC, MOD_LC, STR_LC, archetypeOf } from "./tiers";
 
 export type AccentName =
   | "red" | "orange" | "yellow" | "green" | "teal" | "cyan" | "blue" | "purple" | "magenta";
@@ -40,6 +40,10 @@ export interface Palette {
   builtin: string;             // builtin slot: this/self/ctor targets — orange's warm cousin (hue +2); consumed by the v2 role retarget (Task 4)
   moduleKw: string;            // module boundary (gallery-locked): import/export walk from red toward the variant anchor
   signature?: string;          // resolved signature hex (set iff the variant defines `signature`)
+  fgMod: string;               // v2.3 modifier lane (const/async): electric blue, italic at the role;
+                               // cyber family keeps its periwinkle (= accents.purple there)
+  fgString: string;            // v2.3 string lane: seafoam (H164) — green accent stays git/diag-only;
+                               // cyber family keeps neon-green strings (= accents.green there)
   neonLine?: string;           // cyber family only: the identity neon (signature ?? cyan) that the
                                // current-line treatment keys off (nvim underdashed sp / vscode border)
 }
@@ -127,7 +131,9 @@ export function buildPalette(v: VariantConfig): Palette {
   const builtin = oklchToHex(bL, bC, (v.hues?.orange ?? TIER_HUES.orange) + 2);
 
   const fgParam = blend(fg0, accents.cyan, 0.30); // moonlit parameters
-  const fgConst = blend(fgVar, accents.purple, 0.35); // const-variable whisper (v2.1.1, screen 24 A)
+  const fgMod = v.hues !== undefined ? accents.purple : oklchToHex(MOD_LC[arch][0], MOD_LC[arch][1], 255);
+  const fgString = v.hues !== undefined ? accents.green : oklchToHex(STR_LC[arch][0], STR_LC[arch][1], 164);
+  const fgConst = blend(fgVar, fgMod, 0.35); // const-variable whisper follows the modifier lane (v2.3)
 
   // Heading ladder: -25° OKLCH hue walk from the variant's anchor (signature ?? blue), at the
   // variant's equiluminant accent band — harmonious on every variant by construction.
@@ -169,7 +175,7 @@ export function buildPalette(v: VariantConfig): Palette {
 
   return {
     name: v.name, kind: v.kind, uiContrast: v.uiContrast,
-    bg0: bg0t, bg1: bg1t, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam, fgConst,
+    bg0: bg0t, bg1: bg1t, bg2, bg3, fg0, fg1, fg2, fgVar, fgParam, fgConst, fgMod, fgString,
     accents, headings, fgPunct,
     builtin, moduleKw,
     signature, neonLine,

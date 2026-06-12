@@ -1,6 +1,6 @@
 import type { AccentName, Palette } from "./palette/types";
 
-export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var" | "constVar" | "moduleKw";
+export type ColorSlot = AccentName | "fg0" | "fg1" | "fg2" | "h1" | "h2" | "h3" | "h4" | "punct" | "builtin" | "param" | "var" | "constVar" | "moduleKw" | "fgMod" | "fgString";
 export interface TokenStyle {
   color: ColorSlot; bold?: boolean; italic?: boolean; mute?: boolean;
   underline?: boolean; strikethrough?: boolean;
@@ -24,6 +24,8 @@ export function slot(p: Palette, c: ColorSlot): string {
   if (c === "param") return p.fgParam;
   if (c === "var") return p.fgVar;
   if (c === "constVar") return p.fgConst;
+  if (c === "fgMod") return p.fgMod;
+  if (c === "fgString") return p.fgString;
   if (c === "moduleKw") return p.moduleKw;
   if (c in HEADING_SLOT) return p.headings[HEADING_SLOT[c as keyof typeof HEADING_SLOT]];
   return p.accents[c as AccentName];
@@ -53,7 +55,7 @@ export const TOKENS = {
   // storage.modifier.attribute rule can't clone keywordModifier's italic at sorted trie insert.
   decorator:    { color: "builtin" as ColorSlot, plain: true },
   preproc:      { color: "red" as ColorSlot },                  // legacy-only surface (PreProc/Macro); modern import/export ride keyword (bold red)
-  string:       { color: "green" as ColorSlot },
+  string:       { color: "fgString" as ColorSlot }, // seafoam (v2.3 G3) — green accent stays git/diag
   escape:       { color: "cyan" as ColorSlot },
   number:       { color: "blue" as ColorSlot },
   constant:     { color: "purple" as ColorSlot },
@@ -103,13 +105,13 @@ export const TOKENS = {
   docParam:     { color: "fg0" as ColorSlot, italic: true },
   diffMeta:     { color: "blue" as ColorSlot },
   // --- detail pass: guards & semantic depth ---
-  stringQuote:  { color: "green" as ColorSlot },                // keep quotes string-colored despite punct dim
+  stringQuote:  { color: "fgString" as ColorSlot },             // keep quotes string-colored despite punct dim
   wordOperator: { color: "red" as ColorSlot, bold: true },      // typeof/instanceof/new stay keywords
   typeInterface:{ color: "orange" as ColorSlot, italic: true }, // interface/typeParameter vs class(bold)
   typeKeyword:  { color: "orange" as ColorSlot, italic: true }, // `type` in import type / type X = (deeper than storage.type)
   moduleKw:     { color: "moduleKw" as ColorSlot, bold: true }, // import/export/from/as — walk from red toward the variant anchor
   // --- v2.1: keyword stratification ---
-  keywordModifier: { color: "purple" as ColorSlot, italic: true }, // async/await/const/let/static/… — adjectives, not verbs (screen 21 A)
+  keywordModifier: { color: "fgMod" as ColorSlot, italic: true }, // async/await/const/let/static/… — electric-blue adjectives (v2.3 screen 30 BL2)
   constVar:       { color: "constVar" as ColorSlot }, // const-declared NAMES: whisper tier, plain — the plum-italic keyword carries const-ness (screen 24 A)
   // C-family declarator glyphs (* & [] scoped storage.modifier.* by the grammars) — operator-voice
   // cyan. bold+plain ⇒ an EXPLICIT fontStyle in both build modes: vscode-textmate sorts theme rules

@@ -54,9 +54,11 @@ describe("neovim emitter", () => {
     expect(hl["@variable"]!.italic).toBeUndefined();
     expect(hl["@string.escape"]!.fg).not.toBe(hl.String!.fg);
   });
-  it("strings render green", () => {
+  it("strings render seafoam (v2.3); git-add keeps green", () => {
     const hl = buildNeovim(dusk, { bold: true });
-    expect(hl.String!.fg).toBe(buildPalette(dusk).accents.green);
+    const p = buildPalette(dusk);
+    expect(hl.String!.fg).toBe(p.fgString);
+    expect(hl.GitSignsAdd!.fg).toBe(p.accents.green);
   });
   it("file-explorer ignored/hidden entries stay readable (not near-bg) on every variant", () => {
     for (const v of VARIANTS) {
@@ -249,7 +251,7 @@ describe("v2.1 — keyword stratification (nvim)", () => {
 
   it("@keyword.modifier and @keyword.coroutine are purple italic, not bold", () => {
     for (const g of ["@keyword.modifier", "@keyword.coroutine"]) {
-      expect(hl[g], g).toEqual({ fg: p.accents.purple, italic: true });
+      expect(hl[g], g).toEqual({ fg: p.fgMod, italic: true }); // v2.3: electric blue
     }
   });
   it("command captures stay ember bold; @keyword.type stays orange italic (the `type` keyword)", () => {
