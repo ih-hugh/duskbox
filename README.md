@@ -175,9 +175,13 @@ Everything is generated from `src/`: palettes are authored in **OKLCH** (`src/pa
 A real VS Code (code-server) on localhost for rendering-true theme validation:
 
 ```sh
+# terminal 1
 lab/up.sh                 # build + package + install the local VSIX, serve on :8089
+
+# terminal 2
 cd lab && npm i           # once
 npm run shoot             # screenshot all 16 variants x fixtures -> lab/shots/
+DUSKBOX_LAB_DOCS=1 npm run shoot  # refresh docs/img/shots/<variant>.png from sample.tsx
 npm run shoot -- Dusk     # or specific variants
 ```
 
