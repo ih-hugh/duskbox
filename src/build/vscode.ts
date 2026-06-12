@@ -36,9 +36,9 @@ export function buildVscode(v: VariantConfig, opts: { bold: boolean }): VsTheme 
     "editorCursor.foreground": ui, "editorCursor.background": p.bg0, "editor.selectionBackground": p.bg3,
     "editor.lineHighlightBackground": p.bg2, "editorWhitespace.foreground": p.bg3,
     // v2.2: cyber family — neon wireframe on the current line. monaco renders this border
-    // hard-coded SOLID (2px focused / 1px blurred); 35% alpha keeps it a whisper. nvim side
+    // hard-coded SOLID (2px focused / 1px blurred); 55% alpha — 35% read as invisible on the user display. nvim side
     // renders the real dashed underline.
-    ...(p.neonLine ? { "editor.lineHighlightBorder": p.neonLine + "59" } : {}),
+    ...(p.neonLine ? { "editor.lineHighlightBorder": p.neonLine + "8C" } : {}),
     "editorIndentGuide.background1": p.bg2, "editorIndentGuide.activeBackground1": ui,
     "editor.findMatchBackground": p.bg3, "editor.findMatchHighlightBackground": p.bg2,
     "sideBar.background": p.bg1, "sideBar.foreground": p.fg1, "sideBarTitle.foreground": p.fg0,

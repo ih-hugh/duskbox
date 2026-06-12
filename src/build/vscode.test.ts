@@ -279,7 +279,7 @@ describe("v2.2 — cyber line-highlight border (vscode)", () => {
   it("cyber family themes carry an alpha'd neon lineHighlightBorder; others none", () => {
     const cyber = buildVscode(VARIANTS.find((v) => v.name === "cyber")!, { bold: true });
     const pc = buildPalette(VARIANTS.find((v) => v.name === "cyber")!);
-    expect(cyber.colors["editor.lineHighlightBorder"]).toBe(pc.neonLine + "59"); // 35% alpha — monaco renders this border solid; nvim carries the real dash
+    expect(cyber.colors["editor.lineHighlightBorder"]).toBe(pc.neonLine + "8C"); // 55% alpha (v2.3 visibility) — monaco renders this border solid; nvim carries the real dash
     const dusk2 = buildVscode(VARIANTS.find((v) => v.name === "dusk")!, { bold: true });
     expect(dusk2.colors["editor.lineHighlightBorder"]).toBeUndefined();
     const hc = buildVscode(VARIANTS.find((v) => v.name === "night-hc")!, { bold: true });
