@@ -8,7 +8,7 @@ A calm theme family with **tiered attention** for **Neovim**, **VS Code** (and f
 
 ![duskbox OKLCH palette](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/palette.png)
 
-Designed in **OKLCH** around **tiered attention**: deep ember keywords command (plum-italic modifiers at their side), the warm + cool work spine carries meaning, and structure recedes into each variant's own background material. In the **signature** variants, the chrome — cursor, borders, selection, markdown headings, statusline — takes the signature color while the syntax stays consistent across the family.
+Designed in **OKLCH** around **tiered attention**: deep ember keywords command (electric-blue modifiers at their side), the warm + cool work spine carries meaning, and structure recedes into each variant's own background material. In the **signature** variants, the chrome — cursor, borders, selection, markdown headings, statusline — takes the signature color while the syntax stays consistent across the family.
 
 ## Variants
 
@@ -23,7 +23,7 @@ Designed in **OKLCH** around **tiered attention**: deep ember keywords command (
 | `duskbox-night-hc` | high-contrast dark |
 | `duskbox-cyber` | neon-on-black (high contrast) |
 
-**Signature variants:** `dusk` and `cyber` also come in four signature flavors — the chrome (cursor, borders, selection, headings, statusline) and the background's mood take the signature color while syntax stays consistent: `duskbox-{dusk,cyber}-{azure,neon-purple,magenta,salmon}`.
+**Signature variants:** `dusk` and `cyber` also come in four signature flavors — the chrome (cursor, borders, selection, headings, statusline) takes the signature color — and the stage carries a 2% signature whisper while syntax stays consistent: `duskbox-{dusk,cyber}-{azure,neon-purple,magenta,salmon}`.
 
 ## Gallery
 

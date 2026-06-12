@@ -1,6 +1,6 @@
 # duskbox
 
-A calm theme family with **tiered attention** for **Neovim**, **VS Code** (and forks: Cursor, VSCodium, Windsurf…), **Ghostty/cmux**, and **lazygit**. Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so editors and terminals never drift. Richly detailed (graded Markdown headings, per-language tokens, calm punctuation, deep LSP semantics), and each variant carries its own atmosphere — backgrounds lean toward the variant's mood — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it.)
+A calm theme family with **tiered attention** for **Neovim**, **VS Code** (and forks: Cursor, VSCodium, Windsurf…), **Ghostty/cmux**, and **lazygit**. Sixteen variants — eight core moods (light → dark plus high-contrast and a neon "cyber" option), with `dusk` and `cyber` each also in four signature flavors — all generated from one OKLCH source of truth, so editors and terminals never drift. Richly detailed (graded Markdown headings, per-language tokens, calm punctuation, deep LSP semantics), and each core mood carries its own atmosphere, while signature variants stand on their base's slate stage with a whisper of their signature in the room — plus designed diagnostics, diffs, and an accent cursor. (Neovim bonus: TODO/FIXME comment badges via the treesitter `comment` parser — `:TSInstall comment` if your distro doesn't bundle it.)
 
 > Warm declarations, cool literals, **bold keywords & types** for legibility. Calm by default; punchy where you want it (hello, `cyber`).
 
@@ -8,7 +8,7 @@ A calm theme family with **tiered attention** for **Neovim**, **VS Code** (and f
 
 ![duskbox OKLCH palette](https://raw.githubusercontent.com/ih-hugh/duskbox/main/docs/img/palette.svg)
 
-Designed in **OKLCH** around **tiered attention**: deep ember keywords command (plum-italic modifiers at their side), the warm + cool work spine carries meaning, and structure recedes into each variant's own background material. In the **signature** variants, the chrome — cursor, borders, selection, markdown headings, statusline — takes the signature color while the syntax stays consistent across the family.
+Designed in **OKLCH** around **tiered attention**: deep ember keywords command (electric-blue modifiers at their side), the warm + cool work spine carries meaning, and structure recedes into each variant's own background material. In the **signature** variants, the chrome — cursor, borders, selection, markdown headings, statusline — takes the signature color while the syntax stays consistent across the family.
 
 ## Variants
 
@@ -26,7 +26,7 @@ Designed in **OKLCH** around **tiered attention**: deep ember keywords command (
 ### Signature variants
 
 `dusk` and `cyber` also come in four **signature** flavors — the chrome (cursor, borders,
-selection, headings, statusline) and the background's mood take the signature color while
+selection, headings, statusline) takes the signature color — and the stage carries a 2% signature whisper while
 syntax stays consistent across the family:
 
 | signature | dark | neon |
