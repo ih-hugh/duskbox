@@ -10,7 +10,7 @@ describe("v2 tier palettes", () => {
   it("dusk anchors match the locked hybrid", () => {
     const p = get("dusk");
     expect(p.accents.red).toBe(oklchToHex(0.66, 0.200, 26));
-    expect(p.accents.yellow).toBe(oklchToHex(0.83, 0.135, 92));
+    expect(p.accents.yellow).toBe(oklchToHex(0.82, 0.120, 86)); // amber (v2.3)
     expect(p.accents.orange).toBe(oklchToHex(0.74, 0.160, 55));
     expect(p.builtin).toBe(oklchToHex(0.77, 0.145, 57));
     expect(p.accents.teal).toBe(oklchToHex(0.78, 0.120, 184));

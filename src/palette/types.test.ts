@@ -166,8 +166,8 @@ describe("v2 stages & ladder", () => {
     }
   });
   it("moduleKw gallery-locked pins: dusk / dusk-azure / dusk-salmon / cyber", () => {
-    expect(get("dusk").moduleKw).toBe("#9c72fe");
-    expect(get("dusk-azure").moduleKw).toBe("#0797f4");
+    expect(get("dusk").moduleKw).toBe("#ae93fd"); // v2.3 brightened
+    expect(get("dusk-azure").moduleKw).toBe("#4eaeff"); // v2.3 brightened
     expect(get("dusk-salmon").moduleKw).toBe("#ff8a6f"); // v2.1 vivid-salmon band (screen 22 B)
     expect(get("cyber").moduleKw).toBe("#b197fe");
     expect(get("dusk-magenta").moduleKw).toBe(get("dusk").moduleKw); // sig>=300 falls back to the 255 anchor — same walk as base

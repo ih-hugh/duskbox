@@ -166,8 +166,13 @@ export function buildPalette(v: VariantConfig): Palette {
   // #ff8a6f clears the pink gate outright (effective C 0.148 ≥ 0.13) — no gate carve-out.
   const walkedH = halfLeanK(redO.H, impAnchor, impK);
   const walkEscaped = Math.abs(((walkedH - redO.H + 540) % 360) - 180) >= 12;
+  // v2.3: the walked boundary is brightened (+0.07 L) — it read too dim; the vivid-salmon band
+  // and the CYBER family (locked pins) are shielded.
+  const walked = oklchToHex(redO.L, Math.max(redO.C, 0.14), walkedH);
+  const wo = hexToOklch(walked);
+  const brightened = oklchToHex(Math.min(Math.max(wo.L + dir * 0.07, 0.30), 0.93), Math.max(wo.C, 0.13), wo.H); // dark: lighter; light: deeper (more vivid on white)
   const moduleKw = walkEscaped
-    ? oklchToHex(redO.L, Math.max(redO.C, 0.14), walkedH)
+    ? (v.hues !== undefined ? walked : brightened)
     : oklchToHex(0.755, 0.16, 34);
 
   // Identity neon for the cyber family's current-line treatment (dashed in nvim, border in vscode).

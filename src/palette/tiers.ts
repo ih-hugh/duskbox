@@ -4,7 +4,7 @@ export type Archetype = "normal-dark" | "hc-dark" | "normal-light" | "hc-light";
 
 /** v2 hue spine (normal variants). Cyber overrides via VariantConfig.hues as before. */
 export const TIER_HUES: Record<AccentName, number> = {
-  red: 26, orange: 55, yellow: 92, green: 140, teal: 184, cyan: 213, blue: 253, purple: 297, magenta: 335,
+  red: 26, orange: 55, yellow: 86, green: 140, teal: 184, cyan: 213, blue: 253, purple: 297, magenta: 335,
 };
 
 /** Per-slot OKLCH [L, C] by archetype — hierarchy from lightness×chroma (spec anchors).
@@ -15,11 +15,11 @@ export const TIER_HUES: Record<AccentName, number> = {
  *  in the v2 role retarget (until then it remains the legacy builtin slot). */
 export const SLOT_LC: Record<Archetype, Record<AccentName, [number, number]>> = {
   "normal-dark": {
-    red: [0.66, 0.200], orange: [0.74, 0.160], yellow: [0.83, 0.135], green: [0.78, 0.130],
+    red: [0.66, 0.200], orange: [0.74, 0.160], yellow: [0.82, 0.120], green: [0.78, 0.130],
     teal: [0.78, 0.120], cyan: [0.81, 0.125], blue: [0.755, 0.115], purple: [0.74, 0.100], magenta: [0.78, 0.140],
   },
   "hc-dark": {
-    red: [0.74, 0.220], orange: [0.82, 0.170], yellow: [0.88, 0.150], green: [0.84, 0.180],
+    red: [0.74, 0.220], orange: [0.82, 0.170], yellow: [0.87, 0.135], green: [0.84, 0.180],
     teal: [0.85, 0.140], cyan: [0.88, 0.160], blue: [0.80, 0.170], purple: [0.80, 0.130], magenta: [0.80, 0.170],
   },
   "normal-light": {
