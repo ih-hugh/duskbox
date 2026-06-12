@@ -245,8 +245,8 @@ describe("v2.3 — modifier + string lanes", () => {
     expect(get("cyber").fgMod).toBe(get("cyber").accents.purple);
   });
   it("fgString: seafoam per archetype; green accent untouched; cyber keeps neon green", () => {
-    expect(get("dusk").fgString).toBe("#8bdbb7");
-    expect(get("night-hc").fgString).toBe("#8bebc1");
+    expect(get("dusk").fgString).toBe("#95daac"); // H155 (nudged greener, screen-33 feedback)
+    expect(get("night-hc").fgString).toBe("#98eab5");
     expect(get("cyber").fgString).toBe(get("cyber").accents.green);
     expect(get("dusk").accents.green).toBe("#89cc7b");
   });
