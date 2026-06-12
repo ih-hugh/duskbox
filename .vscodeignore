@@ -4,6 +4,7 @@ colors/**
 after/**
 scripts/**
 docs/**
+lab/**
 .github/**
 tsconfig.json
 vitest.config.*
