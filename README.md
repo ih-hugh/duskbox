@@ -164,6 +164,20 @@ pnpm gallery    # regenerate docs/img/*.svg
 
 Everything is generated from `src/`: palettes are authored in **OKLCH** (`src/palette/variants.ts`) and a shared semantic token map (`src/tokens.ts`) defines the identity. Edit those, run `pnpm build`, and both editors update from the single source.
 
+## Lab (agentic screenshot validation)
+
+A real VS Code (code-server) on localhost for rendering-true theme validation:
+
+```sh
+lab/up.sh                 # build + package + install the local VSIX, serve on :8089
+cd lab && npm i           # once
+npm run shoot             # screenshot all 16 variants x fixtures -> lab/shots/
+npm run shoot -- Dusk     # or specific variants
+```
+
+Real workbench, real TextMate + semantic tokens — what the marketplace ships is what gets
+screenshotted. Agents read the PNGs to validate changes before release.
+
 ## Design
 
 duskbox is designed in **OKLCH** (a perceptually-uniform color space) around **tiered attention**: hierarchy comes from lightness × chroma, identity from hue. Deep ember keywords command; the work sits in a warm (gold/orange) + cool (green/teal/blue) spine with bright-lavender variables; punctuation is carved from each variant's own background material and recedes. High-contrast variants get their hierarchy from chroma alone (≥7:1 floors). Every accent is gated on WCAG contrast in the test suite — and a pink-regression gate keeps washed-pink and fuchsia out of syntax permanently. Keywords are stratified: command keywords (`if`, `return`, `function`, `class`) stay ember bold while modifiers (`async`, `const`, `static`, `extends`) recede to electric-blue italics — `async function main` reads as three colors, not one. On the salmon variants, `import`/`export` ride a vivid true salmon.
