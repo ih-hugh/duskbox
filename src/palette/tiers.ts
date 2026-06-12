@@ -51,6 +51,6 @@ export const MOD_LC: Record<Archetype, [number, number]> = {
   "normal-light": [0.48, 0.16], "hc-light": [0.42, 0.17],
 };
 export const STR_LC: Record<Archetype, [number, number]> = {
-  "normal-dark": [0.83, 0.095], "hc-dark": [0.87, 0.11],
-  "normal-light": [0.50, 0.10], "hc-light": [0.42, 0.11],
+  "normal-dark": [0.81, 0.125], "hc-dark": [0.86, 0.14],
+  "normal-light": [0.49, 0.12], "hc-light": [0.42, 0.13],
 };
